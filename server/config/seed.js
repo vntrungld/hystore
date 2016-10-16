@@ -6,6 +6,7 @@
 'use strict';
 import Thing from '../api/thing/thing.model';
 import User from '../api/user/user.model';
+import Category from '../api/category/category.model';
 
 Thing.find({}).remove()
   .then(() => {
@@ -43,17 +44,54 @@ User.find({}).remove()
   .then(() => {
     User.create({
       provider: 'local',
-      name: 'Test User',
-      email: 'test@example.com',
-      password: 'test'
+      name: 'user',
+      email: 'user@user.com',
+      password: 'user'
     }, {
       provider: 'local',
       role: 'admin',
       name: 'Admin',
-      email: 'admin@example.com',
+      email: 'admin@admin.com',
       password: 'admin'
+    }, {
+      provider: 'local',
+      name: 'delete',
+      email: 'delete@delete.com',
+      password: 'delete',
+      status: 'delete'
+    }, {
+      provider: 'local',
+      name: 'inactive',
+      email: 'inactive@inactive.com',
+      password: 'inactive',
+      status: 'inactive'
+    }, {
+      provider: 'local',
+      name: 'deactive',
+      email: 'deactive@deactive.com',
+      password: 'deactive',
+      status: 'deactive'
     })
     .then(() => {
       console.log('finished populating users');
+    });
+  });
+
+Category.find({}).remove()
+  .then(() => {
+    Category.create({
+      name: 'Books',
+      info: 'Book category'
+    }, {
+      name: 'Games',
+      info: 'Game category'
+    }, {
+      name: 'Deletes',
+      info: 'Delete category',
+      status: 'delete'
+    }, {
+      name: 'Deactives',
+      info: 'Deactive category',
+      status: 'deactive'
     });
   });
