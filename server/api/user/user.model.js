@@ -1,5 +1,7 @@
 'use strict';
+/*eslint no-sync:0*/
 /*eslint no-invalid-this:0*/
+/*eslint prefer-rest-params:0*/
 import crypto from 'crypto';
 mongoose.Promise = require('bluebird');
 import mongoose, {Schema} from 'mongoose';
@@ -9,10 +11,12 @@ var UserSchema = new Schema({
   email: {
     type: String,
     lowercase: true,
-    required: true
+    required: true,
+    unique: true
   },
   role: {
     type: String,
+    enum: ['admin', 'user', 'dev'],
     default: 'user'
   },
   password: {
@@ -20,8 +24,14 @@ var UserSchema = new Schema({
     required: true
   },
   provider: String,
-  salt: String
-});
+  salt: String,
+  status: {
+    type: String,
+    required: true,
+    enum: ['active', 'inactive', 'deactive', 'delete'],
+    default: 'active'
+  }
+}, { timestamps: true });
 
 /**
  * Virtuals

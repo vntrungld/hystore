@@ -23,7 +23,7 @@ function handleError(res, statusCode) {
  * restriction: 'admin'
  */
 export function index(req, res) {
-  return User.find({}, '-salt -password').exec()
+  return User.find({status: { $ne: 'delete' }}, '-salt -password').exec()
     .then(users => {
       res.status(200).json(users);
     })
@@ -68,9 +68,14 @@ export function show(req, res, next) {
  * restriction: 'admin'
  */
 export function destroy(req, res) {
-  return User.findByIdAndRemove(req.params.id).exec()
-    .then(function() {
-      res.status(204).end();
+  return User.findById(req.params.id).exec()
+    .then(function(user) {
+      user.status = 'delete';
+      return user.save()
+        .then(() => {
+          res.status(204).end();
+        })
+        .catch(validationError(res));
     })
     .catch(handleError(res));
 }
