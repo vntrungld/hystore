@@ -8,8 +8,9 @@ import routing from './account.routes';
 import login from './login';
 import settings from './settings';
 import signup from './signup';
+import profile from './profile';
 
-export default angular.module('hystoreApp.account', [uiRouter, login, settings, signup])
+export default angular.module('hystoreApp.account', [uiRouter, login, settings, signup, profile])
   .config(routing)
   .run(function($rootScope) {
     'ngInject';

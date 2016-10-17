@@ -33,5 +33,12 @@ export default function routes($stateProvider) {
       controller: 'SettingsController',
       controllerAs: 'vm',
       authenticate: true
+    })
+    .state('profile', {
+      url: '/profile',
+      template: require('./profile/profile.pug'),
+      controller: 'ProfileController',
+      controllerAs: 'vm',
+      authenticate: true
     });
 }
