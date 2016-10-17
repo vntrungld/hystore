@@ -3,6 +3,8 @@
  */
 
 'use strict';
+/* eslint prefer-template: 0 */
+/* eslint no-process-env: 0 */
 
 import express from 'express';
 import favicon from 'serve-favicon';

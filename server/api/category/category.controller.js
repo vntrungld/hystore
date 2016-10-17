@@ -9,6 +9,7 @@
  */
 
 'use strict';
+/* eslint prefer-reflect: 0 */
 
 import jsonpatch from 'fast-json-patch';
 import Category from './category.model';
