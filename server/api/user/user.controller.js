@@ -103,6 +103,28 @@ export function changePassword(req, res) {
 }
 
 /**
+ * Change a users profile
+ */
+export function changeProfile(req, res) {
+  var userId = req.user._id;
+  var profile = req.body.profile;
+
+  return User.findById(userId).exec()
+    .then(user => {
+      if(user) {
+        user.name = profile.name;
+        return user.save()
+          .then(() => {
+            res.status(204).end();
+          })
+          .catch(validationError(res));
+      } else {
+        return res.status(403).end();
+      }
+    });
+}
+
+/**
  * Get my info
  */
 export function me(req, res, next) {
