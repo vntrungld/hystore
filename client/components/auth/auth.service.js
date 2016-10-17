@@ -1,4 +1,8 @@
 'use strict';
+/* eslint prefer-reflect:0 */
+/* eslint prefer-spread:0 */
+/* eslint prefer-rest-params:0 */
+/* eslint no-sync:0 */
 // @flow
 
 class _User {
@@ -109,6 +113,19 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
         .$promise;
     },
 
+    changeProfile(profile, callback ? : Function) {
+      return User.changeProfile({
+        id: currentUser._id
+      }, {
+        profile
+      }, function() {
+        return safeCb(callback)(null);
+      }, function(err) {
+        return safeCb(callback)(err);
+      })
+        .$promise;
+    },
+
     /**
      * Gets all available info on a user
      *
@@ -145,7 +162,7 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
      */
     isLoggedIn(callback ? : Function) {
       return Auth.getCurrentUser(undefined)
-        .then(user => {
+        .then((user = {}) => {
           var is = user.hasOwnProperty('role');
           safeCb(callback)(is);
           return is;

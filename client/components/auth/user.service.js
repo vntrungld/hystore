@@ -12,6 +12,12 @@ export function UserResource($resource) {
         controller: 'password'
       }
     },
+    changeProfile: {
+      method: 'PUT',
+      params: {
+        controller: 'profile'
+      }
+    },
     get: {
       method: 'GET',
       params: {
