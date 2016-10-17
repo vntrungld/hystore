@@ -1,4 +1,6 @@
 'use strict';
+/* eslint prefer-reflect: 0 */
+/* eslint prefer-rest-params: 0 */
 
 import angular from 'angular';
 
@@ -47,7 +49,7 @@ export function Modal($rootScope, $uibModal) {
             modal: {
               dismissable: true,
               title: 'Confirm Delete',
-              html: '<p>Are you sure you want to delete <strong>' + name + '</strong> ?</p>',
+              html: `<p>Are you sure you want to delete <strong>${name}</strong> ?</p>`,
               buttons: [{
                 classes: 'btn-danger',
                 text: 'Delete',
