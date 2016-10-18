@@ -1,5 +1,5 @@
 div.navbar.navbar-default.navbar-static-top
-  div.container
+  div(ng-class="$ctrl.isState('admin') ? 'container-fluid' : 'container'")
     div.navbar-header
       button.navbar-toggle(type='button', ng-click='$ctrl.isCollapsed = !$ctrl.isCollapsed')
         span.sr-only Toggle navigation

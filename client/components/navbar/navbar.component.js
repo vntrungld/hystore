@@ -11,13 +11,15 @@ export class NavbarComponent {
   isLoggedIn: Function;
   isAdmin: Function;
   getCurrentUser: Function;
+  isState: Function;
   isCollapsed = true;
 
-  constructor(Auth) {
+  constructor(Auth, $state) {
     'ngInject';
 
     this.isLoggedIn = Auth.isLoggedInSync;
     this.isAdmin = Auth.isAdminSync;
+    this.isState = $state.is;
     this.getCurrentUser = Auth.getCurrentUserSync;
   }
 
