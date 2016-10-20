@@ -14,7 +14,7 @@ div.navbar.navbar-default.navbar-static-top
           a(ui-sref='{{item.state}}') {{item.title}}
 
         li(ng-show='$ctrl.isAdmin()', ui-sref-active='active')
-          a(ui-sref='admin') Admin
+          a(ui-sref='admin.dashboard') Admin
 
       ul.nav.navbar-nav.navbar-right
         li(ng-hide='$ctrl.isLoggedIn()', ui-sref-active='active')

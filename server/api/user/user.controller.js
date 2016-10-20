@@ -106,13 +106,15 @@ export function changePassword(req, res) {
  * Change a users profile
  */
 export function changeProfile(req, res) {
-  var userId = req.user._id;
   var profile = req.body.profile;
+  var userId = profile._id;
 
   return User.findById(userId).exec()
     .then(user => {
       if(user) {
         user.name = profile.name;
+        user.role = profile.role;
+        user.status = profile.status;
         return user.save()
           .then(() => {
             res.status(204).end();

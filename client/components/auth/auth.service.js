@@ -113,9 +113,17 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
         .$promise;
     },
 
+    /**
+     * Change profile
+     *
+     * @param  {Object} profile
+     * @param {Function} callback - function(error, user)
+     *
+     * @return {Promise}
+     */
     changeProfile(profile, callback ? : Function) {
       return User.changeProfile({
-        id: currentUser._id
+        id: profile._id || currentUser._id
       }, {
         profile
       }, function() {

@@ -1,0 +1,47 @@
+.container
+  .row
+    .col-sm-12
+      h1 Edit user
+    .col-sm-12
+      form.form(
+        name='form',
+        ng-submit='adminAccountEdit.changeUserProfile(form)',
+        novalidate=''
+      )
+        .form-group
+          label Name
+          input.form-control(
+            type='text',
+            name='name',
+            ng-model='adminAccountEdit.user.name'
+          )
+
+          p.help-block(ng-show='form.name.$error.mongoose') {{ vm.errors.other }}
+
+        .form-group
+          label Role
+          select.form-control(
+            name='role',
+            ng-model="adminAccountEdit.user.role"
+          )
+            option(
+              ng-repeat="option in adminAccountEdit.options.role",
+              value="{{option}}"
+            ) {{option}}
+
+          p.help-block(ng-show='form.name.$error.mongoose') {{ vm.errors.other }}
+
+        .form-group
+          label Status
+          select.form-control(
+            name='status',
+            ng-model="adminAccountEdit.user.status"
+          )
+            option(
+              ng-repeat="option in adminAccountEdit.options.status",
+              value="{{option}}"
+            ) {{option}}
+
+          p.help-block(ng-show='form.name.$error.mongoose') {{ vm.errors.other }}
+
+        button.btn.btn-lg.btn-primary(type="submit") Save changes

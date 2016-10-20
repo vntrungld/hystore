@@ -1,6 +1,6 @@
 'use strict';
 
-export default class AdminController {
+export default class AdminAccountController {
   users: Object[];
 
   /*@ngInject*/
