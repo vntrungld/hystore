@@ -16,7 +16,6 @@ export default class LoginController {
   errors = {
     login: undefined
   };
-  submitted = false;
   Auth;
   $state;
 
@@ -27,8 +26,6 @@ export default class LoginController {
   }
 
   login(form) {
-    this.submitted = true;
-
     if(form.$valid) {
       this.Auth.login({
         email: this.user.email,

@@ -15,7 +15,6 @@ export default class ProfileController {
     other: undefined
   };
   message = '';
-  submitted = false;
   Auth;
 
   /*@ngInject*/
@@ -25,8 +24,6 @@ export default class ProfileController {
   }
 
   changeProfile(form) {
-    this.submitted = true;
-
     if(form.$valid) {
       this.Auth.changeProfile(this.user)
         .then(() => {

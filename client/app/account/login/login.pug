@@ -21,7 +21,7 @@ div(
         required
       )
 
-      div(ng-messages="form.email.$error && vm.submitted")
+      div(ng-messages="form.email.$error")
         p(ng-message="required") Please enter your email
 
     md-input-container
@@ -34,7 +34,7 @@ div(
         required
       )
 
-      div(ng-messages="form.password.$error && vm.submitted")
+      div(ng-messages="form.password.$error")
         p(ng-message="required") Please enter your password.
 
     div

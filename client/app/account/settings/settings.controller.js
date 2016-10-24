@@ -17,7 +17,6 @@ export default class SettingsController {
     other: undefined
   };
   message = '';
-  submitted = false;
   Auth;
 
   /*@ngInject*/
@@ -26,8 +25,6 @@ export default class SettingsController {
   }
 
   changePassword(form) {
-    this.submitted = true;
-
     if(form.$valid) {
       this.Auth.changePassword(this.user.oldPassword, this.user.newPassword)
         .then(() => {
