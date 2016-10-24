@@ -9,7 +9,6 @@ export default class AdminAccountEditController {
     other: undefined
   };
   message = '';
-  submitted = false;
   Auth;
 
   /*@ngInject*/
@@ -21,8 +20,6 @@ export default class AdminAccountEditController {
   }
 
   changeUserProfile(form) {
-    this.submitted = true;
-
     if(form.$valid) {
       this.user._id = this.id;
       this.Auth.changeProfile(this.user)
