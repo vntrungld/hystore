@@ -1,25 +1,31 @@
-.container
-  .row
-    .col-sm-12
-      h1 Change Profile
-    .col-sm-12
-      form.form(
-        name='form',
-        ng-submit='vm.changeProfile(form)',
-        novalidate=''
+div(
+  flex,
+  layout="column",
+  layout-padding
+)
+  h1.md-display-1 Change Profile
+
+  form(
+    name='form',
+    ng-submit='vm.changeProfile(form)',
+    novalidate='',
+    flex,
+    layout="column"
+  )
+    md-input-container
+      label Name
+
+      input(
+        type='text',
+        name='name',
+        ng-model='vm.user.name',
+        mongoose-error='',
+        required
       )
-        .form-group
-          label Name
-          input.form-control(
-            type='text',
-            name='name',
-            ng-model='vm.user.name',
-            mongoose-error=''
-          )
-          p.help-block(ng-show='form.name.$error.mongoose')
-            | {{ vm.errors.other }}
 
-        p.help-block {{ vm.message }}
+      div(ng-messages='form.name.$error')
+        p(ng-message="required")
+        p(ng-message="mongoose") {{ vm.errors.other }}
 
-        button.btn.btn-lg.btn-primary(type='submit') Save changes
-
+  div
+    button.md-button.md-primary(type='submit') Save changes
