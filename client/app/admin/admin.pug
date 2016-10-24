@@ -1,2 +1,31 @@
-.container
-  ui-view
+section(
+  flex,
+  layout='row',
+  layout-fill
+)
+  md-sidenav.md-sidenav-left(
+    md-component-id='left',
+    md-is-locked-open="true",
+    md-whiteframe='3',
+  )
+    md-toolbar.md-theme-indigo
+      h1.md-toolbar-tools Admin navigation
+
+    md-content
+      md-list
+        md-list-item(ui-sref="admin.dashboard")
+          p Dashboard
+        md-divider
+      md-list
+        md-list-item(ui-sref="admin.account")
+          p Account manager
+        md-divider
+      md-list
+        md-list-item(ui-sref="admin.category")
+          p Category manager
+        md-divider
+  md-content(
+    flex,
+    layout="column",
+    ui-view=""
+  )
