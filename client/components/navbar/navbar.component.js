@@ -11,18 +11,23 @@ export class NavbarComponent {
   isLoggedIn: Function;
   isAdmin: Function;
   getCurrentUser: Function;
-  isState: Function;
+  isAdminState: Function;
   isCollapsed = true;
+  state: Object;
 
   constructor(Auth, $state) {
     'ngInject';
 
     this.isLoggedIn = Auth.isLoggedInSync;
     this.isAdmin = Auth.isAdminSync;
-    this.isState = $state.is;
     this.getCurrentUser = Auth.getCurrentUserSync;
+    this.state = $state;
   }
 
+  isAdminState() {
+    var regx = /admin\./g;
+    return regx.test(this.state.current.name);
+  }
 }
 
 export default angular.module('directives.navbar', [])
