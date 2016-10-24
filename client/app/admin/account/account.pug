@@ -1,11 +1,22 @@
-.container
-  p
-    | The delete user and user index api routes are restricted to users with the 'admin' role.
-  ul.list-group
-    li.list-group-item(ng-repeat='user in adminAccount.users')
-      a(ui-sref="admin.accountEdit({ id: user._id })")
-        strong {{user.name}}
-      br
-      span.text-muted {{user.email}}
-      a.trash(ng-click='adminAccount.delete(user)')
-        span.glyphicon.glyphicon-trash.pull-right
+div(
+  flex,
+  layout="column"
+)
+  h1.md-display-1(layout-padding) Account manager
+
+  md-list
+    md-list-item.md-2-lines(
+      ng-repeat='user in adminAccount.users',
+      ui-sref="admin.accountEdit({ id: user._id })"
+    )
+      .md-list-item-text(
+        flex,
+        layout="column",
+      )
+        strong.md-title {{user.name}}
+        span.md-subtitle {{user.email}}
+
+      md-button.md-icon-button(ng-click='adminAccount.delete(user)')
+        span.fa.fa-trash
+
+      md-divider(ng-if="!$last")
