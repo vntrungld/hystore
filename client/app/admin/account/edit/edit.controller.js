@@ -15,7 +15,6 @@ export default class AdminAccountEditController {
   constructor($state, User, Auth) {
     this.id = $state.params.id;
     this.user = User.get({ id: this.id });
-    console.log(this.user);
     this.Auth = Auth;
   }
 
