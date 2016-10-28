@@ -101,6 +101,8 @@ export function upsert(req, res) {
 export function patch(req, res) {
   if(req.body._id) {
     delete req.body._id;
+    delete req.body.createdAt;
+    delete req.body.updatedAt;
   }
   return Category.findById(req.params.id).exec()
     .then(handleEntityNotFound(res))
