@@ -43,5 +43,12 @@ export default function routes($stateProvider) {
       controller: 'AdminCategoryEditController',
       controllerAs: 'adminCategoryEdit',
       authenticate: 'admin'
+    })
+    .state('admin.application', {
+      url: '/applications',
+      template: require('./application/application.pug'),
+      controller: 'AdminApplicationController',
+      controllerAs: 'adminApplication',
+      authenticate: 'admin'
     });
 }
