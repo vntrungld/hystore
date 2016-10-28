@@ -116,7 +116,7 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
     /**
      * Change profile
      *
-     * @param  {Object} profile
+     * @param  {Object} profile - user info
      * @param {Function} callback - function(error, user)
      *
      * @return {Promise}

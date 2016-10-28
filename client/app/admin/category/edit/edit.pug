@@ -1,1 +1,59 @@
-h1 Category edit
+div(
+  flex,
+  layout="column",
+  layout-padding
+)
+  h1.md-display-1 {{ adminCategoryEdit.isEdit ? 'Edit' : 'Create' }} category
+
+  form(
+    name='form',
+    ng-submit='adminCategoryEdit.saveCategory(form)',
+    novalidate=''
+    flex,
+    layout="column"
+  )
+    md-input-container
+      label Name
+
+      input(
+        type='text',
+        name='name',
+        ng-model='adminCategoryEdit.category.name',
+        required
+      )
+
+      div(ng-messages='form.name.$error')
+        p(ng-message="required") What's your category name?
+        p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
+
+    md-input-container
+      label Info
+
+      input(
+        type='text',
+        name='info',
+        ng-model='adminCategoryEdit.category.info'
+      )
+
+      div(ng-messages='form.info.$error')
+        p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
+
+    md-input-container
+      label Status
+
+      md-select(
+        name='status',
+        ng-model="adminCategoryEdit.category.status",
+        required
+      )
+        md-option(
+          ng-repeat="option in adminCategoryEdit.options.status",
+          value="{{ option }}"
+        ) {{ option }}
+
+      div(ng-messages='form.status.$error')
+        p(ng-message="required") Please select role
+        p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
+
+    div
+      button.md-button.md-primary(type="submit") {{ adminCategoryEdit.isEdit ? 'Save change' : 'Create' }}

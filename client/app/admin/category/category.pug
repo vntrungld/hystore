@@ -3,3 +3,22 @@ div(
   layout="column"
 )
   h1.md-display-1(layout-padding) Category list
+
+  md-button(ui-sref="admin.categoryEdit") Create
+
+  md-list
+    md-list-item.md-2-lines(
+      ng-repeat='category in adminCategory.categories',
+      ui-sref="admin.categoryEdit({ id: category._id })"
+    )
+      .md-list-item-text(
+        flex,
+        layout="column",
+      )
+        strong.md-title {{category.name}}
+        span.md-subtitle {{category.info}}
+
+      md-button.md-icon-button(ng-click='adminCategory.delete(category)')
+        span.fa.fa-trash
+
+      md-divider(ng-if="!$last")

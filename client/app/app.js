@@ -18,6 +18,7 @@ import {
 } from './app.config';
 
 import _Auth from '../components/auth/auth.module';
+import Category from '../components/category/category.module';
 import account from './account';
 import admin from './admin';
 import navbar from '../components/navbar/navbar.component';
@@ -30,7 +31,7 @@ import socket from '../components/socket/socket.service';
 import './app.scss';
 
 angular.module('hystoreApp', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', uiRouter,
-    ngMaterial, _Auth, account, admin, navbar, footer, main, constants, socket, util
+    ngMaterial, _Auth, Category, account, admin, navbar, footer, main, constants, socket, util
   ])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {
