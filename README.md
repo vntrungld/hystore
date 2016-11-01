@@ -12,3 +12,30 @@
     Vậy còn hiệu năng của các ứng dụng mobile cross platform thì sao? Hiệu năng luôn là một vấn đề nan giải đối với những ứng dụng mobile cross platform. Hiện tại chúng ta chỉ nên phát triển những ứng dụng nhỏ quy mô không cao và chờ đợi. Trong tương lai rất có thể Chrome OS sẽ lên các thiết bị di động, mà đặc trưng của hệ điều hành này chính là việc toàn bộ giao diện là web. Vì vậy tới lúc đó chúng ta sẽ không phải suy nghĩ đến hiệu năng khi làm những sản phẩm mobile cross platform nữa.
 
     Hystore không những chỉ đơn thuần chỉ là dịch vụ mà còn là giải pháp, không chỉ là giải pháp cho hôm nay mà còn cho cả tương lai.
+
+  2. **Yêu cầu nghiệp vụ**
+    1. **BR1: Chứng thực**
+      1. **BR1.1. Đăng ký** - Người dùng có thể đăng ký tài khoản sử dụng thông qua hệ thống.
+      2. **BR1.2: Đăng nhập** - Người dùng sử dụng dịch vụ có thể đăng nhập hoặc không.
+
+    2. **BR2: Quản lý tài khoản**
+      1. **BR2.1: Hiển thị tài khoả**n - Hệ thống cho phép hiển thị và sắp xếp danh sách tài khoản theo tên và theo các thống số như: xếp hạng, số lượng ứng dụng, số lượt tải xuống,… Hiển thị chi tiết tài khoản như: Tên, địa chỉ, số điện thoại, email,…
+      2. **BR2.2: Thao tác với tài khoản** - Hệ thống cho phép tạo mới, sửa thống tin và xóa tài khoản.
+      3. **BR2.3: Phân quyền** - Hệ thống cũng cho phép phần quyền tài khoản theo 4 loại: quản trị, nhà phát triển, người dùng và các tài khoản bị khóa. Dựa vào đó mà mỗi tài khoản sẽ có thể sự dụng các chức năng tương ứng mà hệ thống cho phép.
+
+    3. **BR3: Quản lý ứng dụng**
+      1. **BR3.1: Chứng thực ứng dụng** - Với mỗi ứng dụng do nhà phát triển tải lên hệ thống. Hệ thống sẽ kiểm tra xem liệu cấu trúc của ứng dụng có hợp lệ hay không rồi mới cho phép lưu ứng dụng lên hệ thống.
+      2. **BR3.2: Hiển thị ứng dụn**g - Hệ thống cho phép hiển thị và sắp xếp danh sách ứng dụng theo thể loại, xếp hạng, tên, số lượt tải xuống, số lượt nhận xét, ngày tải lên. Hiển thị lịch sử các phiên bản
+      3. **BR3.3: Thao tác với ứng dụng** - Hệ thống cho phép thêm mới, sửa, xóa, tải lên, tải xuống ứng dụng.
+
+    4. **BR4: Quản lý thể loại**
+      1. **BR3.1: Hiển thị thể loại** - Hệ thống cho phép hiển thị và sắp xếp danh sách các thể loại dựa trên: tên, số lượng ứng dụng trên mỗi thể loại.
+      2. **BR3.2: Thao tác với thể loại** - Hệ thống cho phép thêm mới, sửa, xóa các thể loại.
+
+    5. **BR5: Quản lý nhận xét**
+      1. **BR5.1: Hiển thị nhận xét** - Hệ thống cho phép hiển thị và sắp xếp nhận xét trên mỗi ứng dụng theo các tiêu chí: mức độ, ngày thêm.
+      2. **BR5.2 Thao tác với nhận xét** - Hệ thống cho phép thêm mới, sửa, xóa các nhận xét trên mỗi ứng dụng.
+
+    6. **BR6: Số liệu tổng quan** - Hệ thống cho phép xem thông tin tổng quan của qoàn bộ hệ thống bao gồm thông tin về số lượng các ứng dụng, tài khoản, nhận xét, thể loại, lượt tải lên, lượt tải xuống, lượt truy cập.
+
+    7. **BR7: Báo cáo thống kê** - Hệ thống cho phép tạo các báo cáo theo ngày, tháng, quý, năm cho các thông số về số lượng các ứng dụng, tài khoản, nhận xét, thể loại, lượt tải lên, lượt tải xuống, lượt truy cập.
