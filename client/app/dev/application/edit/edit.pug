@@ -1,0 +1,61 @@
+div(
+  flex,
+  layout="column"
+)
+  h1.md-display-1(layout-padding) Application edit
+
+  form(
+    name="form"
+    ng-submit="devApplicationEdit.saveApplication(form)",
+    novalidate
+    flex,
+    layout="column"
+  )
+    md-input-container
+      label Name
+
+      input(
+        type='text',
+        name='name',
+        ng-model='devApplicationEdit.application.name',
+        required
+      )
+
+      div(ng-messages='form.name.$error')
+        p(ng-message="required") What's your category name?
+        p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
+
+    div
+      label Photo:
+
+      input(
+        type='file',
+        ngf-select,
+        ng-model='appArchive',
+        name='appArchive',
+        required,
+        ngf-model-invalid='errorFile'
+      )
+
+      div(ng-messages='form.appArchive.$error')
+        p(ng-message="required") Choose your application archive file
+        p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
+
+    md-input-container
+      label Description
+
+      input(
+        type='text',
+        name='desc',
+        ng-model='devApplicationEdit.application.description',
+        required
+      )
+
+      div(ng-messages='form.desc.$error')
+        p(ng-message="required") What's your category name?
+        p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
+
+    md-input-container
+      label Category
+
+    button.md-button.md-primary(type="submit") {{ devApplicationEdit.isEdit ? 'Save change' : 'Create' }}

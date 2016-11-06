@@ -234,6 +234,26 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
     },
 
     /**
+     * Check if a user is an developer
+     *   (synchronous|asynchronous)
+     *
+     * @param  {Function|*} callback - optional, function(is)
+     * @return {Bool|Promise}
+     */
+    isDev() {
+      return Auth.hasRole.apply(Auth, [].concat.apply(['dev'], arguments));
+    },
+
+    /**
+     * Check if a user is an developer
+     *
+     * @return {Bool}
+     */
+    isDevSync() {
+      return Auth.hasRoleSync('dev');
+    },
+
+    /**
      * Get auth token
      *
      * @return {String} - a token string used for authenticating
