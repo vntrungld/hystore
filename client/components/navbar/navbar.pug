@@ -11,6 +11,12 @@ md-toolbar.md-whiteframe-1dp(style="z-index: 100")
       ui-sref="admin.dashboard"
     ) Admin
 
+    a(
+      layout-padding,
+      ng-show="$ctrl.isDev()",
+      ui-sref="dev.dashboard"
+    ) Developer
+
     span(flex)
 
     a(

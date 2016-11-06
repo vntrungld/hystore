@@ -10,8 +10,8 @@ export class NavbarComponent {
   }];
   isLoggedIn: Function;
   isAdmin: Function;
+  isDev: Function;
   getCurrentUser: Function;
-  isAdminState: Function;
   isCollapsed = true;
   state: Object;
 
@@ -20,13 +20,9 @@ export class NavbarComponent {
 
     this.isLoggedIn = Auth.isLoggedInSync;
     this.isAdmin = Auth.isAdminSync;
+    this.isDev = Auth.isDevSync;
     this.getCurrentUser = Auth.getCurrentUserSync;
     this.state = $state;
-  }
-
-  isAdminState() {
-    var regx = /admin\./g;
-    return regx.test(this.state.current.name);
   }
 }
 
