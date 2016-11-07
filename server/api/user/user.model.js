@@ -16,7 +16,7 @@ var UserSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ['admin', 'user', 'dev'],
+    enum: ['user', 'dev', 'admin'],
     default: 'user'
   },
   password: {
