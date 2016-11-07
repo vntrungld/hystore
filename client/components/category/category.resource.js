@@ -6,7 +6,7 @@ export function CategoryResource($resource) {
   return $resource('api/categories/:id', {
     id: '@_id'
   }, {
-    changeCategoryContent: { method: 'PATCH' }
+    changeCategoryContent: { method: 'PUT' }
   });
 }
 
