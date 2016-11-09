@@ -15,7 +15,7 @@ import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
 import errorHandler from 'errorhandler';
 import path from 'path';
-import lusca from 'lusca';
+// import lusca from 'lusca';
 import config from './environment';
 import passport from 'passport';
 import session from 'express-session';
@@ -47,7 +47,6 @@ export default function(app) {
   app.use(cookieParser());
   app.use(passport.initialize());
 
-
   // Persist sessions with MongoStore / sequelizeStore
   // We need to enable sessions for passport-twitter because it's an
   // oauth 1.0 strategy, and Lusca depends on sessions
@@ -65,20 +64,20 @@ export default function(app) {
    * Lusca - express server security
    * https://github.com/krakenjs/lusca
    */
-  if(env !== 'test' && !process.env.SAUCE_USERNAME) {
-    app.use(lusca({
-      csrf: {
-        angular: true
-      },
-      xframe: 'SAMEORIGIN',
-      hsts: {
-        maxAge: 31536000, //1 year, in seconds
-        includeSubDomains: true,
-        preload: true
-      },
-      xssProtection: true
-    }));
-  }
+  // if(env !== 'test' && !process.env.SAUCE_USERNAME) {
+  //   app.use(lusca({
+  //     csrf: {
+  //       angular: true
+  //     },
+  //     xframe: 'SAMEORIGIN',
+  //     hsts: {
+  //       maxAge: 31536000, //1 year, in seconds
+  //       includeSubDomains: true,
+  //       preload: true
+  //     },
+  //     xssProtection: true
+  //   }))
+  // }
 
   if(env === 'development') {
     const webpackDevMiddleware = require('webpack-dev-middleware');
