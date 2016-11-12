@@ -89,8 +89,77 @@ Category.find({}).remove()
       name: 'Books',
       info: 'Book category'
     }, {
+      name: 'Business',
+      info: 'Business category'
+    }, {
+      name: 'Catalogues',
+      info: 'Catalogues category'
+    }, {
+      name: 'Education',
+      info: 'Education category'
+    }, {
+      name: 'Entertainment',
+      info: 'Entertainment category'
+    }, {
+      name: 'Finance',
+      info: 'Finance category'
+    }, {
+      name: 'Food & Drink',
+      info: 'Food & Drink category'
+    }, {
       name: 'Games',
       info: 'Game category'
+    }, {
+      name: 'Health & Fitness',
+      info: 'Health & Fitness category'
+    }, {
+      name: 'Kids',
+      info: 'Kids category'
+    }, {
+      name: 'Lifestyle',
+      info: 'Lifestyle category'
+    }, {
+      name: 'Magazines & Newspapers',
+      info: 'Magazines & Newspapers category'
+    }, {
+      name: 'Medical',
+      info: 'Medical category'
+    }, {
+      name: 'Music',
+      info: 'Music category'
+    }, {
+      name: 'Navigation',
+      info: 'Navigation category'
+    }, {
+      name: 'News',
+      info: 'News category'
+    }, {
+      name: 'Photo & Video',
+      info: 'Photo & Video category'
+    }, {
+      name: 'Productivity',
+      info: 'Productivity category'
+    }, {
+      name: 'Reference',
+      info: 'Reference category'
+    }, {
+      name: 'Shopping',
+      info: 'Shopping category'
+    }, {
+      name: 'Social Networking',
+      info: 'Social Networking category'
+    }, {
+      name: 'Sports',
+      info: 'Sports category'
+    }, {
+      name: 'Travel',
+      info: 'Travel category'
+    }, {
+      name: 'Utilities',
+      info: 'Utilities category'
+    }, {
+      name: 'Weather',
+      info: 'Weather category'
     }, {
       name: 'Deletes',
       info: 'Delete category',
