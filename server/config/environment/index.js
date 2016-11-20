@@ -43,7 +43,10 @@ var all = {
         safe: true
       }
     }
-  }
+  },
+
+  // Hard disk storage location
+  path: '/data/hystore/'
 };
 
 // Export the config object based on the NODE_ENV
