@@ -8,6 +8,7 @@ export default class AdminCategoryEditController {
     other: undefined
   };
   message = '';
+  id = '';
   isEdit = true;
   Category;
 
