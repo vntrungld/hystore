@@ -6,3 +6,18 @@ div(
 
   md-button(ui-sref="dev.applicationEdit") Create
 
+  md-list-item.md-2-lines(
+    ng-repeat='application in devApplication.applications',
+    ui-sref="dev.applicationEdit({ id: application._id })"
+  )
+    .md-list-item-text(
+      flex,
+      layout="column",
+    )
+      strong.md-title {{application.name}}
+      span.md-subtitle {{application.info}}
+
+    md-button.md-icon-button(ng-click='devApplication.delete(application)')
+      span.fa.fa-trash
+
+    md-divider(ng-if="!$last")

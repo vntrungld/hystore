@@ -2,16 +2,20 @@ div(
   flex,
   layout="column"
 )
-  h1.md-display-1(layout-padding) Application edit
+  h1.md-display-1(
+    flex="none",
+    layout-padding
+  )
+    | Application edit
 
   form(
     name="form"
     ng-submit="devApplicationEdit.saveApplication(form)",
     novalidate
-    flex,
+    flex="grow",
     layout="column"
   )
-    md-input-container
+    md-input-container(flex="none")
       label Name
 
       input(
@@ -22,40 +26,171 @@ div(
       )
 
       div(ng-messages='form.name.$error')
-        p(ng-message="required") What's your category name?
+        p(ng-message="required") What's your application name?
         p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
 
-    div
-      label Photo:
+    div.input-wrapper(
+      flex="none",
+      layout="row"
+    )
+      label(flex="20") Archive *:
 
       input(
-        type='file',
+        type="file",
         ngf-select,
-        ng-model='appArchive',
-        name='appArchive',
+        ng-model="devApplicationEdit.application.archive",
+        name="archive",
         required,
-        ngf-model-invalid='errorFile'
+        ngf-model-invalid="errorFile",
+        flex
       )
 
-      div(ng-messages='form.appArchive.$error')
-        p(ng-message="required") Choose your application archive file
-        p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
+    div.input-wrapper(
+      flex="none",
+      layout="column"
+    )
+      div.input-and-label(
+        flex,
+        layout="row"
+      )
+        label(flex="20") Icon *:
 
-    md-input-container
+        input(
+          type="file",
+          ngf-select,
+          ng-model="devApplicationEdit.application.icon",
+          name="icon",
+          required,
+          ngf-model-invalid="errorFile",
+          flex="none"
+        )
+
+      div.input-preview(
+        flex,
+        layout="row",
+        ng-if="devApplicationEdit.application.icon"
+      )
+        img(
+          ngf-thumbnail="devApplicationEdit.application.icon",
+          flex="none"
+        )
+
+    div.input-wrapper(
+      flex="none",
+      layout="column"
+    )
+      div.input-and-label(
+        flex,
+        layout="row"
+      )
+        label(flex="20") Feature Image *:
+
+        input(
+          type="file",
+          ngf-select,
+          ng-model="devApplicationEdit.application.feature",
+          name="feature",
+          required,
+          ngf-model-invalid="errorFile",
+          flex="none"
+        )
+
+      div.image-preview(
+        flex,
+        layout="row",
+        ng-if="devApplicationEdit.application.feature"
+      )
+        img(
+          ngf-src="devApplicationEdit.application.feature",
+          flex="none"
+        )
+
+    div.input-wrapper(
+      flex="none",
+      layout="column"
+    )
+      div.input-and-label(
+        flex="none",
+        layout="row"
+      )
+        label(flex="20") Screenshots *:
+
+        input(
+          type="file",
+          ngf-select,
+          ng-model="devApplicationEdit.application.screenshots",
+          name="screenshots",
+          required,
+          ngf-model-invalid="errorFile",
+          ngf-multiple="true",
+          flex="none"
+        )
+
+      md-grid-list.input-preview(
+        flex,
+        md-cols='1',
+        md-cols-sm='2',
+        md-cols-md='3',
+        md-cols-gt-md='6',
+        md-row-height-gt-md='1:1',
+        md-row-height='4:3',
+        md-gutter='8px',
+        md-gutter-gt-sm='4px',
+        ng-if="devApplicationEdit.application.screenshots"
+      )
+        md-grid-tile(ng-repeat="screenshot in devApplicationEdit.application.screenshots")
+          img.img-fill(
+            ngf-src="screenshot",
+            ngf-background="screenshot",
+            flex="none"
+          )
+
+    md-input-container(flex="none")
+      label Category
+
+      md-select(
+        name="category",
+        ng-model="devApplicationEdit.application.category",
+        required
+      )
+        md-option(
+          ng-repeat="category in devApplicationEdit.categories",
+          value="{{ category._id }}"
+          ng-if="category.status !== 'delete' && category.status !== 'deactive'"
+        )
+          | {{ category.name }}
+
+      div(ng-messages='form.category.$error')
+        p(ng-message="required") Please select category
+        p(ng-message="mongoose") {{ vm.errors.other }}
+
+    md-input-container(flex="none")
       label Description
 
-      input(
+      textarea(
         type='text',
         name='desc',
+        rows=5,
         ng-model='devApplicationEdit.application.description',
         required
       )
 
       div(ng-messages='form.desc.$error')
-        p(ng-message="required") What's your category name?
+        p(ng-message="required") What's your description?
         p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
 
-    md-input-container
-      label Category
+    md-input-container(flex="none")
+      label Version
+
+      input(
+        type='text',
+        name='name',
+        ng-model='devApplicationEdit.application.version',
+        required
+      )
+
+      div(ng-messages='form.version.$error')
+        p(ng-message="required") What's your application version?
+        p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
 
     button.md-button.md-primary(type="submit") {{ devApplicationEdit.isEdit ? 'Save change' : 'Create' }}
