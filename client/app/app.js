@@ -12,13 +12,11 @@ import ngMaterial from 'angular-material';
 // import ngMessages from 'angular-messages';
 // import ngValidationMatch from 'angular-validation-match';
 
-
-import {
-  routeConfig
-} from './app.config';
+import { routeConfig } from './app.config';
 
 import _Auth from '../components/auth/auth.module';
 import Category from '../components/category/category.module';
+import Application from '../components/application/application.module';
 import account from './account';
 import admin from './admin';
 import dev from './dev';
@@ -31,10 +29,10 @@ import socket from '../components/socket/socket.service';
 
 import './app.scss';
 
-angular.module('hystoreApp', [ngCookies, ngResource, ngSanitize, 'btford.socket-io', uiRouter,
-    ngMaterial, _Auth, Category, account, admin, dev, navbar, footer, main, constants, socket,
-    util
-  ])
+angular.module('hystoreApp', [ngCookies, ngResource, ngSanitize, 'btford.socket-io',
+  uiRouter, ngMaterial, _Auth, Category, Application, account, admin, dev, navbar,
+  footer, main, constants, socket, util
+])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {
     'ngInject';
