@@ -4,7 +4,7 @@
 
 'use strict';
 
-import {EventEmitter} from 'events';
+import { EventEmitter } from 'events';
 import Application from './application.model';
 var ApplicationEvents = new EventEmitter();
 
@@ -25,7 +25,7 @@ for(var e in events) {
 
 function emitEvent(event) {
   return function(doc) {
-    ApplicationEvents.emit(event + ':' + doc._id, doc);
+    ApplicationEvents.emit(`${event}:${doc._id}`, doc);
     ApplicationEvents.emit(event, doc);
   };
 }

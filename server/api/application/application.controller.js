@@ -3,6 +3,7 @@
  * GET     /api/applications              ->  index
  * POST    /api/applications              ->  create
  * GET     /api/applications/:id          ->  show
+ * GET     /api/applications/file/:filename  ->  file
  * PUT     /api/applications/:id          ->  upsert
  * PATCH   /api/applications/:id          ->  patch
  * DELETE  /api/applications/:id          ->  destroy
@@ -17,6 +18,16 @@ function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
     if(entity) {
+      const prefix = '/api/file/';
+
+      entity.icon = prefix + entity.icon;
+      entity.feature = prefix + entity.feature;
+      if(entity.screenshots !== undefined) {
+        entity.screenshots = entity.screenshots.map(screenshot => {
+          return prefix + screenshot;
+        });
+      }
+
       return res.status(statusCode).json(entity);
     }
     return null;
@@ -80,7 +91,13 @@ export function show(req, res) {
 
 // Creates a new Application in the DB
 export function create(req, res) {
-  return Application.create(req.body)
+  let data = req.body;
+  data.archive = req.files.archive[0].filename;
+  data.icon = req.files.icon[0].filename;
+  data.feature = req.files.feature[0].filename;
+  data.screenshots = req.files.screenshots.map(screenshot => screenshot.filename);
+
+  return Application.create(data)
     .then(respondWithResult(res, 201))
     .catch(handleError(res));
 }

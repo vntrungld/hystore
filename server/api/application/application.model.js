@@ -2,32 +2,32 @@
 
 import mongoose from 'mongoose';
 
-var Schema = mongoose.Schema;
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 var ApplicationSchema = new mongoose.Schema({
   name: {
     type: String,
+    index: true,
     required: true,
-    unique: true,
+    unique: true
   },
-  path: {
+  archive: {
     type: String,
-    required: true,
-    unique: true,
+    required: true
   },
   description: {
     type: String,
     required: true
   },
-  iconPath: {
+  icon: {
     type: String,
     required: true
   },
-  coverPath: {
+  feature: {
     type: String,
     required: true
   },
-  screenshotPath: [{
+  screenshots: [{
     type: String
   }],
   version: {
@@ -35,13 +35,15 @@ var ApplicationSchema = new mongoose.Schema({
     required: true
   },
   category: {
-    type: Schema.Types.ObjectId,
-    ref: 'Category'
+    type: ObjectId,
+    ref: 'Category',
+    required: true
   },
   status: {
     type: String,
     enum: ['unpublish', 'publish', 'depublish', 'block'],
-    default: 'unpublish'
+    default: 'unpublish',
+    required: true
   }
 }, { timestamps: true });
 
