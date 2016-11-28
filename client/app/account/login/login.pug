@@ -23,6 +23,7 @@ div(
 
       div(ng-messages="form.email.$error")
         p(ng-message="required") Please enter your email
+        p(ng-message="email") This is not an email
 
     md-input-container
       label Password
@@ -31,11 +32,16 @@ div(
         type="password",
         name="password",
         ng-model="vm.user.password",
-        required
+        required,
+        ng-minlength="3"
       )
 
       div(ng-messages="form.password.$error")
         p(ng-message="required") Please enter your password.
+        p(ng-message="minlength") Password must be at least 3 characters.
+
+    div(ng-messages="form.message.$error")
+      p(ng-message="mongoose") {{ vm.errors.message }}
 
     div
       button.md-button.md-primary(type="submit") Login
