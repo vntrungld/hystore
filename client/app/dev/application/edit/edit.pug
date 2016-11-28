@@ -33,9 +33,9 @@ div(
       flex="none",
       layout="row"
     )
-      label(flex="20") Archive *:
-
       input(
+        id="archiveInput",
+        ng-hide="true",
         type="file",
         ngf-select,
         ng-model="devApplicationEdit.application.archive",
@@ -44,6 +44,7 @@ div(
         ngf-model-invalid="errorFile",
         flex
       )
+      label.md-button.md-raised.md-primary(for="archiveInput") Choose an archive file
 
     div.input-wrapper(
       flex="none",

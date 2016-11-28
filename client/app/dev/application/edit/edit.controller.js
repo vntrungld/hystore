@@ -16,22 +16,22 @@ export default class DevApplicationEditController {
     other: undefined
   };
   message = '';
-  id = '';
+  slug = '';
   applicationService;
   isEdit = true;
 
   /* @ngInject */
   constructor($state, CategoryResource, Application, ApplicationResource) {
-    this.id = $state.params.id;
+    this.slug = $state.params.slug;
     this.categories = CategoryResource.query();
     this.applicationService = Application;
 
-    if(this.id === '') {
+    if(this.slug === '') {
       this.isEdit = false;
     }
 
     if(this.isEdit) {
-      this.application = ApplicationResource.get({ id: this.id });
+      this.application = ApplicationResource.get({ slug: this.slug });
     }
   }
 

@@ -24,7 +24,7 @@ export default function routes($stateProvider) {
       authenticate: 'dev'
     })
     .state('dev.applicationEdit', {
-      url: '/application/:id',
+      url: '/application/:slug',
       template: require('./application/edit/edit.pug'),
       controller: 'DevApplicationEditController',
       controllerAs: 'devApplicationEdit',

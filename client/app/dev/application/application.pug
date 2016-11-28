@@ -2,22 +2,88 @@ div(
   flex,
   layout="column"
 )
-  h1.md-display-1(layout-padding) Application list
+  md-card
+    md-toolbar.md-table-toolbar.md-default(ng-hide="devApplication.selected.length")
+      .md-toolbar-tools
+        span Application manager
+        div(flex)
+        span.md-button.md-icon-button(ui-sref="dev.applicationEdit()")
+          i.fa.fa-plus
+        md-button.md-icon-button(ng-click="devApplication.reload()")
+          i.fa.fa-refresh
+    md-toolbar.md-table-toolbar.alternate(ng-show="devApplication.selected.length")
+      .md-toolbar-tools
+        span {{ adminAccount.selected.length }} {{ adminAccount.selected.length > 1 ? 'items' : 'item' }} selected
+    md-table-container
+      table(
+        md-table,
+        md-row-select,
+        multiple,
+        ng-model="devApplication.selected",
+        md-progress="promise"
+      )
+        thead(
+          md-head,
+          md-order="devApplication.query.order",
+        )
+          tr(md-row)
+            th(
+              md-column,
+              md-order-by="name"
+            )
+              span Name
 
-  md-button(ui-sref="dev.applicationEdit") Create
+            th(md-column)
+              span Description
 
-  md-list-item.md-2-lines(
-    ng-repeat='application in devApplication.applications',
-    ui-sref="dev.applicationEdit({ id: application._id })"
-  )
-    .md-list-item-text(
-      flex,
-      layout="column",
+            th(
+              md-column,
+              md-order-by="version"
+            )
+              span Version
+
+            th(
+              md-column,
+              md-order-by="status"
+            )
+              span Status
+
+            th(md-column)
+              span Action
+
+        tbody(md-body)
+          tr(
+            md-row,
+            md-select="application",
+            md-on-select="logItem",
+            ng-repeat="application in devApplication.applications | filter: filter.search | orderBy: devApplication.query.order | limitTo: devApplication.query.limit : (devApplication.query.page -1) * devApplication.query.limit"
+          )
+            td(md-cell) {{ application.name }}
+
+            td(md-cell) {{ application.description }}
+
+            td(md-cell) {{ application.version }}
+
+            td(md-cell)
+              md-select(ng-model="application.status")
+                md-option(
+                  ng-value="status.value",
+                  ng-repeat="status in devApplication.status"
+                )
+                  | {{ status.name }}
+
+            td(md-cell)
+              span.md-button.md-icon-button(ui-sref="dev.applicationEdit({ slug: application.slug })")
+                i.fa.fa-pencil
+
+              span.md-button.md-icon-button(ng-click="devApplication.delete(application)")
+                i.fa.fa-trash
+
+    md-table-pagination(
+      md-limit="devApplication.query.limit",
+      md-limit-options="devApplication.limitOptions",
+      md-page="devApplication.query.page",
+      md-total="{{ devApplication.applications.length }}",
+      md-page-select,
+      md-on-paginate="logPagination"
     )
-      strong.md-title {{application.name}}
-      span.md-subtitle {{application.info}}
-
-    md-button.md-icon-button(ng-click='devApplication.delete(application)')
-      span.fa.fa-trash
-
-    md-divider(ng-if="!$last")

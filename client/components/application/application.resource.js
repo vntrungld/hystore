@@ -3,8 +3,8 @@
 export function ApplicationResource($resource) {
   'ngInject';
 
-  return $resource('api/applications/:id', {
-    id: '@_id'
+  return $resource('api/applications/:slug', {
+    slug: '@slug'
   }, {
     upload: { method: 'POST' }
   });
