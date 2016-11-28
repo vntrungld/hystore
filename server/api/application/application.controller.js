@@ -14,6 +14,8 @@
 import jsonpatch from 'fast-json-patch';
 import Application from './application.model';
 
+const util = require('../../utilities');
+
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
@@ -83,7 +85,7 @@ export function index(req, res) {
 
 // Gets a single Application from the DB
 export function show(req, res) {
-  return Application.findById(req.params.id).exec()
+  return Application.findOne({ slug: req.params.slug }).populate('categories').exec()
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -96,6 +98,8 @@ export function create(req, res) {
   data.icon = req.files.icon[0].filename;
   data.feature = req.files.feature[0].filename;
   data.screenshots = req.files.screenshots.map(screenshot => screenshot.filename);
+  data.slug = util.slugify(req.body.name);
+  data.author = req.user._id;
 
   return Application.create(data)
     .then(respondWithResult(res, 201))

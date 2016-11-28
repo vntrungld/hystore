@@ -8,10 +8,10 @@ var auth = require('../../auth/auth.service');
 var router = express.Router();
 
 router.get('/', controller.index);
-router.get('/:id', controller.show);
+router.get('/:slug', controller.show);
 router.post('/', auth.hasRole('dev'), File.upload, controller.create);
-router.put('/:id', controller.upsert);
-router.patch('/:id', controller.patch);
-router.delete('/:id', controller.destroy);
+router.put('/:id', auth.hasRole('dev'), controller.upsert);
+router.patch('/:id', auth.hasRole('dev'), controller.patch);
+router.delete('/:id', auth.hasRole('dev'), controller.destroy);
 
 module.exports = router;

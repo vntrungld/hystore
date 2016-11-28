@@ -5,9 +5,18 @@ import mongoose from 'mongoose';
 const ObjectId = mongoose.Schema.Types.ObjectId;
 
 var ApplicationSchema = new mongoose.Schema({
+  author: {
+    type: ObjectId,
+    ref: 'User',
+    required: true
+  },
   name: {
     type: String,
-    index: true,
+    required: true,
+    unique: true
+  },
+  slug: {
+    type: String,
     required: true,
     unique: true
   },
@@ -36,8 +45,7 @@ var ApplicationSchema = new mongoose.Schema({
   },
   category: {
     type: ObjectId,
-    ref: 'Category',
-    required: true
+    ref: 'Category'
   },
   status: {
     type: String,
