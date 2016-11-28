@@ -17,7 +17,7 @@ export function CategoryService(Util, CategoryResource) {
      */
     changeCategoryContent(category, callback ? : Function) {
       return CategoryResource.changeCategoryContent({
-        id: category._id
+        slug: category.slug
       },
         category,
         () => safeCb(callback)(null, category),

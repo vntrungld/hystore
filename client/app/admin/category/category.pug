@@ -2,23 +2,102 @@ div(
   flex,
   layout="column"
 )
-  h1.md-display-1(layout-padding) Category list
-
-  md-button(ui-sref="admin.categoryEdit") Create
-
-  md-list
-    md-list-item.md-2-lines(
-      ng-repeat='category in adminCategory.categories',
-      ui-sref="admin.categoryEdit({ id: category._id })"
-    )
-      .md-list-item-text(
-        flex,
-        layout="column",
+  md-card
+    md-toolbar.md-table-toolbar.md-default(ng-hide="adminCategory.selected.length")
+      .md-toolbar-tools
+        span Category manager
+        div(flex)
+        span.md-button.md-icon-button(ui-sref="admin.categoryEdit()")
+          i.fa.fa-plus
+        md-button.md-icon-button(ng-click="adminCategory.reload()")
+          i.fa.fa-refresh
+    md-toolbar.md-table-toolbar.alternate(ng-show="adminCategory.selected.length")
+      .md-toolbar-tools
+        span {{ adminCategory.selected.length }} {{ adminCategory.selected.length > 1 ? 'items' : 'item' }} selected
+    md-table-container
+      table(
+        md-table,
+        md-row-select,
+        multiple,
+        ng-model="adminCategory.selected",
+        md-progress="promise"
       )
-        strong.md-title {{category.name}}
-        span.md-subtitle {{category.info}}
+        thead(
+          md-head,
+          md-order="adminCategory.query.order",
+        )
+          tr(md-row)
+            th(
+              md-column,
+              md-order-by="name"
+            )
+              span Name
 
-      md-button.md-icon-button(ng-click='adminCategory.delete(category)')
-        span.fa.fa-trash
+            th(
+              md-column,
+              md-order-by="slug"
+            )
+              span Slug
 
-      md-divider(ng-if="!$last")
+            th(md-column)
+              span Infomation
+
+            th(
+              md-column,
+              md-order-by="parent"
+            )
+              span Parent
+
+            th(
+              md-column,
+              md-order-by="status"
+            )
+              span Status
+
+            th(md-column)
+              span Action
+
+        tbody(md-body)
+          tr(
+            md-row,
+            md-select="category",
+            md-on-select="logItem",
+            ng-repeat="category in adminCategory.categories | filter: filter.search | orderBy: adminCategory.query.order | limitTo: adminCategory.query.limit : (adminCategory.query.page -1) * adminCategory.query.limit"
+          )
+            td(md-cell) {{ category.name }}
+
+            td(md-cell) {{ category.slug }}
+
+            td(md-cell) {{ category.info }}
+
+            td(md-cell)
+              md-select(ng-model="category.parent._id")
+                md-option(
+                  ng-value="parent._id",
+                  ng-repeat="parent in adminCategory.categories"
+                )
+                  | {{ parent.name }}
+
+            td(md-cell)
+              md-select(ng-model="category.status")
+                md-option(
+                  ng-value="status.value",
+                  ng-repeat="status in adminCategory.status"
+                )
+                  | {{ status.name }}
+
+            td(md-cell)
+              span.md-button.md-icon-button(ui-sref="admin.categoryEdit({ slug: category.slug })")
+                i.fa.fa-pencil
+
+              span.md-button.md-icon-button(ng-click="adminCategory.delete(category)")
+                i.fa.fa-trash
+
+    md-table-pagination(
+      md-limit="adminCategory.query.limit",
+      md-limit-options="adminCategory.limitOptions",
+      md-page="adminCategory.query.page",
+      md-total="{{ adminCategory.categories.length }}",
+      md-page-select,
+      md-on-paginate="logPagination"
+    )

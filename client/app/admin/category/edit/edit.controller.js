@@ -1,6 +1,7 @@
 'use strict';
 
 export default class AdminCategoryEditController {
+  categories = [];
   options = {
     status: ['active', 'deactive', 'delete']
   };
@@ -8,21 +9,25 @@ export default class AdminCategoryEditController {
     other: undefined
   };
   message = '';
-  id = '';
+  slug = '';
   isEdit = true;
+  state;
   Category;
 
   /*@ngInject*/
   constructor($state, CategoryResource, Category) {
     this.Category = Category;
-    this.id = $state.params.id;
+    this.state = $state;
+    this.slug = $state.params.slug;
 
-    if(this.id === '') {
+    this.categories = CategoryResource.query();
+
+    if(this.slug === '') {
       this.isEdit = false;
     }
 
     if(this.isEdit) {
-      this.category = CategoryResource.get({ id: this.id });
+      this.category = CategoryResource.get({ slug: this.slug });
     }
   }
 
@@ -30,7 +35,7 @@ export default class AdminCategoryEditController {
     this.Category
       .createCategory(this.category)
       .then(() => {
-        this.message = 'Category successfully created.';
+        this.state.go('admin.category');
       })
       .catch(() => {
         form.name.$setValidity('mongoose', false);
@@ -45,7 +50,7 @@ export default class AdminCategoryEditController {
     this.Category
       .changeCategoryContent(this.category)
       .then(() => {
-        this.message = 'Category successfully changed.';
+        this.state.go('admin.category');
       })
       .catch(() => {
         form.name.$setValidity('mongoose', false);

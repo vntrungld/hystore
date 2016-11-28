@@ -38,7 +38,7 @@ export default function routes($stateProvider) {
       authenticate: 'admin'
     })
     .state('admin.categoryEdit', {
-      url: '/category/:id',
+      url: '/category/:slug',
       template: require('./category/edit/edit.pug'),
       controller: 'AdminCategoryEditController',
       controllerAs: 'adminCategoryEdit',

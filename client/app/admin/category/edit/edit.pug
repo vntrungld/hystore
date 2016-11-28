@@ -51,6 +51,19 @@ div(
           value="{{ option }}"
         ) {{ option }}
 
+    md-input-container
+      label Parent
+
+      md-select(
+        name="parent",
+        ng-model="adminCategoryEdit.category.parent",
+      )
+        md-option(
+          ng-repeat="parent in adminCategoryEdit.categories",
+          value="{{ parent._id }}"
+        )
+          | {{ parent.name }}
+
       div(ng-messages='form.status.$error')
         p(ng-message="required") Please select role
         p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
