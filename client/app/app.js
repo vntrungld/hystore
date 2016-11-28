@@ -5,7 +5,6 @@ import angular from 'angular';
 import ngCookies from 'angular-cookies';
 import ngResource from 'angular-resource';
 import ngSanitize from 'angular-sanitize';
-import 'angular-socket-io';
 
 import uiRouter from 'angular-ui-router';
 import ngMaterial from 'angular-material';
