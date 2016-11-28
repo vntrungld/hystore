@@ -3,28 +3,28 @@ div(
   layout="column"
 )
   md-card
-    md-toolbar.md-table-toolbar.md-default(ng-hide="adminCategory.selected.length")
+    md-toolbar.md-table-toolbar.md-default(ng-hide="vm.selected.length")
       .md-toolbar-tools
         span Category manager
         div(flex)
         span.md-button.md-icon-button(ui-sref="admin.categoryEdit()")
           i.fa.fa-plus
-        md-button.md-icon-button(ng-click="adminCategory.reload()")
+        md-button.md-icon-button(ng-click="vm.reload()")
           i.fa.fa-refresh
-    md-toolbar.md-table-toolbar.alternate(ng-show="adminCategory.selected.length")
+    md-toolbar.md-table-toolbar.alternate(ng-show="vm.selected.length")
       .md-toolbar-tools
-        span {{ adminCategory.selected.length }} {{ adminCategory.selected.length > 1 ? 'items' : 'item' }} selected
+        span {{ vm.selected.length }} {{ vm.selected.length > 1 ? 'items' : 'item' }} selected
     md-table-container
       table(
         md-table,
         md-row-select,
         multiple,
-        ng-model="adminCategory.selected",
+        ng-model="vm.selected",
         md-progress="promise"
       )
         thead(
           md-head,
-          md-order="adminCategory.query.order",
+          md-order="vm.query.order",
         )
           tr(md-row)
             th(
@@ -62,7 +62,7 @@ div(
             md-row,
             md-select="category",
             md-on-select="logItem",
-            ng-repeat="category in adminCategory.categories | filter: filter.search | orderBy: adminCategory.query.order | limitTo: adminCategory.query.limit : (adminCategory.query.page -1) * adminCategory.query.limit"
+            ng-repeat="category in vm.categories | filter: filter.search | orderBy: vm.query.order | limitTo: vm.query.limit : (vm.query.page -1) * vm.query.limit"
           )
             td(md-cell) {{ category.name }}
 
@@ -74,7 +74,7 @@ div(
               md-select(ng-model="category.parent._id")
                 md-option(
                   ng-value="parent._id",
-                  ng-repeat="parent in adminCategory.categories"
+                  ng-repeat="parent in vm.categories"
                 )
                   | {{ parent.name }}
 
@@ -82,7 +82,7 @@ div(
               md-select(ng-model="category.status")
                 md-option(
                   ng-value="status.value",
-                  ng-repeat="status in adminCategory.status"
+                  ng-repeat="status in vm.status"
                 )
                   | {{ status.name }}
 
@@ -90,14 +90,14 @@ div(
               span.md-button.md-icon-button(ui-sref="admin.categoryEdit({ slug: category.slug })")
                 i.fa.fa-pencil
 
-              span.md-button.md-icon-button(ng-click="adminCategory.delete(category)")
+              span.md-button.md-icon-button(ng-click="vm.delete(category)")
                 i.fa.fa-trash
 
     md-table-pagination(
-      md-limit="adminCategory.query.limit",
-      md-limit-options="adminCategory.limitOptions",
-      md-page="adminCategory.query.page",
-      md-total="{{ adminCategory.categories.length }}",
+      md-limit="vm.query.limit",
+      md-limit-options="vm.limitOptions",
+      md-page="vm.query.page",
+      md-total="{{ vm.categories.length }}",
       md-page-select,
       md-on-paginate="logPagination"
     )

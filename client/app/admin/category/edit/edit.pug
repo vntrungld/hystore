@@ -3,11 +3,11 @@ div(
   layout="column",
   layout-padding
 )
-  h1.md-display-1 {{ adminCategoryEdit.isEdit ? 'Edit' : 'Create' }} category
+  h1.md-display-1 {{ vm.isEdit ? 'Edit' : 'Create' }} category
 
   form(
     name='form',
-    ng-submit='adminCategoryEdit.saveCategory(form)',
+    ng-submit='vm.saveCategory(form)',
     novalidate=''
     flex,
     layout="column"
@@ -18,13 +18,13 @@ div(
       input(
         type='text',
         name='name',
-        ng-model='adminCategoryEdit.category.name',
+        ng-model='vm.category.name',
         required
       )
 
       div(ng-messages='form.name.$error')
         p(ng-message="required") What's your category name?
-        p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
+        p(ng-message="mongoose") {{ vm.errors.other }}
 
     md-input-container
       label Info
@@ -32,22 +32,22 @@ div(
       input(
         type='text',
         name='info',
-        ng-model='adminCategoryEdit.category.info'
+        ng-model='vm.category.info'
       )
 
       div(ng-messages='form.info.$error')
-        p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
+        p(ng-message="mongoose") {{ vm.errors.other }}
 
     md-input-container
       label Status
 
       md-select(
         name='status',
-        ng-model="adminCategoryEdit.category.status",
+        ng-model="vm.category.status",
         required
       )
         md-option(
-          ng-repeat="option in adminCategoryEdit.options.status",
+          ng-repeat="option in vm.options.status",
           value="{{ option }}"
         ) {{ option }}
 
@@ -56,17 +56,17 @@ div(
 
       md-select(
         name="parent",
-        ng-model="adminCategoryEdit.category.parent",
+        ng-model="vm.category.parent",
       )
         md-option(
-          ng-repeat="parent in adminCategoryEdit.categories",
+          ng-repeat="parent in vm.categories",
           value="{{ parent._id }}"
         )
           | {{ parent.name }}
 
       div(ng-messages='form.status.$error')
         p(ng-message="required") Please select role
-        p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
+        p(ng-message="mongoose") {{ vm.errors.other }}
 
     div
-      button.md-button.md-primary(type="submit") {{ adminCategoryEdit.isEdit ? 'Save change' : 'Create' }}
+      button.md-button.md-primary(type="submit") {{ vm.isEdit ? 'Save change' : 'Create' }}

@@ -7,7 +7,7 @@ div(
 
   form(
     name='form',
-    ng-submit='adminAccountEdit.changeUserProfile(form)',
+    ng-submit='vm.changeUserProfile(form)',
     novalidate=''
     flex,
     layout="column"
@@ -18,7 +18,7 @@ div(
       input(
         type='text',
         name='name',
-        ng-model='adminAccountEdit.user.name'
+        ng-model='vm.user.name'
       )
 
       div(ng-messages='form.name.$error')
@@ -29,11 +29,11 @@ div(
 
       md-select(
         name='role',
-        ng-model="adminAccountEdit.user.role",
+        ng-model="vm.user.role",
         required
       )
         md-option(
-          ng-repeat="option in adminAccountEdit.options.role",
+          ng-repeat="option in vm.options.role",
           value="{{ option }}"
         ) {{ option }}
 
@@ -46,11 +46,11 @@ div(
 
       md-select(
         name='status',
-        ng-model="adminAccountEdit.user.status",
+        ng-model="vm.user.status",
         required
       )
         md-option(
-          ng-repeat="option in adminAccountEdit.options.status",
+          ng-repeat="option in vm.options.status",
           value="{{ option }}"
         ) {{ option }}
 

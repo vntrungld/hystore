@@ -13,21 +13,21 @@ export default function routes($stateProvider) {
       url: '/dashboard',
       template: require('./dashboard/dashboard.pug'),
       controller: 'DevDashboardController',
-      controllerAs: 'devDashboard',
+      controllerAs: 'vm',
       authenticate: 'dev'
     })
     .state('dev.application', {
       url: '/applications',
       template: require('./application/application.pug'),
       controller: 'DevApplicationController',
-      controllerAs: 'devApplication',
+      controllerAs: 'vm',
       authenticate: 'dev'
     })
     .state('dev.applicationEdit', {
       url: '/application/:slug',
       template: require('./application/edit/edit.pug'),
       controller: 'DevApplicationEditController',
-      controllerAs: 'devApplicationEdit',
+      controllerAs: 'vm',
       authenticate: 'dev'
     });
 }

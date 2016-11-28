@@ -1,10 +1,10 @@
 'use strict';
 
 export default class AdminApplicationController {
-  applications: Object[];
+  applications = [];
 
   /*@ngInject*/
-  constructor() {
-
+  constructor(ApplicationResource) {
+    this.applications = ApplicationResource.query();
   }
 }

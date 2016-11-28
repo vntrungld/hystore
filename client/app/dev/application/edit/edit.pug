@@ -10,7 +10,7 @@ div(
 
   form(
     name="form"
-    ng-submit="devApplicationEdit.saveApplication(form)",
+    ng-submit="vm.saveApplication(form)",
     novalidate
     flex="grow",
     layout="column"
@@ -21,7 +21,7 @@ div(
       input(
         type='text',
         name='name',
-        ng-model='devApplicationEdit.application.name',
+        ng-model='vm.application.name',
         required
       )
 
@@ -38,7 +38,7 @@ div(
         ng-hide="true",
         type="file",
         ngf-select,
-        ng-model="devApplicationEdit.application.archive",
+        ng-model="vm.application.archive",
         name="archive",
         required,
         ngf-model-invalid="errorFile",
@@ -59,7 +59,7 @@ div(
         input(
           type="file",
           ngf-select,
-          ng-model="devApplicationEdit.application.icon",
+          ng-model="vm.application.icon",
           name="icon",
           required,
           ngf-model-invalid="errorFile",
@@ -69,10 +69,10 @@ div(
       div.input-preview(
         flex,
         layout="row",
-        ng-if="devApplicationEdit.application.icon"
+        ng-if="vm.application.icon"
       )
         img(
-          ngf-thumbnail="devApplicationEdit.application.icon",
+          ngf-thumbnail="vm.application.icon",
           flex="none"
         )
 
@@ -89,7 +89,7 @@ div(
         input(
           type="file",
           ngf-select,
-          ng-model="devApplicationEdit.application.feature",
+          ng-model="vm.application.feature",
           name="feature",
           required,
           ngf-model-invalid="errorFile",
@@ -99,10 +99,10 @@ div(
       div.image-preview(
         flex,
         layout="row",
-        ng-if="devApplicationEdit.application.feature"
+        ng-if="vm.application.feature"
       )
         img(
-          ngf-src="devApplicationEdit.application.feature",
+          ngf-src="vm.application.feature",
           flex="none"
         )
 
@@ -119,7 +119,7 @@ div(
         input(
           type="file",
           ngf-select,
-          ng-model="devApplicationEdit.application.screenshots",
+          ng-model="vm.application.screenshots",
           name="screenshots",
           required,
           ngf-model-invalid="errorFile",
@@ -137,9 +137,9 @@ div(
         md-row-height='4:3',
         md-gutter='8px',
         md-gutter-gt-sm='4px',
-        ng-if="devApplicationEdit.application.screenshots"
+        ng-if="vm.application.screenshots"
       )
-        md-grid-tile(ng-repeat="screenshot in devApplicationEdit.application.screenshots")
+        md-grid-tile(ng-repeat="screenshot in vm.application.screenshots")
           img.img-fill(
             ngf-src="screenshot",
             ngf-background="screenshot",
@@ -151,11 +151,11 @@ div(
 
       md-select(
         name="category",
-        ng-model="devApplicationEdit.application.category",
+        ng-model="vm.application.category",
         required
       )
         md-option(
-          ng-repeat="category in devApplicationEdit.categories",
+          ng-repeat="category in vm.categories",
           value="{{ category._id }}"
           ng-if="category.status !== 'delete' && category.status !== 'deactive'"
         )
@@ -172,7 +172,7 @@ div(
         type='text',
         name='desc',
         rows=5,
-        ng-model='devApplicationEdit.application.description',
+        ng-model='vm.application.description',
         required
       )
 
@@ -186,7 +186,7 @@ div(
       input(
         type='text',
         name='name',
-        ng-model='devApplicationEdit.application.version',
+        ng-model='vm.application.version',
         required
       )
 
@@ -194,4 +194,4 @@ div(
         p(ng-message="required") What's your application version?
         p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
 
-    button.md-button.md-primary(type="submit") {{ devApplicationEdit.isEdit ? 'Save change' : 'Create' }}
+    button.md-button.md-primary(type="submit") {{ vm.isEdit ? 'Save change' : 'Create' }}

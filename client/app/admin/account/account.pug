@@ -3,26 +3,26 @@ div(
   layout="column"
 )
   md-card
-    md-toolbar.md-table-toolbar.md-default(ng-hide="adminAccount.selected.length")
+    md-toolbar.md-table-toolbar.md-default(ng-hide="vm.selected.length")
       .md-toolbar-tools
         span Account manager
         div(flex)
-        md-button.md-icon-button(ng-click="adminAccount.reload()")
+        md-button.md-icon-button(ng-click="vm.reload()")
           i.fa.fa-refresh
-    md-toolbar.md-table-toolbar.alternate(ng-show="adminAccount.selected.length")
+    md-toolbar.md-table-toolbar.alternate(ng-show="vm.selected.length")
       .md-toolbar-tools
-        span {{ adminAccount.selected.length }} {{ adminAccount.selected.length > 1 ? 'items' : 'item' }} selected
+        span {{ vm.selected.length }} {{ vm.selected.length > 1 ? 'items' : 'item' }} selected
     md-table-container
       table(
         md-table,
         md-row-select,
         multiple,
-        ng-model="adminAccount.selected",
+        ng-model="vm.selected",
         md-progress="promise"
       )
         thead(
           md-head,
-          md-order="adminAccount.query.order",
+          md-order="vm.query.order",
         )
           tr(md-row)
             th(
@@ -52,7 +52,7 @@ div(
             md-row,
             md-select="user",
             md-on-select="logItem",
-            ng-repeat="user in adminAccount.users | filter: filter.search | orderBy: adminAccount.query.order | limitTo: adminAccount.query.limit : (adminAccount.query.page -1) * adminAccount.query.limit"
+            ng-repeat="user in vm.users | filter: filter.search | orderBy: vm.query.order | limitTo: vm.query.limit : (vm.query.page -1) * vm.query.limit"
           )
             td(md-cell) {{ user.name }}
             td(md-cell) {{ user.email }}
@@ -60,27 +60,27 @@ div(
               md-select(ng-model="user.role")
                 md-option(
                   ng-value="roles.value",
-                  ng-repeat="roles in adminAccount.roles"
+                  ng-repeat="roles in vm.roles"
                 )
                   | {{ roles.name }}
             td(md-cell)
               md-select(ng-model="user.status")
                 md-option(
                   ng-value="status.value",
-                  ng-repeat="status in adminAccount.status"
+                  ng-repeat="status in vm.status"
                 )
                   | {{ status.name }}
             td(md-cell)
               span.md-button.md-icon-button(ui-sref="admin.accountEdit({ id: user._id })")
                 i.fa.fa-pencil
 
-              span.md-button.md-icon-button(ng-click="adminAccount.delete(user)")
+              span.md-button.md-icon-button(ng-click="vm.delete(user)")
                 i.fa.fa-trash
     md-table-pagination(
-      md-limit="adminAccount.query.limit",
-      md-limit-options="adminAccount.limitOptions",
-      md-page="adminAccount.query.page",
-      md-total="{{ adminAccount.users.length }}",
+      md-limit="vm.query.limit",
+      md-limit-options="vm.limitOptions",
+      md-page="vm.query.page",
+      md-total="{{ vm.users.length }}",
       md-page-select,
       md-on-paginate="logPagination"
     )

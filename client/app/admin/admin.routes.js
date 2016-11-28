@@ -13,42 +13,42 @@ export default function routes($stateProvider) {
       url: '/dashboard',
       template: require('./dashboard/dashboard.pug'),
       controller: 'AdminDashboardController',
-      controllerAs: 'adminDashboard',
+      controllerAs: 'vm',
       authenticate: 'admin'
     })
     .state('admin.account', {
       url: '/accounts',
       template: require('./account/account.pug'),
       controller: 'AdminAccountController',
-      controllerAs: 'adminAccount',
+      controllerAs: 'vm',
       authenticate: 'admin'
     })
     .state('admin.accountEdit', {
       url: '/account/:id',
       template: require('./account/edit/edit.pug'),
       controller: 'AdminAccountEditController',
-      controllerAs: 'adminAccountEdit',
+      controllerAs: 'vm',
       authenticate: 'admin'
     })
     .state('admin.category', {
       url: '/categories',
       template: require('./category/category.pug'),
       controller: 'AdminCategoryController',
-      controllerAs: 'adminCategory',
+      controllerAs: 'vm',
       authenticate: 'admin'
     })
     .state('admin.categoryEdit', {
       url: '/category/:slug',
       template: require('./category/edit/edit.pug'),
       controller: 'AdminCategoryEditController',
-      controllerAs: 'adminCategoryEdit',
+      controllerAs: 'vm',
       authenticate: 'admin'
     })
     .state('admin.application', {
       url: '/applications',
       template: require('./application/application.pug'),
       controller: 'AdminApplicationController',
-      controllerAs: 'adminApplication',
+      controllerAs: 'vm',
       authenticate: 'admin'
     });
 }

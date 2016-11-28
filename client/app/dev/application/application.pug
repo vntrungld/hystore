@@ -3,15 +3,15 @@ div(
   layout="column"
 )
   md-card
-    md-toolbar.md-table-toolbar.md-default(ng-hide="devApplication.selected.length")
+    md-toolbar.md-table-toolbar.md-default(ng-hide="vm.selected.length")
       .md-toolbar-tools
         span Application manager
         div(flex)
         span.md-button.md-icon-button(ui-sref="dev.applicationEdit()")
           i.fa.fa-plus
-        md-button.md-icon-button(ng-click="devApplication.reload()")
+        md-button.md-icon-button(ng-click="vm.reload()")
           i.fa.fa-refresh
-    md-toolbar.md-table-toolbar.alternate(ng-show="devApplication.selected.length")
+    md-toolbar.md-table-toolbar.alternate(ng-show="vm.selected.length")
       .md-toolbar-tools
         span {{ adminAccount.selected.length }} {{ adminAccount.selected.length > 1 ? 'items' : 'item' }} selected
     md-table-container
@@ -19,12 +19,12 @@ div(
         md-table,
         md-row-select,
         multiple,
-        ng-model="devApplication.selected",
+        ng-model="vm.selected",
         md-progress="promise"
       )
         thead(
           md-head,
-          md-order="devApplication.query.order",
+          md-order="vm.query.order",
         )
           tr(md-row)
             th(
@@ -56,7 +56,7 @@ div(
             md-row,
             md-select="application",
             md-on-select="logItem",
-            ng-repeat="application in devApplication.applications | filter: filter.search | orderBy: devApplication.query.order | limitTo: devApplication.query.limit : (devApplication.query.page -1) * devApplication.query.limit"
+            ng-repeat="application in vm.applications | filter: filter.search | orderBy: vm.query.order | limitTo: vm.query.limit : (vm.query.page -1) * vm.query.limit"
           )
             td(md-cell) {{ application.name }}
 
@@ -68,7 +68,7 @@ div(
               md-select(ng-model="application.status")
                 md-option(
                   ng-value="status.value",
-                  ng-repeat="status in devApplication.status"
+                  ng-repeat="status in vm.status"
                 )
                   | {{ status.name }}
 
@@ -76,14 +76,14 @@ div(
               span.md-button.md-icon-button(ui-sref="dev.applicationEdit({ slug: application.slug })")
                 i.fa.fa-pencil
 
-              span.md-button.md-icon-button(ng-click="devApplication.delete(application)")
+              span.md-button.md-icon-button(ng-click="vm.delete(application)")
                 i.fa.fa-trash
 
     md-table-pagination(
-      md-limit="devApplication.query.limit",
-      md-limit-options="devApplication.limitOptions",
-      md-page="devApplication.query.page",
-      md-total="{{ devApplication.applications.length }}",
+      md-limit="vm.query.limit",
+      md-limit-options="vm.limitOptions",
+      md-page="vm.query.page",
+      md-total="{{ vm.applications.length }}",
       md-page-select,
       md-on-paginate="logPagination"
     )
