@@ -2,21 +2,85 @@ div(
   flex,
   layout="column"
 )
-  h1.md-display-1(layout-padding) Account manager
-
-  md-list
-    md-list-item.md-2-lines(
-      ng-repeat='user in adminAccount.users',
-      ui-sref="admin.accountEdit({ id: user._id })"
-    )
-      .md-list-item-text(
-        flex,
-        layout="column",
+  md-card
+    md-toolbar.md-table-toolbar.md-default(ng-hide="adminAccount.selected.length")
+      .md-toolbar-tools
+        span Account manager
+        div(flex)
+        md-button.md-icon-button(ng-click="adminAccount.reload()")
+          i.fa.fa-refresh
+    md-toolbar.md-table-toolbar.alternate(ng-show="adminAccount.selected.length")
+      .md-toolbar-tools
+        span {{ adminAccount.selected.length }} {{ adminAccount.selected.length > 1 ? 'items' : 'item' }} selected
+    md-table-container
+      table(
+        md-table,
+        md-row-select,
+        multiple,
+        ng-model="adminAccount.selected",
+        md-progress="promise"
       )
-        strong.md-title {{user.name}}
-        span.md-subtitle {{user.email}}
+        thead(
+          md-head,
+          md-order="adminAccount.query.order",
+        )
+          tr(md-row)
+            th(
+              md-column,
+              md-order-by="name"
+            )
+              span Name
+            th(
+              md-column,
+              md-order-by="email"
+            )
+              span Email
+            th(
+              md-column,
+              md-order-by="role"
+            )
+              span Role
+            th(
+              md-column,
+              md-order-by="status"
+            )
+              span Status
+            th(md-column)
+              span Action
+        tbody(md-body)
+          tr(
+            md-row,
+            md-select="user",
+            md-on-select="logItem",
+            ng-repeat="user in adminAccount.users | filter: filter.search | orderBy: adminAccount.query.order | limitTo: adminAccount.query.limit : (adminAccount.query.page -1) * adminAccount.query.limit"
+          )
+            td(md-cell) {{ user.name }}
+            td(md-cell) {{ user.email }}
+            td(md-cell)
+              md-select(ng-model="user.role")
+                md-option(
+                  ng-value="roles.value",
+                  ng-repeat="roles in adminAccount.roles"
+                )
+                  | {{ roles.name }}
+            td(md-cell)
+              md-select(ng-model="user.status")
+                md-option(
+                  ng-value="status.value",
+                  ng-repeat="status in adminAccount.status"
+                )
+                  | {{ status.name }}
+            td(md-cell)
+              span.md-button.md-icon-button(ui-sref="admin.accountEdit({ id: user._id })")
+                i.fa.fa-pencil
 
-      md-button.md-icon-button(ng-click='adminAccount.delete(user)')
-        span.fa.fa-trash
-
-      md-divider(ng-if="!$last")
+              span.md-button.md-icon-button(ng-click="adminAccount.delete(user)")
+                i.fa.fa-trash
+    md-table-pagination(
+      md-limit="adminAccount.query.limit",
+      md-limit-options="adminAccount.limitOptions",
+      md-page="adminAccount.query.page",
+      md-total="{{ adminAccount.users.length }}",
+      md-page-select,
+      md-on-paginate="logPagination"
+    )
