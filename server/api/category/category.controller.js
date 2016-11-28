@@ -14,6 +14,8 @@
 import jsonpatch from 'fast-json-patch';
 import Category from './category.model';
 
+const util = require('../../utilities');
+
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
@@ -66,22 +68,41 @@ function handleError(res, statusCode) {
 
 // Gets a list of Categorys
 export function index(req, res) {
-  return Category.find().exec()
+  return Category.find().populate('parent').populate('children').exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
 
 // Gets a single Category from the DB
 export function show(req, res) {
-  return Category.findById(req.params.id).exec()
+  return Category.findOne({ slug: req.params.slug }).populate('children').populate('parent').exec()
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
 
+function updateChildren(parentId) {
+  return function(child) {
+    if (child) {
+      if (parentId) {
+        Category.findOne({ _id: parentId })
+          .then(parent => {
+            parent.children.push(child._id);
+            parent.save();
+          });
+      }
+      return child;
+    }
+    return null;
+  }
+}
+
 // Creates a new Category in the DB
 export function create(req, res) {
+  req.body.slug = util.slugify(req.body.name);
+
   return Category.create(req.body)
+    .then(updateChildren(req.body.parent))
     .then(respondWithResult(res, 201))
     .catch(handleError(res));
 }
@@ -91,7 +112,7 @@ export function upsert(req, res) {
   if(req.body._id) {
     delete req.body._id;
   }
-  return Category.findOneAndUpdate(req.params.id, req.body, {upsert: true, setDefaultsOnInsert: true, runValidators: true}).exec()
+  return Category.findOneAndUpdate({ slug: req.params.slug }, req.body, {upsert: true, setDefaultsOnInsert: true, runValidators: true}).exec()
 
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -104,7 +125,7 @@ export function patch(req, res) {
     delete req.body.createdAt;
     delete req.body.updatedAt;
   }
-  return Category.findById(req.params.id).exec()
+  return Category.findOne({ slug: req.params.slug }).exec()
     .then(handleEntityNotFound(res))
     .then(patchUpdates(req.body))
     .then(respondWithResult(res))
@@ -113,7 +134,7 @@ export function patch(req, res) {
 
 // Deletes a Category from the DB
 export function destroy(req, res) {
-  return Category.findById(req.params.id).exec()
+  return Category.findOne({ slug: req.params.id }).exec()
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));
