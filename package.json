@@ -8,6 +8,8 @@
     "angular-aria": "~1.5.5",
     "angular-cookies": "~1.5.5",
     "angular-material": "^1.1.1",
+    "angular-material-data-table": "^0.10.9",
+    "angular-messages": "^1.5.9",
     "angular-resource": "~1.5.5",
     "angular-sanitize": "~1.5.5",
     "angular-socket-io": "~0.7.0",

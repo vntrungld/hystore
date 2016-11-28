@@ -8,7 +8,7 @@ import ngSanitize from 'angular-sanitize';
 
 import uiRouter from 'angular-ui-router';
 import ngMaterial from 'angular-material';
-// import ngMessages from 'angular-messages';
+import ngMessages from 'angular-messages';
 // import ngValidationMatch from 'angular-validation-match';
 
 import { routeConfig } from './app.config';
@@ -24,14 +24,18 @@ import footer from '../components/footer/footer.component';
 import main from './main/main.component';
 import constants from './app.constants';
 import util from '../components/util/util.module';
-import socket from '../components/socket/socket.service';
 
 import './app.scss';
 
-angular.module('hystoreApp', [ngCookies, ngResource, ngSanitize, 'btford.socket-io',
-  uiRouter, ngMaterial, _Auth, Category, Application, account, admin, dev, navbar,
-  footer, main, constants, socket, util
+const mdDataTable = require('angular-material-data-table');
+
+angular.module('hystoreApp', [ngCookies, ngResource, ngSanitize, uiRouter,
+  ngMaterial, _Auth, Category, Application, account, admin, dev, navbar,
+  footer, main, constants, util, mdDataTable, ngMessages
 ])
+  .config(['$mdAriaProvider', function ($mdAriaProvider) {
+      $mdAriaProvider.disableWarnings();
+  }])
   .config(routeConfig)
   .run(function($rootScope, $location, Auth) {
     'ngInject';
