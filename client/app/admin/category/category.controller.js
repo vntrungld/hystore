@@ -4,7 +4,8 @@ export default class AdminCategoryController {
   categories = [];
   selected = [];
   limitOptions = [10, 50, 100];
-  status = [{
+  status = [
+    {
       name: 'Active',
       value: 'active'
     }, {

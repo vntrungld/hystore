@@ -5,7 +5,8 @@ export default class DevApplicationController {
   selected = [];
   limitOptions = [10, 50, 100];
   categories = [];
-  status = [{
+  status = [
+    {
       name: 'Publish',
       value: 'publish'
     }, {
