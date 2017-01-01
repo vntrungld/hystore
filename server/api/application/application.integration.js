@@ -49,6 +49,7 @@ describe('Application API:', function() {
 
     it('should respond with the newly created application', function() {
       newApplication.name.should.equal('New Application');
+      newApplication.slug.should.equal('new-application');
       newApplication.info.should.equal('This is the brand new application!!!');
     });
   });

@@ -44,8 +44,38 @@ var ApplicationSchema = new mongoose.Schema({
     required: true
   },
   category: {
-    type: ObjectId,
+    type: String,
     ref: 'Category'
+  },
+  oneStar: {
+    type: Number,
+    default: 0,
+    required: true
+  },
+  twoStar: {
+    type: Number,
+    default: 0,
+    required: true
+  },
+  threeStar: {
+    type: Number,
+    default: 0,
+    required: true
+  },
+  fourStar: {
+    type: Number,
+    default: 0,
+    required: true
+  },
+  fiveStar: {
+    type: Number,
+    default: 0,
+    required: true
+  },
+  totalRate: {
+    type: Number,
+    default: 0,
+    required: true
   },
   status: {
     type: String,

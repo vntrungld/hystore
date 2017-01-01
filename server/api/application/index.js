@@ -9,9 +9,10 @@ var router = express.Router();
 
 router.get('/', controller.index);
 router.get('/:slug', controller.show);
+router.get('/:slug/reviews', controller.reviews);
 router.post('/', auth.hasRole('dev'), File.upload, controller.create);
-router.put('/:id', auth.hasRole('dev'), controller.upsert);
-router.patch('/:id', auth.hasRole('dev'), controller.patch);
-router.delete('/:id', auth.hasRole('dev'), controller.destroy);
+router.put('/:slug', auth.hasRole('dev'), controller.upsert);
+router.patch('/:slug', auth.hasRole('dev'), controller.patch);
+router.delete('/:slug', auth.hasRole('dev'), controller.destroy);
 
 module.exports = router;

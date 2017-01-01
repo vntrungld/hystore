@@ -11,6 +11,16 @@ var applicationCtrlStub = {
   destroy: 'applicationCtrl.destroy'
 };
 
+var authServiceStub = {
+  hasRole(role) {
+    return 'authService.hasRole.' + role;
+  }
+}
+
+var fileCtrlStub = {
+  upload: 'fileCtrl.upload'
+}
+
 var routerStub = {
   get: sinon.spy(),
   put: sinon.spy(),
@@ -26,7 +36,9 @@ var applicationIndex = proxyquire('./index.js', {
       return routerStub;
     }
   },
-  './application.controller': applicationCtrlStub
+  './application.controller': applicationCtrlStub,
+  '../../auth/auth.service': authServiceStub,
+  '../file/file.controller': fileCtrlStub
 });
 
 describe('Application API Router:', function() {
@@ -42,10 +54,10 @@ describe('Application API Router:', function() {
     });
   });
 
-  describe('GET /api/applications/:id', function() {
+  describe('GET /api/applications/:slug', function() {
     it('should route to application.controller.show', function() {
       routerStub.get
-        .withArgs('/:id', 'applicationCtrl.show')
+        .withArgs('/:slug', 'applicationCtrl.show')
         .should.have.been.calledOnce;
     });
   });
@@ -53,31 +65,31 @@ describe('Application API Router:', function() {
   describe('POST /api/applications', function() {
     it('should route to application.controller.create', function() {
       routerStub.post
-        .withArgs('/', 'applicationCtrl.create')
+        .withArgs('/', 'authService.hasRole.dev', 'fileCtrl.upload', 'applicationCtrl.create')
         .should.have.been.calledOnce;
     });
   });
 
-  describe('PUT /api/applications/:id', function() {
+  describe('PUT /api/applications/:slug', function() {
     it('should route to application.controller.upsert', function() {
       routerStub.put
-        .withArgs('/:id', 'applicationCtrl.upsert')
+        .withArgs('/:slug', 'authService.hasRole.dev', 'applicationCtrl.upsert')
         .should.have.been.calledOnce;
     });
   });
 
-  describe('PATCH /api/applications/:id', function() {
+  describe('PATCH /api/applications/:slug', function() {
     it('should route to application.controller.patch', function() {
       routerStub.patch
-        .withArgs('/:id', 'applicationCtrl.patch')
+        .withArgs('/:slug', 'authService.hasRole.dev', 'applicationCtrl.patch')
         .should.have.been.calledOnce;
     });
   });
 
-  describe('DELETE /api/applications/:id', function() {
+  describe('DELETE /api/applications/:slug', function() {
     it('should route to application.controller.destroy', function() {
       routerStub.delete
-        .withArgs('/:id', 'applicationCtrl.destroy')
+        .withArgs('/:slug', 'authService.hasRole.dev', 'applicationCtrl.destroy')
         .should.have.been.calledOnce;
     });
   });
