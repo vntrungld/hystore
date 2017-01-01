@@ -3,9 +3,9 @@
 export function CategoryService(Util, CategoryResource) {
   'ngInject';
 
-  var safeCb = Util.safeCb;
+  const safeCb = Util.safeCb;
 
-  var Category = {
+  const Category = {
 
     /**
      * Change category content
@@ -17,7 +17,7 @@ export function CategoryService(Util, CategoryResource) {
      */
     changeCategoryContent(category, callback ? : Function) {
       return CategoryResource.changeCategoryContent({
-        slug: category.slug
+        slug: category._id
       },
         category,
         () => safeCb(callback)(null, category),
