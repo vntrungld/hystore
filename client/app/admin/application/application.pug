@@ -2,4 +2,96 @@ div(
   flex,
   layout="column"
 )
-  h1.md-display-1(layout-padding) Application list
+  md-card
+    md-toolbar.md-table-toolbar.md-default(ng-hide="vm.selected.length")
+      .md-toolbar-tools
+        span Application manager
+        div(flex)
+        span.md-button.md-icon-button(ui-sref="dev.applicationEdit()")
+          md-icon add
+        md-button.md-icon-button(ng-click="vm.reload()")
+          md-icon refresh
+    md-toolbar.md-table-toolbar.alternate(ng-show="vm.selected.length")
+      .md-toolbar-tools
+        span {{ adminAccount.selected.length }} {{ adminAccount.selected.length > 1 ? 'items' : 'item' }} selected
+    md-table-container
+      table(
+        md-table,
+        md-row-select,
+        multiple,
+        ng-model="vm.selected",
+        md-progress="promise"
+      )
+        thead(
+          md-head,
+          md-order="vm.query.order",
+        )
+          tr(md-row)
+            th(
+              md-column,
+              md-order-by="author"
+            )
+              span Author
+
+            th(
+              md-column,
+              md-order-by="name"
+            )
+              span Name
+
+            th(md-column)
+              span Description
+
+            th(
+              md-column,
+              md-order-by="version"
+            )
+              span Version
+
+            th(
+              md-column,
+              md-order-by="status"
+            )
+              span Status
+
+            th(md-column)
+              span Action
+
+        tbody(md-body)
+          tr(
+            md-row,
+            md-select="application",
+            md-on-select="logItem",
+            ng-repeat="application in vm.applications | filter: filter.search | orderBy: vm.query.order | limitTo: vm.query.limit : (vm.query.page -1) * vm.query.limit"
+          )
+            td(md-cell) {{ application.author.email }}
+
+            td(md-cell) {{ application.name }}
+
+            td(md-cell) {{ application.description }}
+
+            td(md-cell) {{ application.version }}
+
+            td(md-cell)
+              md-select(ng-model="application.status")
+                md-option(
+                  ng-value="status.value",
+                  ng-repeat="status in vm.status"
+                )
+                  | {{ status.name }}
+
+            td(md-cell)
+              span.md-button.md-icon-button(ui-sref="dev.applicationEdit({ slug: application.slug })")
+                md-icon mode_edit
+
+              span.md-button.md-icon-button(ng-click="vm.delete(application)")
+                md-icon delete
+
+    md-table-pagination(
+      md-limit="vm.query.limit",
+      md-limit-options="vm.limitOptions",
+      md-page="vm.query.page",
+      md-total="{{ vm.applications.length }}",
+      md-page-select,
+      md-on-paginate="logPagination"
+    )

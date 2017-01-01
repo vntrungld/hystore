@@ -8,9 +8,9 @@ div(
         span Category manager
         div(flex)
         span.md-button.md-icon-button(ui-sref="admin.categoryEdit()")
-          i.fa.fa-plus
+          md-icon add
         md-button.md-icon-button(ng-click="vm.reload()")
-          i.fa.fa-refresh
+          md-icon refresh
     md-toolbar.md-table-toolbar.alternate(ng-show="vm.selected.length")
       .md-toolbar-tools
         span {{ vm.selected.length }} {{ vm.selected.length > 1 ? 'items' : 'item' }} selected
@@ -87,11 +87,11 @@ div(
                   | {{ status.name }}
 
             td(md-cell)
-              span.md-button.md-icon-button(ui-sref="admin.categoryEdit({ slug: category.slug })")
-                i.fa.fa-pencil
+              span.md-button.md-icon-button(ui-sref="admin.categoryEdit({ slug: category._id })")
+                md-icon mode_edit
 
               span.md-button.md-icon-button(ng-click="vm.delete(category)")
-                i.fa.fa-trash
+                md-icon delete
 
     md-table-pagination(
       md-limit="vm.query.limit",
