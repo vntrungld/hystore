@@ -340,7 +340,6 @@ gulp.task('serve', cb => {
             'clean:tmp',
             'lint:scripts',
             'inject',
-            'copy:fonts:dev',
             'env:all'
         ],
         // 'webpack:dev',
@@ -356,7 +355,6 @@ gulp.task('serve:debug', cb => {
             'clean:tmp',
             'lint:scripts',
             'inject',
-            'copy:fonts:dev',
             'env:all'
         ],
         'webpack:dev',
@@ -473,7 +471,6 @@ gulp.task('build', cb => {
         [
             'copy:extras',
             'copy:assets',
-            'copy:fonts:dist',
             'copy:server',
             'webpack:dist'
         ],
@@ -533,16 +530,6 @@ function flatten() {
         next();
     });
 }
-gulp.task('copy:fonts:dev', () => {
-    return gulp.src('node_modules/{bootstrap,font-awesome}/fonts/*')
-        .pipe(flatten())
-        .pipe(gulp.dest(`${clientPath}/assets/fonts`));
-});
-gulp.task('copy:fonts:dist', () => {
-    return gulp.src('node_modules/{bootstrap,font-awesome}/fonts/*')
-        .pipe(flatten())
-        .pipe(gulp.dest(`${paths.dist}/${clientPath}/assets/fonts`));
-});
 
 gulp.task('copy:assets', () => {
     return gulp.src([paths.client.assets, '!' + paths.client.images])
