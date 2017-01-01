@@ -1,10 +1,9 @@
-$icon-font-path: '/assets/fonts/bootstrap/';
+@import '~material-design-icons/iconfont/material-icons.css';
 @import '~angular-material/angular-material';
-$fa-font-path: '/assets/fonts/font-awesome/';
-@import '~font-awesome/scss/font-awesome';
 @import '~angular-material-data-table/dist/md-data-table.min.css';
-
-// @import url(http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,900|Roboto:300,500,700,900);
+@import '~angular-carousel/dist/angular-carousel.css';
+@import '../assets/styles/index';
+//@import '../assets/fonts/roboto/font.css';
 
 /**
  * App-wide Styles
@@ -20,7 +19,10 @@ $fa-font-path: '/assets/fonts/font-awesome/';
 // Component styles are injected through gulp
 /* inject:scss */
 @import 'admin/admin';
+@import 'application/application';
 @import 'dev/application/edit/edit';
 @import 'main/main';
 @import '../components/footer/footer';
+@import '../components/navbar/navbar';
+@import '../components/star-rating/star-rating';
 /* endinject */
