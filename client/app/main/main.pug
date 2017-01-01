@@ -1,6 +1,37 @@
 div(
-  flex
-  layout="column",
-  layout-padding
+  flex,
+  layout="column"
 )
-  h1.md-display-1 Main
+  div(
+    flex-offset-md="20"
+    flex-offset-gt-md="20"
+    flex,
+    layout="row",
+    layout-wrap
+  )
+    md-card(
+      ng-repeat="application in vm.applications",
+      flex-xs="100",
+      flex-sm="50",
+      flex-md="20",
+      flex="15",
+      layout-gt-sm="column",
+      layout-sm="row",
+      layout-xs="row"
+    )
+
+      md-card-content
+        .md-media-md.card-media
+          a.full-cover(
+            ui-sref="application({ slug: application.slug })",
+            style="background-image: url('{{ application.icon }}')"
+          )
+            img.img-semantic.img-responsive(
+              ng-src="{{ application.icon }}",
+              alt="{{ application.name }}"
+            )
+
+      md-card-title
+        md-card-title-text.text-overflow
+          a.md-headline(ui-sref="application({ slug: application.slug })") {{ application.name }}
+          a.md-subhead(ui-sref="application({ slug: application.slug })") {{ application.author.name || 'Unknown' }}

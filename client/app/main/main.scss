@@ -1,27 +1,28 @@
-.thing-form {
-  margin: 20px 0;
+.grid-image-wrapper {
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
-#banner {
-  border-bottom: none;
-  margin-top: -20px;
+.app-icon {
+  @include rectangle-maker(1);
 }
 
-#banner h1 {
-  font-size: 60px;
-  line-height: 1;
-  letter-spacing: -1px;
+.app-title {
+  padding: 0;
 }
 
-.hero-unit {
-  position: relative;
-  padding: 30px 15px;
-  color: #F5F5F5;
-  text-align: center;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-  background: #4393B9;
+.text-overflow {
+  @include text-overflow();
 }
 
-.navbar-text {
-  margin-left: 15px;
+a:link {
+  color: black;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
 }

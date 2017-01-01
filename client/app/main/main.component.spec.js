@@ -1,19 +1,15 @@
 'use strict';
 
 import main from './main.component';
-import {
-  MainController
-} from './main.component';
 
-describe('Component: MainComponent', function() {
+describe('Component: MainComponent', () => {
   beforeEach(angular.mock.module(main));
   beforeEach(angular.mock.module('stateMock'));
-  beforeEach(angular.mock.module('socketMock'));
 
-  var scope;
-  var mainComponent;
-  var state;
-  var $httpBackend;
+  let scope;
+  let mainComponent;
+  let state;
+  let $httpBackend;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function(_$httpBackend_, $http, $componentController, $rootScope, $state,
@@ -27,11 +23,11 @@ describe('Component: MainComponent', function() {
     mainComponent = $componentController('main', {
       $http,
       $scope: scope,
-      socket
+      socket,
     });
   }));
 
-  it('should attach a list of things to the controller', function() {
+  it('should attach a list of things to the controller', () => {
     mainComponent.$onInit();
     $httpBackend.flush();
     expect(mainComponent.awesomeThings.length)
