@@ -1,0 +1,34 @@
+.np {
+  padding: 0 !important;
+}
+
+.img-fluid {
+  @include img-fluid();
+}
+
+.text-center {
+  text-align: center;
+}
+
+.full-cover {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.img-semantic {
+  position: relative;
+  visibility: hidden;
+  opacity: 0;
+  z-index: -1;
+  text-indent: -9000px;
+}
+
+.img-responsive {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}

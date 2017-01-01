@@ -1,0 +1,31 @@
+@mixin img-fluid() {
+  width: 100%;
+  height: auto;
+}
+
+@mixin rectangle-maker($ratio) {
+  overflow: hidden;
+  position: relative;
+
+  &:after {
+    content: '';
+    display: block;
+    padding-bottom: ($ratio * 100%);
+  }
+
+  .rec-fill {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+}
+
+@mixin text-overflow() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
