@@ -4,12 +4,10 @@
  */
 
 'use strict';
-import mongoose from 'mongoose';
 import User from '../api/user/user.model';
 import Category from '../api/category/category.model';
 import Application from '../api/application/application.model';
-
-const ObjectId = mongoose.Schema.Types.ObjectId;
+import Review from '../api/review/review.model';
 
 User.find({}).remove()
   .then(() => {
@@ -55,211 +53,211 @@ User.find({}).remove()
   });
 
 Category.find({}).remove()
+  .then(() => Category.create({
+    name: 'Books',
+    _id: 'books',
+    info: 'Book category'
+  }, {
+    name: 'Business',
+    _id: 'business',
+    info: 'Business category'
+  }, {
+    name: 'Catalogues',
+    _id: 'catalogues',
+    info: 'Catalogues category'
+  }, {
+    name: 'Education',
+    _id: 'education',
+    info: 'Education category'
+  }, {
+    name: 'Entertainment',
+    _id: 'entertainment',
+    info: 'Entertainment category'
+  }, {
+    name: 'Finance',
+    _id: 'finance',
+    info: 'Finance category'
+  }, {
+    name: 'Food & Drink',
+    _id: 'food_and_drink',
+    info: 'Food & Drink category'
+  }, {
+    name: 'Action',
+    _id: 'action',
+    info: 'Game Action Category'
+  }, {
+    name: 'Adventure',
+    _id: 'adventure',
+    info: 'Game Adventure'
+  }, {
+    name: 'Arcade',
+    _id: 'arcade',
+    info: 'Game Arcade Category'
+  }, {
+    name: 'Board',
+    _id: 'board',
+    info: 'Game Board Category'
+  }, {
+    name: 'Card',
+    _id: 'card',
+    info: 'Game Card Category'
+  }, {
+    name: 'Casino',
+    _id: 'casino',
+    info: 'Game Casino Category'
+  }, {
+    name: 'Dice',
+    _id: 'dice',
+    info: 'Game Dice Category'
+  }, {
+    name: 'Education',
+    _id: 'game_education',
+    info: 'Game Education Category'
+  }, {
+    name: 'Family',
+    _id: 'family',
+    info: 'Game Family Category'
+  }, {
+    name: 'Music',
+    _id: 'game_music',
+    info: 'Game Music Category'
+  }, {
+    name: 'Puzzle',
+    _id: 'puzzle',
+    info: 'Game Puzzle Category'
+  }, {
+    name: 'Racing',
+    _id: 'racing',
+    info: 'Game Racing Category'
+  }, {
+    name: 'Role-Playing',
+    _id: 'role_playing',
+    info: 'Game Role-Playing Category'
+  }, {
+    name: 'Simulation',
+    _id: 'simulation',
+    info: 'Game Simulation Category'
+  }, {
+    name: 'Sport',
+    _id: 'sport',
+    info: 'Game Sport Category'
+  }, {
+    name: 'Strategy',
+    _id: 'strategy',
+    info: 'Game Strategy Category'
+  }, {
+    name: 'Travia',
+    _id: 'travia',
+    info: 'Game Travia Category'
+  }, {
+    name: 'Word',
+    _id: 'word',
+    info: 'Game Word Category'
+  }, {
+    name: 'Games',
+    _id: 'games',
+    info: 'Games Category'
+  }, {
+    name: 'Health & Fitness',
+    _id: 'health_and_fitness',
+    info: 'Health & Fitness category'
+  }, {
+    name: 'Kids',
+    _id: 'kids',
+    info: 'Kids category'
+  }, {
+    name: 'Lifestyle',
+    _id: 'lifestyle',
+    info: 'Lifestyle category'
+  }, {
+    name: 'Magazines & Newspapers',
+    _id: 'magazines_and_newspapers',
+    info: 'Magazines & Newspapers category'
+  }, {
+    name: 'Medical',
+    _id: 'medical',
+    info: 'Medical category'
+  }, {
+    name: 'Music',
+    _id: 'music',
+    info: 'Music category'
+  }, {
+    name: 'Navigation',
+    _id: 'navigation',
+    info: 'Navigation category'
+  }, {
+    name: 'News',
+    _id: 'news',
+    info: 'News category'
+  }, {
+    name: 'Photo & Video',
+    _id: 'photo_and_video',
+    info: 'Photo & Video category'
+  }, {
+    name: 'Productivity',
+    _id: 'productivity',
+    info: 'Productivity category'
+  }, {
+    name: 'Reference',
+    _id: 'reference',
+    info: 'Reference category'
+  }, {
+    name: 'Shopping',
+    _id: 'shopping',
+    info: 'Shopping category'
+  }, {
+    name: 'Social Networking',
+    _id: 'social_networking',
+    info: 'Social Networking category'
+  }, {
+    name: 'Sports',
+    _id: 'sports',
+    info: 'Sports category'
+  }, {
+    name: 'Travel',
+    _id: 'travel',
+    info: 'Travel category'
+  }, {
+    name: 'Utilities',
+    _id: 'utilities',
+    info: 'Utilities category'
+  }, {
+    name: 'Weather',
+    _id: 'weather',
+    info: 'Weather category'
+  }, {
+    name: 'Deletes',
+    _id: 'deletes',
+    info: 'Delete category',
+    status: 'delete'
+  }, {
+    name: 'Deactives',
+    _id: 'deactives',
+    info: 'Deactive category',
+    status: 'deactive'
+  }))
   .then(() => {
-    return Category.create({
-      name: 'Books',
-      slug: 'books',
-      info: 'Book category'
-    }, {
-      name: 'Business',
-      slug: 'business',
-      info: 'Business category'
-    }, {
-      name: 'Catalogues',
-      slug: 'catalogues',
-      info: 'Catalogues category'
-    }, {
-      name: 'Education',
-      slug: 'education',
-      info: 'Education category'
-    }, {
-      name: 'Entertainment',
-      slug: 'entertainment',
-      info: 'Entertainment category'
-    }, {
-      name: 'Finance',
-      slug: 'finance',
-      info: 'Finance category'
-    }, {
-      name: 'Food & Drink',
-      slug: 'food_and_drink',
-      info: 'Food & Drink category'
-    }, {
-      name: 'Action',
-      slug: 'action',
-      info: 'Game Action Category'
-    }, {
-      name: 'Adventure',
-      slug: 'adventure',
-      info: 'Game Adventure'
-    }, {
-      name: 'Arcade',
-      slug: 'arcade',
-      info: 'Game Arcade Category'
-    }, {
-      name: 'Board',
-      slug: 'board',
-      info: 'Game Board Category'
-    }, {
-      name: 'Card',
-      slug: 'card',
-      info: 'Game Card Category'
-    }, {
-      name: 'Casino',
-      slug: 'casino',
-      info: 'Game Casino Category'
-    }, {
-      name: 'Dice',
-      slug: 'dice',
-      info: 'Game Dice Category'
-    }, {
-      name: 'Education',
-      slug: 'game_education',
-      info: 'Game Education Category'
-    }, {
-      name: 'Family',
-      slug: 'family',
-      info: 'Game Family Category'
-    }, {
-      name: 'Music',
-      slug: 'game_music',
-      info: 'Game Music Category'
-    }, {
-      name: 'Puzzle',
-      slug: 'puzzle',
-      info: 'Game Puzzle Category'
-    }, {
-      name: 'Racing',
-      slug: 'racing',
-      info: 'Game Racing Category'
-    }, {
-      name: 'Role-Playing',
-      slug: 'role_playing',
-      info: 'Game Role-Playing Category'
-    }, {
-      name: 'Simulation',
-      slug: 'simulation',
-      info: 'Game Simulation Category'
-    }, {
-      name: 'Sport',
-      slug: 'sport',
-      info: 'Game Sport Category'
-    }, {
-      name: 'Strategy',
-      slug: 'strategy',
-      info: 'Game Strategy Category'
-    }, {
-      name: 'Travia',
-      slug: 'travia',
-      info: 'Game Travia Category'
-    }, {
-      name: 'Word',
-      slug: 'word',
-      info: 'Game Word Category'
-    }, {
-      name: 'Games',
-      slug: 'games',
-      info: 'Games Category'
-    }, {
-      name: 'Health & Fitness',
-      slug: 'health_and_fitness',
-      info: 'Health & Fitness category'
-    }, {
-      name: 'Kids',
-      slug: 'kids',
-      info: 'Kids category'
-    }, {
-      name: 'Lifestyle',
-      slug: 'lifestyle',
-      info: 'Lifestyle category'
-    }, {
-      name: 'Magazines & Newspapers',
-      slug: 'magazines_and_newspapers',
-      info: 'Magazines & Newspapers category'
-    }, {
-      name: 'Medical',
-      slug: 'medical',
-      info: 'Medical category'
-    }, {
-      name: 'Music',
-      slug: 'music',
-      info: 'Music category'
-    }, {
-      name: 'Navigation',
-      slug: 'navigation',
-      info: 'Navigation category'
-    }, {
-      name: 'News',
-      slug: 'news',
-      info: 'News category'
-    }, {
-      name: 'Photo & Video',
-      slug: 'photo_and_video',
-      info: 'Photo & Video category'
-    }, {
-      name: 'Productivity',
-      slug: 'productivity',
-      info: 'Productivity category'
-    }, {
-      name: 'Reference',
-      slug: 'reference',
-      info: 'Reference category'
-    }, {
-      name: 'Shopping',
-      slug: 'shopping',
-      info: 'Shopping category'
-    }, {
-      name: 'Social Networking',
-      slug: 'social_networking',
-      info: 'Social Networking category'
-    }, {
-      name: 'Sports',
-      slug: 'sports',
-      info: 'Sports category'
-    }, {
-      name: 'Travel',
-      slug: 'travel',
-      info: 'Travel category'
-    }, {
-      name: 'Utilities',
-      slug: 'utilities',
-      info: 'Utilities category'
-    }, {
-      name: 'Weather',
-      slug: 'weather',
-      info: 'Weather category'
-    }, {
-      name: 'Deletes',
-      slug: 'deletes',
-      info: 'Delete category',
-      status: 'delete'
-    }, {
-      name: 'Deactives',
-      slug: 'deactives',
-      info: 'Deactive category',
-      status: 'deactive'
-    });
-  })
-  .then(() => {
-    const gameChildren = [ 'action', 'adventure', 'arcade', 'board', 'card',
+    const gameChildren = ['action', 'adventure', 'arcade', 'board', 'card',
       'casino', 'dice', 'game_education', 'family', 'game_music', 'puzzle',
-      'racing', 'role_playing', 'simulation', 'sport', 'strategy', 'travia', 'word' ]
+      'racing', 'role_playing', 'simulation', 'sport', 'strategy', 'travia', 'word'];
 
-    Category.find({ slug: { $in: gameChildren } })
+    Category.find({ _id: { $in: gameChildren } })
       .then(entities => {
-        const entitiesId = entities.map(entity => entity._id);
+        const entitiesSlug = entities.map(entity => entity._id);
 
-        Category.findOne({ slug: 'games' })
+        Category.findOne({ _id: 'games' })
           .then(gamesCategory => {
-            entities.map(entity => {
+            entities.forEach(entity => {
               entity.parent = gamesCategory._id;
               entity.save();
             });
 
-            gamesCategory.children = entitiesId;
+            gamesCategory.children = entitiesSlug;
             gamesCategory.save();
           });
-      })
+      });
   });
 
 Application.find({}).remove();
+
+Review.find({}).remove();
