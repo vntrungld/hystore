@@ -23,6 +23,13 @@ export function UserResource($resource) {
       params: {
         id: 'me'
       }
+    },
+    getListApp: {
+      method: 'GET',
+      isArray: true,
+      params: {
+        controller: 'applications'
+      }
     }
   });
 }
