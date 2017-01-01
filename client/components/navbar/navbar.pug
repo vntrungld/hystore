@@ -1,51 +1,57 @@
-md-toolbar.md-whiteframe-1dp(style="z-index: 100")
+md-toolbar
   .md-toolbar-tools
+    md-button.md-icon-button(
+      ng-if="$ctrl.isStateAuth('admin') || $ctrl.isStateAuth('dev')",
+      ng-click="$ctrl.mdSidenav('left').toggle()"
+    )
+      md-icon menu
     a(
-      layout-padding,
       ui-sref="main",
     ) Hystore
 
-    a(
-      layout-padding,
-      ng-show="$ctrl.isAdmin()",
-      ui-sref="admin.dashboard"
-    ) Admin
-
-    a(
-      layout-padding,
-      ng-show="$ctrl.isDev()",
-      ui-sref="dev.dashboard"
-    ) Developer
-
     span(flex)
 
-    a(
-      layout-padding,
-      ng-hide="$ctrl.isLoggedIn()",
-      ui-sref="signup"
-    ) Sign up
-
-    a(
-      layout-padding,
-      ng-hide="$ctrl.isLoggedIn()",
+    md-button.md-raised(
+      ng-if="!$ctrl.isLoggedIn()",
       ui-sref="login"
     ) Login
 
-    a(
-      layout-padding,
-      ng-show="$ctrl.isLoggedIn()",
-      ui-sref="profile"
-    ) {{ $ctrl.getCurrentUser().name }}
 
-    a(
-      layout-padding,
-      ng-show="$ctrl.isLoggedIn()",
-      ui-sref="settings"
-    )
-      .fa.fa-cog
+    md-menu(ng-if="$ctrl.isLoggedIn()")
+      md-button(ng-click="$mdOpenMenu($event)")
+        | {{ $ctrl.getCurrentUser().name }}
+        md-icon more_vert
 
-    a(
-      layout-padding,
-      ng-show="$ctrl.isLoggedIn()",
-      ui-sref="logout"
-    ) Logout
+      md-menu-content
+        md-menu-item(ng-if="$ctrl.isAdmin()")
+          md-button(ui-sref="admin.dashboard")
+            md-icon security
+            | Admin
+
+        md-menu-divider(ng-if="$ctrl.isAdmin()")
+
+        md-menu-item(ng-if="$ctrl.isDev()")
+          md-button(ui-sref="dev.dashboard")
+            md-icon developer_board
+            | Developer
+
+        md-menu-divider(ng-if="$ctrl.isDev()")
+
+        md-menu-item
+          md-button(ui-sref="profile")
+            md-icon person
+            | Profile
+
+        md-menu-divider
+
+        md-menu-item
+          md-button(ui-sref="settings")
+            md-icon settings
+            | Settings
+
+        md-menu-divider
+
+        md-menu-item
+          md-button(ui-sref="logout")
+            md-icon exit_to_app
+            | Logout

@@ -13,9 +13,10 @@ export class NavbarComponent {
   isDev: Function;
   getCurrentUser: Function;
   isCollapsed = true;
+  mdSidenav: Object;
   state: Object;
 
-  constructor(Auth, $state) {
+  constructor(Auth, $state, $mdSidenav) {
     'ngInject';
 
     this.isLoggedIn = Auth.isLoggedInSync;
@@ -23,6 +24,11 @@ export class NavbarComponent {
     this.isDev = Auth.isDevSync;
     this.getCurrentUser = Auth.getCurrentUserSync;
     this.state = $state;
+    this.mdSidenav = $mdSidenav;
+  }
+
+  isStateAuth(state) {
+    return state == this.state.current.authenticate;
   }
 }
 
