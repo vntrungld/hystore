@@ -1,48 +1,56 @@
 div(
   flex,
-  layout="column",
-  layout-padding
+  layout="row"
+  layout-align="center start"
 )
-  h1.md-display-1 Login
-  form(
-    name="form",
-    ng-submit="vm.login(form)",
-    novalidate="",
-    flex,
+  div(
+    flex-lg="25",
+    flex-md="33",
+    flex-sm="50",
+    flex-xs="100",
     layout="column"
   )
-    md-input-container
-      label Email
+    h1.md-display-1.text-center Login
+    md-card
+      md-card-content
+        form(
+          name="form",
+          ng-submit="vm.login(form)",
+          novalidate="",
+          layout="column"
+        )
+          md-input-container
+            label Email
 
-      input(
-        type="email",
-        name="email",
-        ng-model="vm.user.email",
-        required
-      )
+            input(
+              type="email",
+              name="email",
+              ng-model="vm.user.email",
+              required
+            )
 
-      div(ng-messages="form.email.$error")
-        p(ng-message="required") Please enter your email
-        p(ng-message="email") This is not an email
+            div(ng-messages="form.email.$error")
+              p(ng-message="required") Please enter your email
+              p(ng-message="email") This is not an email
 
-    md-input-container
-      label Password
+          md-input-container
+            label Password
 
-      input(
-        type="password",
-        name="password",
-        ng-model="vm.user.password",
-        required,
-        ng-minlength="3"
-      )
+            input(
+              type="password",
+              name="password",
+              ng-model="vm.user.password",
+              required,
+              ng-minlength="3"
+            )
 
-      div(ng-messages="form.password.$error")
-        p(ng-message="required") Please enter your password.
-        p(ng-message="minlength") Password must be at least 3 characters.
+            div(ng-messages="form.password.$error")
+              p(ng-message="required") Please enter your password.
+              p(ng-message="minlength") Password must be at least 3 characters.
 
-    div(ng-messages="form.message.$error")
-      p(ng-message="mongoose") {{ vm.errors.message }}
+          div(ng-messages="vm.errors")
+            p(ng-message="login") {{ vm.errors.login }}
 
-    div
-      button.md-button.md-primary(type="submit") Login
-      a.md-button(ui-sref="signup") Register
+          md-card-actions
+            button.md-button.md-primary(type="submit") Login
+            a.md-button(ui-sref="signup") Register

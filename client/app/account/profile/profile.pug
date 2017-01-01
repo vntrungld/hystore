@@ -1,31 +1,39 @@
 div(
   flex,
-  layout="column",
-  layout-padding
+  layout="row",
+  layout-align="center start"
 )
-  h1.md-display-1 Change Profile
-
-  form(
-    name='form',
-    ng-submit='vm.changeProfile(form)',
-    novalidate='',
-    flex,
+  div(
+    flex-lg="25",
+    flex-md="33",
+    flex-sm="50",
+    flex-xs="100",
     layout="column"
   )
-    md-input-container
-      label Name
+    h1.md-display-1.text-center Change Profile
 
-      input(
-        type='text',
-        name='name',
-        ng-model='vm.user.name',
-        mongoose-error='',
-        required
-      )
+    md-card
+      md-card-content
+        form(
+          name='form',
+          ng-submit='vm.changeProfile(form)',
+          novalidate='',
+          layout="column"
+        )
+          md-input-container
+            label Name
 
-      div(ng-messages='form.name.$error')
-        p(ng-message="required")
-        p(ng-message="mongoose") {{ vm.errors.other }}
+            input(
+              type='text',
+              name='name',
+              ng-model='vm.user.name',
+              mongoose-error='',
+              required
+            )
 
-  div
-    button.md-button.md-primary(type='submit') Save changes
+            div(ng-messages='form.name.$error')
+              p(ng-message="required")
+              p(ng-message="mongoose") {{ vm.errors.other }}
+
+          md-card-actions
+            button.md-button.md-primary(type='submit') Save changes

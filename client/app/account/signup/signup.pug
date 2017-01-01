@@ -1,78 +1,87 @@
 div(
   flex,
-  layout="column",
-  layout-padding
+  layout="row",
+  layout-align="center start"
 )
-  h1.md-display-1 Sign up
-
-  form(
-    name="form",
-    ng-submit="vm.register(form)",
-    novalidate,
-    flex,
+  div(
+    flex-lg="25",
+    flex-md="33",
+    flex-sm="50",
+    flex-xs="100",
     layout="column"
   )
-    md-input-container
-      label Name
+    h1.md-display-1.text-center Sign up
 
-      input(
-        type="text",
-        name="name",
-        ng-model="vm.user.name",
-        required
-      )
+    md-card
+      md-card-content
+        form(
+          name="form",
+          ng-submit="vm.register(form)",
+          novalidate,
+          flex,
+          layout="column"
+        )
+          md-input-container
+            label Name
 
-      div(ng-messages="form.name.$error", md-auto-hide="true")
-        p(ng-message="required") A name is required
+            input(
+              type="text",
+              name="name",
+              ng-model="vm.user.name",
+              required
+            )
 
-    md-input-container
-      label Email
+            div(ng-messages="form.name.$error", md-auto-hide="true")
+              p(ng-message="required") A name is required
 
-      input(
-        type="email",
-        name="email",
-        ng-model="vm.user.email",
-        required,
-        mongoose-error
-      )
+          md-input-container
+            label Email
 
-      div(ng-messages="form.email.$error" multiple)
-        p(ng-message="required") What's your email address?
-        p(ng-message="email") Doesn't look like a valid email.
-        p(ng-message"mongoose") {{ vm.errors.email }}
+            input(
+              type="email",
+              name="email",
+              ng-model="vm.user.email",
+              required,
+              mongoose-error
+            )
 
-    md-input-container
-      label Password
+            div(ng-messages="form.email.$error" multiple)
+              p(ng-message="required") What's your email address?
+              p(ng-message="email") Doesn't look like a valid email.
+              p(ng-message"mongoose") {{ vm.errors.email }}
 
-      input(
-        type="password",
-        name="password",
-        ng-model="vm.user.password",
-        mongoose-error,
-        ng-minlength="3",
-        required
-      )
+          md-input-container
+            label Password
 
-      div(ng-messages="form.password.$error" multiple)
-        p(ng-message="required") What's your password?
-        p(ng-message="minlength") Password must be at least 3 characters.
-        p(ng-message="mongoose") {{ vm.errors.password }}
+            input(
+              type="password",
+              name="password",
+              ng-model="vm.user.password",
+              mongoose-error,
+              ng-minlength="3",
+              required
+            )
 
-    md-input-container
-      label Confirm Password
+            div(ng-messages="form.password.$error" multiple)
+              p(ng-message="required") What's your password?
+              p(ng-message="minlength") Password must be at least 3 characters.
+              p(ng-message="mongoose") {{ vm.errors.password }}
 
-      input(
-        type="password",
-        name="confirmPassword",
-        ng-model="vm.user.confirmPassword",
-        match="vm.user.password",
-        ng-minlength="3",
-        required
-      )
+          md-input-container
+            label Confirm Password
 
-      div(ng-messages="form.confirmPassword.$error")
-        p(ng-message="match") Passwords must match.
+            input(
+              type="password",
+              name="confirmPassword",
+              ng-model="vm.user.confirmPassword",
+              match="vm.user.password",
+              ng-minlength="3",
+              required
+            )
 
-    div
-      button.md-button.md-primary(type="submit") Sign up
-      a.md-button(ui-sref="login") Login
+            div(ng-messages="form.confirmPassword.$error")
+              p(ng-message="match") Passwords must match.
+
+          md-card-actions
+            button.md-button.md-primary(type="submit") Sign up
+            a.md-button(ui-sref="login") Login
