@@ -1,0 +1,30 @@
+md-dialog(aria-label="Review", flex="60%")
+  form(ng-cloak)
+    md-toolbar
+      .md-toolbar-tools
+        h2 Review by
+        span(flex)
+        md-button.md-icon-button(ng-click="vm.cancelReviewDialog()")
+          md-icon close
+
+    md-dialog-content
+      .md-dialog-content
+        star-rating(
+          ng-if="vm.review.star",
+          ng-model="vm.review.star"
+        )
+
+        md-input-container.md-block
+          label Tell others what you think about this app. Would you recommend it, and why?
+          textarea(
+            ng-model="vm.review.content",
+            rows=5
+          )
+    md-dialog-actions(
+      layout='row',
+      layout-align="end center"
+    )
+      md-button(ng-click="vm.cancelReviewDialog()")
+        | Cancel
+      md-button.md-primary.md-raised(ng-click="vm.submitReview()")
+        | Submit
