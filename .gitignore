@@ -9,3 +9,5 @@ dist
 /server/config/local.env.js
 npm-debug.log
 coverage
+platforms
+plugins
