@@ -20,7 +20,7 @@ export default class DevApplicationEditController {
   applicationService;
   isEdit = true;
 
-  /* @ngInject */
+  /*@ngInject*/
   constructor($state, CategoryResource, Application, ApplicationResource) {
     this.slug = $state.params.slug;
     this.categories = CategoryResource.query();

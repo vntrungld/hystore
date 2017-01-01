@@ -26,16 +26,28 @@ export default class DevApplicationController {
     page: 1
   };
   ApplicationResource;
+  User;
+  userId;
 
   /*@ngInject*/
-  constructor(ApplicationResource, CategoryResource) {
-    this.applications = ApplicationResource.query();
+  constructor(ApplicationResource, CategoryResource, User, Auth) {
+    Auth.getCurrentUser()
+      .then(currentUser => {
+        this.userId = currentUser._id;
+        this.applications = this.getApplicationList();
+      });
+
     this.categories = CategoryResource.query();
     this.ApplicationResource = ApplicationResource;
+    this.User = User;
+  }
+
+  getApplicationList() {
+    return this.User.getListApp({ id: this.userId });
   }
 
   reload() {
-    this.applications = this.ApplicationResource.query();
+    this.applications = this.getApplicationList();
   }
 
   delete(application) {

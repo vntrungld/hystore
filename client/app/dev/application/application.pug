@@ -8,9 +8,9 @@ div(
         span Application manager
         div(flex)
         span.md-button.md-icon-button(ui-sref="dev.applicationEdit()")
-          i.fa.fa-plus
+          md-icon add
         md-button.md-icon-button(ng-click="vm.reload()")
-          i.fa.fa-refresh
+          md-icon refresh
     md-toolbar.md-table-toolbar.alternate(ng-show="vm.selected.length")
       .md-toolbar-tools
         span {{ adminAccount.selected.length }} {{ adminAccount.selected.length > 1 ? 'items' : 'item' }} selected
@@ -74,10 +74,10 @@ div(
 
             td(md-cell)
               span.md-button.md-icon-button(ui-sref="dev.applicationEdit({ slug: application.slug })")
-                i.fa.fa-pencil
+                md-icon mode_edit
 
               span.md-button.md-icon-button(ng-click="vm.delete(application)")
-                i.fa.fa-trash
+                md-icon delete
 
     md-table-pagination(
       md-limit="vm.query.limit",

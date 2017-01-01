@@ -5,18 +5,31 @@ section(
 )
   md-sidenav.md-sidenav-left(
     md-component-id='left',
-    md-is-locked-open="true",
     md-whiteframe='3',
   )
     md-content
-      md-list
+      md-list.np
+        md-toolbar
+          h1.md-toolbar-tools Dev site
         md-list-item(ui-sref="dev.dashboard")
+          md-icon dashboard
           p Dashboard
-          md-divider
+
+        md-divider
+
+        md-list-item(ui-sref="dev.review")
+          md-icon email
+          p Message
+          .md-secondary
+            | 99
+
+        md-divider
 
         md-list-item(ui-sref="dev.application")
+          md-icon apps
           p Application manager
-          md-divider
+
+        md-divider
 
   md-content(
     flex,
