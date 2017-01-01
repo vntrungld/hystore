@@ -1,0 +1,16 @@
+.star-rating {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+
+  .star {
+    padding: 1px;
+    list-style-type: none;
+    display: inline-block;
+    cursor: pointer;
+
+    .filled {
+      color: #FFFF00;
+    }
+  }
+}

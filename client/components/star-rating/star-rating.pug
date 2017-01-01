@@ -1,0 +1,12 @@
+ul.star-rating
+  li.star(ng-repeat="star in stars")
+    md-icon(
+      ng-if="!star.filled",
+      ng-click="toggle($index)"
+    )
+      | star_border
+    md-icon.filled(
+      ng-if="star.filled",
+      ng-click="toggle($index)"
+    )
+      | star
