@@ -11,4 +11,3 @@ export default angular.module('hystoreApp.application', [util, constants, uiRout
   .factory('ApplicationResource', ApplicationResource)
   .factory('Application', ApplicationService)
   .name;
-

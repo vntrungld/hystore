@@ -3,10 +3,9 @@
 export function ApplicationService(Util, ApplicationResource, Upload) {
   'ngInject';
 
-  var safeCb = Util.safeCb;
-  var upload = Upload.upload;
+  const upload = Upload.upload;
 
-  var Application = {
+  const Application = {
     upload(application) {
       return upload({
         url: 'api/applications/',

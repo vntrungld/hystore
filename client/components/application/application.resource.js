@@ -3,11 +3,17 @@
 export function ApplicationResource($resource) {
   'ngInject';
 
-  return $resource('api/applications/:slug', {
+  return $resource('api/applications/:slug/:controller', {
     slug: '@slug'
   }, {
-    upload: { method: 'POST' }
+    upload: { method: 'POST' },
+    getReviews: {
+      method: 'GET',
+      isArray: true,
+      params: {
+        slug: '@slug',
+        controller: 'reviews'
+      }
+    }
   });
 }
-
-
