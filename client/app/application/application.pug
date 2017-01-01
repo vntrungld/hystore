@@ -1,0 +1,168 @@
+div(
+  flex,
+  layout-gt-sm="row",
+  layout-sm="column",
+  layout-xs="column"
+)
+  div(
+    flex-offset-gt-sm="20",
+    flex-gt-sm="50"
+  )
+    md-card
+      img.hide-gt-sm(
+        ng-src="{{ vm.application.feature }}",
+        alt="{{ vm.application.name }} Feature Image"
+      )
+      md-card-title
+        md-card-title-media.detail-app-icon
+          .md-media-lg.hide-sm.hide-xs
+            a.full-cover(
+              ui-sref="application({ slug: vm.application.slug })",
+              style="background-image: url('{{ vm.application.icon }}')"
+            )
+              img.img-semantic(
+                ng-src="{{ vm.application.icon }}",
+                alt="{{ vm.application.name }}"
+              )
+
+          .md-media-md.hide-gt-sm.hide-xs
+            a.full-cover(
+              ui-sref="application({ slug: vm.application.slug })",
+              style="background-image: url('{{ vm.application.icon }}')"
+            )
+              img.img-semantic(
+                ng-src="{{ vm.application.icon }}",
+                alt="{{ vm.application.name }}"
+              )
+
+          .md-media-sm.hide-gt-xs
+            a.full-cover(
+              ui-sref="application({ slug: vm.application.slug })",
+              style="background-image: url('{{ vm.application.icon }}')"
+            )
+              img.img-semantic(
+                ng-src="{{ vm.application.icon }}",
+                alt="{{ vm.application.name }}"
+              )
+
+        md-card-title-text
+          span.md-title {{ vm.application.name }}
+          span.md-subhead(layout="row")
+            a(ui-sref="author({ id: vm.application.author._id })") {{ vm.application.author.name || 'Unknown' }}
+            | &nbsp;
+            a(ui-sref="category({ id: vm.application.category._id })") {{ vm.application.category.name || 'Unknown' }}
+
+      md-card-action(ng-if="vm.isLoggedIn()")
+        md-button.md-raised.md-primary Install
+
+      md-card-content
+        div.carousel-wrapper
+          ul(
+            rn-carousel,
+            rn-carousel-controls,
+            rn-carousel-controls-allow-loop,
+            slides="vm.application.screenshots",
+            ng-if="vm.application.screenshots.length > 0"
+          )
+            li(ng-repeat="screenshot in vm.application.screenshots")
+              img.img-fluid(ng-src="{{screenshot}}")
+
+        p {{ vm.application.description }}
+
+        md-divider
+
+        div
+          md-card-title
+            md-card-title-text(layout="row")
+              h2.md-title Reviews
+              span(flex)
+              md-button.md-raised(
+                ng-if="vm.isLoggedIn()",
+                ng-click="vm.showReviewDialog($event)"
+              )
+                md-icon mode_edit
+                | Write Review
+
+          div(
+            layout="row",
+            layout-padding
+          )
+            .score-container(
+              flex-gt-xs="33",
+              flex-xs="50",
+              layout="column"
+            )
+              .score.md-display-3 4.5
+              .reviews-stats.md-title
+                md-icon person
+                | 999.999 users
+
+            .rating-histogram(
+              flex,
+              layout="column"
+            )
+              .rating-bar-container.five(layout="row")
+                .bar-label(flex-nogrow)
+                  md-icon star
+                  | 5
+                .bar(flex)
+                  .bar-background
+                    span.bar-number.md-body-1 1234
+              .rating-bar-container.four(layout="row")
+                .bar-label(flex-nogrow)
+                  md-icon star
+                  | 4
+                .bar(flex)
+                  .bar-background
+                    span.bar-number.md-body-1 1234
+              .rating-bar-container.three(layout="row")
+                .bar-label(flex-nogrow)
+                  md-icon star
+                  | 3
+                .bar(flex)
+                  .bar-background
+                    span.bar-number.md-body-1 1234
+              .rating-bar-container.two(layout="row")
+                .bar-label(flex-nogrow)
+                  md-icon star
+                  | 2
+                .bar(flex)
+                  .bar-background
+                    span.bar-number.md-body-1 1234
+              .rating-bar-container.one(layout="row")
+                .bar-label(flex-nogrow)
+                  md-icon star
+                  | 1
+                .bar(flex)
+                  .bar-background
+                    span.bar-number.md-body-1 1234
+
+          md-list
+            md-list-item.md-3-line.md-long-text(ng-repeat="review in vm.reviews")
+              img.md-avatar(
+                ng-src="{{}}",
+                alt="Unknown"
+              )
+              .md-list-item-text
+                span.md-headline {{ review.from.name || 'Unknown' }}
+                | &nbsp;
+                span.md-subhead {{ review.createdAt }}
+                h4.md-title Rate here
+                p.md-body-1 {{ review.content }}
+
+      md-divider
+
+  div(flex)
+    md-card(ng-repeat="similarApp in vm.similarApps")
+      md-card-title
+        md-card-title-media.detail-app-icon
+          .md-media-lg
+            a.full-cover(ui-sref="application({ slug: similarApp.slug })")
+              img(
+                ng-src="{{ similarApp.icon }}",
+                alt="{{ similarApp.name }}"
+              )
+        md-card-title-text.text-overflow
+          a.md-headline(ui-sref="application({ slug: similarApp.slug })") {{ similarApp.name || 'Unknown' }}
+          a.md-subhead(ui-sref="author({ id: similarApp.author._id })") {{ similarApp.author.name || 'Unknown' }}
+          p.md-body-1 Lorem ipsum dolor sit amet

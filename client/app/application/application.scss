@@ -1,0 +1,64 @@
+.detail-app-icon {
+  margin-right: 16px;
+}
+
+.score-container {
+  text-align: center;
+}
+
+.bar-label {
+  padding-right: 10px;
+
+  md-icon {
+    position: relative;
+    top: -4px;
+  }
+}
+
+.bar-background {
+
+  .five & {
+    background-color: #4CAF50;
+  }
+
+  .four & {
+    background-color: #8BC34A;
+  }
+
+  .three & {
+    background-color: #FFEB3B;
+  }
+
+  .two & {
+    background-color: #FF9800;
+  }
+
+  .one & {
+    background-color: #F44336;
+  }
+}
+
+ul[rn-carousel] > li {
+  position: relative;
+  margin-left: -100%;
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
+.carousel-wrapper {
+  position: relative;
+}
+
+@media (max-width: 599px) {
+  .right-card-title-media-xs {
+    margin-left: 16px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 959px) {
+  .right-card-title-media-sm {
+    margin-left: 16px;
+  }
+}
