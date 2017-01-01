@@ -11,6 +11,12 @@ var categoryCtrlStub = {
   destroy: 'categoryCtrl.destroy'
 };
 
+var authServiceStub = {
+  hasRole(role) {
+    return `authService.hasRole.${role}`
+  }
+}
+
 var routerStub = {
   get: sinon.spy(),
   put: sinon.spy(),
@@ -26,7 +32,8 @@ var categoryIndex = proxyquire('./index.js', {
       return routerStub;
     }
   },
-  './category.controller': categoryCtrlStub
+  './category.controller': categoryCtrlStub,
+  '../../auth/auth.service': authServiceStub
 });
 
 describe('Category API Router:', function() {
@@ -42,10 +49,10 @@ describe('Category API Router:', function() {
     });
   });
 
-  describe('GET /api/categories/:id', function() {
+  describe('GET /api/categories/:slug', function() {
     it('should route to category.controller.show', function() {
       routerStub.get
-        .withArgs('/:id', 'categoryCtrl.show')
+        .withArgs('/:slug', 'categoryCtrl.show')
         .should.have.been.calledOnce;
     });
   });
@@ -53,31 +60,31 @@ describe('Category API Router:', function() {
   describe('POST /api/categories', function() {
     it('should route to category.controller.create', function() {
       routerStub.post
-        .withArgs('/', 'categoryCtrl.create')
+        .withArgs('/', 'authService.hasRole.admin', 'categoryCtrl.create')
         .should.have.been.calledOnce;
     });
   });
 
-  describe('PUT /api/categories/:id', function() {
+  describe('PUT /api/categories/:slug', function() {
     it('should route to category.controller.upsert', function() {
       routerStub.put
-        .withArgs('/:id', 'categoryCtrl.upsert')
+        .withArgs('/:slug', 'authService.hasRole.admin', 'categoryCtrl.upsert')
         .should.have.been.calledOnce;
     });
   });
 
-  describe('PATCH /api/categories/:id', function() {
+  describe('PATCH /api/categories/:slug', function() {
     it('should route to category.controller.patch', function() {
       routerStub.patch
-        .withArgs('/:id', 'categoryCtrl.patch')
+        .withArgs('/:slug', 'authService.hasRole.admin', 'categoryCtrl.patch')
         .should.have.been.calledOnce;
     });
   });
 
-  describe('DELETE /api/categories/:id', function() {
+  describe('DELETE /api/categories/:slug', function() {
     it('should route to category.controller.destroy', function() {
       routerStub.delete
-        .withArgs('/:id', 'categoryCtrl.destroy')
+        .withArgs('/:slug', 'authService.hasRole.admin', 'categoryCtrl.destroy')
         .should.have.been.calledOnce;
     });
   });

@@ -13,33 +13,41 @@
 
 import jsonpatch from 'fast-json-patch';
 import Category from './category.model';
+import Application from '../application/application.model';
 
 const util = require('../../utilities');
 
-function respondWithResult(res, statusCode) {
+const respondWithResult = (res, statusCode) => {
   statusCode = statusCode || 200;
-  return function(entity) {
+  return entity => {
     if(entity) {
+      if(Array.isArray(entity)) {
+        entity = entity.map(e => {
+          const prefix = '/api/file/';
+          if(e.icon) {
+            e.icon = `${prefix}${e.icon}`;
+          }
+          return e;
+        });
+      }
       return res.status(statusCode).json(entity);
     }
     return null;
   };
-}
+};
 
-function patchUpdates(patches) {
-  return function(entity) {
+const patchUpdates = patches =>
+  entity => {
     try {
       jsonpatch.apply(entity, patches, /*validate*/ true);
     } catch(err) {
       return Promise.reject(err);
     }
-
     return entity.save();
   };
-}
 
-function removeEntity(res) {
-  return function(entity) {
+const removeEntity = res =>
+  entity => {
     if(entity) {
       return entity.remove()
         .then(() => {
@@ -47,95 +55,119 @@ function removeEntity(res) {
         });
     }
   };
-}
 
-function handleEntityNotFound(res) {
-  return function(entity) {
+const handleEntityNotFound = res =>
+  entity => {
     if(!entity) {
       res.status(404).end();
       return null;
     }
     return entity;
   };
-}
 
-function handleError(res, statusCode) {
+const handleError = (res, statusCode) => {
   statusCode = statusCode || 500;
-  return function(err) {
+  return err => {
     res.status(statusCode).send(err);
   };
-}
+};
 
-// Gets a list of Categorys
-export function index(req, res) {
-  return Category.find().populate('parent').populate('children').exec()
+// Gets a list of Categories
+export const index = (req, res) =>
+  Category.find()
+    .populate('parent')
+    .populate('children')
+    .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
-}
 
 // Gets a single Category from the DB
-export function show(req, res) {
-  return Category.findOne({ slug: req.params.slug }).populate('children').populate('parent').exec()
+export const show = (req, res) =>
+  Category.findOne({ _id: req.params.slug })
+    .populate('children')
+    .populate('parent')
+    .exec()
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
-}
 
-function updateChildren(parentId) {
-  return function(child) {
-    if (child) {
-      if (parentId) {
+// Gets a list of Applications with specify Category
+export const apps = (req, res) =>
+  Application.find({ category: req.params.slug })
+    .populate('author')
+    .exec()
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+
+const insertChildrenIdToParent = childId =>
+  parent => {
+    if(parent) {
+      parent.children.push(childId);
+      parent.save();
+    }
+  };
+
+const updateChildren = parentId =>
+  child => {
+    if(child) {
+      if(parentId) {
         Category.findOne({ _id: parentId })
-          .then(parent => {
-            parent.children.push(child._id);
-            parent.save();
-          });
+          .then(insertChildrenIdToParent(child.id));
       }
       return child;
     }
     return null;
-  }
-}
+  };
+
 
 // Creates a new Category in the DB
-export function create(req, res) {
+export const create = (req, res) => {
   req.body.slug = util.slugify(req.body.name);
 
   return Category.create(req.body)
     .then(updateChildren(req.body.parent))
     .then(respondWithResult(res, 201))
     .catch(handleError(res));
-}
+};
 
 // Upserts the given Category in the DB at the specified ID
-export function upsert(req, res) {
+export const upsert = (req, res) => {
   if(req.body._id) {
     delete req.body._id;
   }
-  return Category.findOneAndUpdate({ slug: req.params.slug }, req.body, {upsert: true, setDefaultsOnInsert: true, runValidators: true}).exec()
-
+  return Category.findOneAndUpdate(
+    { _id: req.params.slug },
+    req.body,
+    {
+      upsert: true,
+      setDefaultsOnInsert: true,
+      runValidators: true
+    }
+  )
+    .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
-}
+};
 
 // Updates an existing Category in the DB
-export function patch(req, res) {
+export const patch = (req, res) => {
   if(req.body._id) {
     delete req.body._id;
     delete req.body.createdAt;
     delete req.body.updatedAt;
   }
-  return Category.findOne({ slug: req.params.slug }).exec()
+  return Category.findOne({ _id: req.params.slug })
+    .exec()
     .then(handleEntityNotFound(res))
     .then(patchUpdates(req.body))
     .then(respondWithResult(res))
     .catch(handleError(res));
-}
+};
 
 // Deletes a Category from the DB
-export function destroy(req, res) {
-  return Category.findOne({ slug: req.params.id }).exec()
+export const destroy = (req, res) =>
+  Category.findOne({ _id: req.params.id })
+    .exec()
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))
     .catch(handleError(res));
-}
