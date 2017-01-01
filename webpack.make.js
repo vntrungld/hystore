@@ -48,8 +48,6 @@ module.exports = function makeWebpackConfig(options) {
                 'angular-resource',
 
                 'angular-sanitize',
-                'angular-socket-io',
-                'angular-ui-bootstrap',
                 'angular-ui-router',
                 'lodash'
             ]
@@ -198,7 +196,6 @@ module.exports = function makeWebpackConfig(options) {
             test: /\.(scss|sass)$/,
             loaders: ['style', 'css', 'sass'],
             include: [
-                path.resolve(__dirname, 'node_modules/bootstrap-sass/assets/stylesheets/*.scss'),
                 path.resolve(__dirname, 'client/app/app.scss')
             ]
 
