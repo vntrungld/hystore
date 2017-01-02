@@ -4,7 +4,9 @@
         "es6": true,
         "jasmine": true
     },
-    "globals": {},
+    "globals": {
+      "sinon": true
+    },
     "plugins": [],
     "rules": {
         //Possible Errors
