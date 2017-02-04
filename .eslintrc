@@ -7,7 +7,7 @@
     "globals": {
       "sinon": true
     },
-    "plugins": [],
+    "plugins": [angular],
     "rules": {
         //Possible Errors
         "comma-dangle": 0,                                          //disallow or enforce trailing commas
