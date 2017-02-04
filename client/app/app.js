@@ -13,7 +13,7 @@ import mdDataTable from 'angular-material-data-table';
 
 // import ngValidationMatch from 'angular-validation-match';
 
-import { routeConfig } from './app.config';
+import { routeConfig, ariaConfig } from './app.config';
 
 import _Auth from '../components/auth/auth.module';
 import Category from '../components/category/category.module';
@@ -59,10 +59,8 @@ angular.module('hystoreApp', [
   starRating,
   review,
 ])
-  .config(['$mdAriaProvider', $mdAriaProvider => {
-    $mdAriaProvider.disableWarnings();
-  }])
   .config(routeConfig)
+  .config(['$mdAriaProvider', ariaConfig])
   .run(($rootScope, $location, Auth) => {
     'ngInject';
 

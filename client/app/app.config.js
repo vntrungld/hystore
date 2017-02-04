@@ -12,3 +12,9 @@ export function routeConfig($urlRouterProvider, $locationProvider) {
   //   requireBase: false
   // });
 }
+
+export function ariaConfig($mdAriaProvider) {
+  'ngInject';
+
+  $mdAriaProvider.disableWarnings();
+}
