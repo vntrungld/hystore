@@ -13,7 +13,7 @@ import mdDataTable from 'angular-material-data-table';
 
 // import ngValidationMatch from 'angular-validation-match';
 
-import { routeConfig, ariaConfig } from './app.config';
+import { routeConfig, ariaConfig, themeConfig } from './app.config';
 
 import _Auth from '../components/auth/auth.module';
 import Category from '../components/category/category.module';
@@ -61,6 +61,7 @@ angular.module('hystoreApp', [
 ])
   .config(routeConfig)
   .config(['$mdAriaProvider', ariaConfig])
+  .config(themeConfig)
   .run(($rootScope, $location, Auth) => {
     'ngInject';
 

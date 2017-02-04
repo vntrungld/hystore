@@ -18,3 +18,11 @@ export function ariaConfig($mdAriaProvider) {
 
   $mdAriaProvider.disableWarnings();
 }
+
+export function themeConfig($mdThemingProvider) {
+  'ngInject';
+
+  $mdThemingProvider.theme('default')
+    .primaryPalette('teal');
+  $mdThemingProvider.enableBrowserColor();
+}
