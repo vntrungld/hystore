@@ -3,4 +3,98 @@ div(
   layout="column"
 )
   md-card
-    h1.md-display-1(layout-padding) Dev review
+    md-toolbar.md-table-toolbar.md-default(ng-hide="vm.selected.length")
+      .md-toolbar-tools
+        span Inbox
+
+        div(flex)
+
+        md-button.md-icon-button(ng-click="vm.reload()")
+          md-icon refresh
+
+    md-toolbar.md-table-toolbar.alternate(ng-show="vm.selected.length")
+      .md-toolbar-tools
+        span {{ vm.selected.length }} {{ vm.selected.length > 1 ? 'items' : 'item' }} selected
+
+    md-table-container
+      table(
+        md-table,
+        md-row-select,
+        multiple,
+        ng-model="vm.selected",
+        md-progress="promise"
+      )
+        thead(
+          md-head,
+          md-order="vm.query.order",
+        )
+          tr(md-row)
+            th(
+              md-column,
+              md-order-by="name"
+            )
+              span Name
+
+            th(
+              md-column,
+              md-order-by="for"
+            )
+              span For
+
+            th(
+              md-column,
+              md-order-by="star"
+            )
+              span Star
+
+            th(md-column)
+              span Content
+
+            th(
+              md-column,
+              md-order-by="when"
+            )
+              span When
+
+            th(
+              md-column,
+              md-order-by="status"
+            )
+              span Status
+
+        tbody(md-body)
+          tr(
+            md-row,
+            md-select="review",
+            md-on-select="logItem",
+            ng-repeat="review in vm.reviews | filter: filter.search | orderBy: vm.query.order | limitTo: vm.query.limit : (vm.query.page -1) * vm.query.limit"
+          )
+            td(md-cell) {{ review.name }}
+
+            td(md-cell) {{ review.for }}
+
+            td(md-cell) {{ review.star }}
+
+            td(md-cell) {{ review.content }}
+
+            td(md-cell, am-time-ago="review.createdAt")
+
+            td(md-cell)
+              md-select(
+                ng-model="review.status"
+                ng-change="vm.changeStatus($index)"
+              )
+                md-option(
+                  ng-repeat="status in vm.status"
+                  ng-value="status.value"
+                )
+                  | {{ status.name }}
+
+    md-table-pagination(
+      md-limit="vm.query.limit",
+      md-limit-options="vm.limitOptions",
+      md-page="vm.query.page",
+      md-total="{{ vm.reviews.length }}",
+      md-page-select,
+      md-on-paginate="logPagination"
+    )
