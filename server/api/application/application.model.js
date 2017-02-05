@@ -81,4 +81,38 @@ var ApplicationSchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
+/**
+ * Virtual
+ */
+
+// Public current infomation
+ApplicationSchema
+  .virtual('current')
+  .get(function() {
+    const currentVersion = this.versions[this.currentVersionIndex];
+    const author = {
+      name: this.author.name,
+      email: this.author.email
+    };
+    const category = {
+      name: this.category.name,
+      slug: this.category.slug
+    };
+
+    return {
+      author,
+      name: this.name,
+      slug: this.slug,
+      icon: this.icon,
+      feature: this.feature,
+      screenshots: this.screenshots,
+      description: this.description,
+      category,
+      stars: this.stars,
+      major: currentVersion.major,
+      minor: currentVersion.minor,
+      maintenance: currentVersion.maintenance,
+      archive: currentVersion.archive
+    };
+  });
 export default mongoose.model('Application', ApplicationSchema);
