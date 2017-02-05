@@ -20,14 +20,6 @@ var ApplicationSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  archive: {
-    type: String,
-    required: true
-  },
-  description: {
-    type: String,
-    required: true
-  },
   icon: {
     type: String,
     required: true
@@ -36,10 +28,39 @@ var ApplicationSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  screenshots: [{
-    type: String
-  }],
-  version: {
+  screenshots: {
+    type: [{
+      type: String
+    }],
+    validate: [screenshotRange, '{PATH} limit 3 to 8']
+  },
+  versions: [
+    {
+      major: {
+        type: Number,
+        required: true
+      },
+      minor: {
+        type: Number,
+        required: true
+      },
+      maintenance: {
+        type: Number,
+        required: true
+      },
+      whatsnew: String,
+      archive: {
+        type: String,
+        required: true
+      },
+    }
+  ],
+  currentVersionIndex: {
+    type: Number,
+    required: true,
+    default: 0
+  },
+  description: {
     type: String,
     required: true
   },
@@ -47,39 +68,14 @@ var ApplicationSchema = new mongoose.Schema({
     type: String,
     ref: 'Category'
   },
-  oneStar: {
-    type: Number,
-    default: 0,
-    required: true
-  },
-  twoStar: {
-    type: Number,
-    default: 0,
-    required: true
-  },
-  threeStar: {
-    type: Number,
-    default: 0,
-    required: true
-  },
-  fourStar: {
-    type: Number,
-    default: 0,
-    required: true
-  },
-  fiveStar: {
-    type: Number,
-    default: 0,
-    required: true
-  },
-  totalRate: {
-    type: Number,
-    default: 0,
-    required: true
+  stars: {
+    type: [{ type: Number }],
+    default: [0, 0, 0, 0, 0],
+    validate: [starLimit, '{PATH} exceeds the limit of 5']
   },
   status: {
     type: String,
-    enum: ['unpublish', 'publish', 'depublish', 'block'],
+    enum: ['unpublish', 'publish', 'depublish', 'block', 'delete'],
     default: 'unpublish',
     required: true
   }
