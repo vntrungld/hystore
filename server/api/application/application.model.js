@@ -152,4 +152,34 @@ function starLimit(val) {
 function screenshotRange(val) {
   return val.length >= 3 && val.length <= 8;
 }
+
+/**
+ * Methods
+ */
+
+ApplicationSchema.methods = {
+  version(idx) {
+    if(idx < this.versions.length) {
+      const specVersion = this.versions[idx];
+
+      return {
+        author: this.author,
+        name: this.name,
+        slug: this.slug,
+        icon: this.icon,
+        feature: this.feature,
+        screenshots: this.screenshots,
+        description: this.description,
+        category: this.category,
+        stars: this.stars,
+        major: specVersion.major,
+        minor: specVersion.minor,
+        maintenance: specVersion.maintenance,
+        archive: specVersion.archive
+      };
+    }
+
+    return this.current;
+  }
+};
 export default mongoose.model('Application', ApplicationSchema);
