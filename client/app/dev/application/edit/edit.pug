@@ -2,196 +2,228 @@ div(
   flex,
   layout="column"
 )
-  h1.md-display-1(
-    flex="none",
-    layout-padding
-  )
-    | Application edit
-
   form(
-    name="form"
-    ng-submit="vm.saveApplication(form)",
-    novalidate
-    flex="grow",
-    layout="column"
+    name="form",
+    ng-submit="vm.saveApplication(form)"
   )
-    md-input-container(flex="none")
-      label Name
+    md-card
+      md-card-header
+        md-card-header-text
+          span.md-title {{ vm.isEdit ? 'Edit' : 'Add' }} Application
+      md-card-content
+        md-input-container.md-block
+          label Name
 
-      input(
-        type='text',
-        name='name',
-        ng-model='vm.application.name',
-        required
-      )
-
-      div(ng-messages='form.name.$error')
-        p(ng-message="required") What's your application name?
-        p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
-
-    div.input-wrapper(
-      flex="none",
-      layout="row"
-    )
-      input(
-        id="archiveInput",
-        ng-hide="true",
-        type="file",
-        ngf-select,
-        ng-model="vm.application.archive",
-        name="archive",
-        required,
-        ngf-model-invalid="errorFile",
-        flex
-      )
-      label.md-button.md-raised.md-primary(for="archiveInput") Choose an archive file
-
-    div.input-wrapper(
-      flex="none",
-      layout="column"
-    )
-      div.input-and-label(
-        flex,
-        layout="row"
-      )
-        label(flex="20") Icon *:
-
-        input(
-          type="file",
-          ngf-select,
-          ng-model="vm.application.icon",
-          name="icon",
-          required,
-          ngf-model-invalid="errorFile",
-          flex="none"
-        )
-
-      div.input-preview(
-        flex,
-        layout="row",
-        ng-if="vm.application.icon"
-      )
-        img(
-          ngf-thumbnail="vm.application.icon",
-          flex="none"
-        )
-
-    div.input-wrapper(
-      flex="none",
-      layout="column"
-    )
-      div.input-and-label(
-        flex,
-        layout="row"
-      )
-        label(flex="20") Feature Image *:
-
-        input(
-          type="file",
-          ngf-select,
-          ng-model="vm.application.feature",
-          name="feature",
-          required,
-          ngf-model-invalid="errorFile",
-          flex="none"
-        )
-
-      div.image-preview(
-        flex,
-        layout="row",
-        ng-if="vm.application.feature"
-      )
-        img(
-          ngf-src="vm.application.feature",
-          flex="none"
-        )
-
-    div.input-wrapper(
-      flex="none",
-      layout="column"
-    )
-      div.input-and-label(
-        flex="none",
-        layout="row"
-      )
-        label(flex="20") Screenshots *:
-
-        input(
-          type="file",
-          ngf-select,
-          ng-model="vm.application.screenshots",
-          name="screenshots",
-          required,
-          ngf-model-invalid="errorFile",
-          ngf-multiple="true",
-          flex="none"
-        )
-
-      md-grid-list.input-preview(
-        flex,
-        md-cols='1',
-        md-cols-sm='2',
-        md-cols-md='3',
-        md-cols-gt-md='6',
-        md-row-height-gt-md='1:1',
-        md-row-height='4:3',
-        md-gutter='8px',
-        md-gutter-gt-sm='4px',
-        ng-if="vm.application.screenshots"
-      )
-        md-grid-tile(ng-repeat="screenshot in vm.application.screenshots")
-          img.img-fill(
-            ngf-src="screenshot",
-            ngf-background="screenshot",
-            flex="none"
+          input(
+            type="text",
+            name="name",
+            ng-model="vm.application.name",
+            required
           )
 
-    md-input-container(flex="none")
-      label Category
+          div(ng-messages="form.name.$error")
+            p(ng-message="required") What's your application name?
+            p(ng-message="mongoose") {{ vm.errors.other }}
 
-      md-select(
-        name="category",
-        ng-model="vm.application.category",
-        required
-      )
-        md-option(
-          ng-repeat="category in vm.categories",
-          value="{{ category._id }}"
-          ng-if="category.status !== 'delete' && category.status !== 'deactive'"
+        div.input-wrapper(
+          ng-if="!vm.isEdit"
+          flex="none",
+          layout="row"
         )
-          | {{ category.name }}
+          input(
+            id="archiveInput",
+            ng-hide="true",
+            type="file",
+            ngf-select,
+            ng-model="vm.application.archive",
+            name="archive",
+            required,
+            ngf-model-invalid="errorFile",
+            flex
+          )
+          label.md-button.md-raised.md-primary(for="archiveInput") Choose an archive file
 
-      div(ng-messages='form.category.$error')
-        p(ng-message="required") Please select category
-        p(ng-message="mongoose") {{ vm.errors.other }}
+        div.input-wrapper(
+          flex="none",
+          layout="column"
+        )
+          div.input-and-label(
+            flex,
+            layout="row"
+          )
+            label(flex="20") Icon *:
 
-    md-input-container(flex="none")
-      label Description
+            input(
+              type="file",
+              ngf-select,
+              ng-model="vm.application.icon",
+              name="icon",
+              required,
+              ngf-model-invalid="errorFile",
+              flex="none"
+            )
 
-      textarea(
-        type='text',
-        name='desc',
-        rows=5,
-        ng-model='vm.application.description',
-        required
-      )
+          div.input-preview(
+            flex,
+            layout="row",
+            ng-if="vm.application.icon"
+          )
+            img(
+              ngf-thumbnail="vm.application.icon",
+              flex="none"
+            )
 
-      div(ng-messages='form.desc.$error')
-        p(ng-message="required") What's your description?
-        p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
+        div.input-wrapper(
+          flex="none",
+          layout="column"
+        )
+          div.input-and-label(
+            flex,
+            layout="row"
+          )
+            label(flex="20") Feature Image *:
 
-    md-input-container(flex="none")
-      label Version
+            input(
+              type="file",
+              ngf-select,
+              ng-model="vm.application.feature",
+              name="feature",
+              required,
+              ngf-model-invalid="errorFile",
+              flex="none"
+            )
 
-      input(
-        type='text',
-        name='name',
-        ng-model='vm.application.version',
-        required
-      )
+          div.image-preview(ng-if="vm.application.feature")
+            img.img-fill(ngf-src="vm.application.feature")
 
-      div(ng-messages='form.version.$error')
-        p(ng-message="required") What's your application version?
-        p(ng-message="mongoose") {{ adminCategoryEdit.errors.other }}
+        div.input-wrapper(
+          flex="none",
+          layout="column"
+        )
+          div.input-and-label(
+            flex="none",
+            layout="row"
+          )
+            label(flex="20") Screenshots *:
 
-    button.md-button.md-primary(type="submit") {{ vm.isEdit ? 'Save change' : 'Create' }}
+            input(
+              type="file",
+              ngf-select,
+              ng-model="vm.application.screenshots",
+              name="screenshots",
+              required,
+              ngf-model-invalid="errorFile",
+              ngf-multiple="true",
+              flex="none"
+            )
+
+          md-grid-list.input-preview(
+            flex,
+            md-cols='1',
+            md-cols-sm='2',
+            md-cols-md='3',
+            md-cols-gt-md='6',
+            md-row-height-gt-md='1:1',
+            md-row-height='4:3',
+            md-gutter='8px',
+            md-gutter-gt-sm='4px',
+            ng-if="vm.application.screenshots"
+          )
+            md-grid-tile(ng-repeat="screenshot in vm.application.screenshots")
+              img.img-fill(
+                ngf-src="screenshot",
+                ngf-background="screenshot",
+                flex="none"
+              )
+
+        .category-wrapper.md-block
+          md-autocomplete(
+            ng-if="vm.categories",
+            md-input-field="category",
+            md-selected-item="vm.application.category",
+            md-items="category in vm.querySearch(vm.searchText)",
+            md-item-text="category.name",
+            md-search-text="vm.searchText",
+            md-search-text-change="vm.querySearch(vm.searchText)"
+            md-floating-label="Category",
+            md-require-match,
+            required
+          )
+            md-item-template
+              span(md-highlight-text="vm.searchText") {{ category.name }}
+
+            div(ng-messages='form.category.$error')
+              p(ng-message="required") Please select category
+
+              p(ng-message="mongoose") {{ vm.errors.other }}
+
+        md-input-container.md-block
+          label Description
+
+          textarea(
+            type='text',
+            name='desc',
+            rows=5,
+            ng-model='vm.application.description',
+            required
+          )
+
+          div(ng-messages='form.desc.$error')
+            p(ng-message="required") What's your description?
+            p(ng-message="mongoose") {{ vm.errors.other }}
+
+        .version-wrapper(
+          ng-if="!vm.isEdit"
+          flex="none",
+          layout="column"
+        )
+          h4.md-title Version
+
+          .version-input-group(
+            flex="none",
+            layout="row"
+          )
+            md-input-container(flex="none")
+              label Major
+
+              input(
+                type="number",
+                name="major",
+                ng-model="vm.application.major",
+                required
+              )
+
+              div(ng-messages="form.version.$error")
+                p(ng-message="required") What's your application version?
+                p(ng-message="mongoose") {{ vm.errors.other }}
+
+            md-input-container(flex="none")
+              Label Minor
+
+              input(
+                type="number",
+                name="minor",
+                ng-model="vm.application.minor",
+                required
+              )
+
+              div(ng-messages="form.version.$error")
+                p(ng-message="required") What's your application version?
+                p(ng-message="mongoose") {{ vm.errors.other }}
+
+            md-input-container(flex="none")
+              Label Maintenance
+
+              input(
+                type="number",
+                name="maintenance",
+                ng-model="vm.application.maintenance",
+                required
+              )
+
+              div(ng-messages="form.version.$error")
+                p(ng-message="required") What's your application version?
+                p(ng-message="mongoose") {{ vm.errors.other }}
+
+      md-card-actions
+        button.md-button.md-primary(type="submit") {{ vm.isEdit ? 'Save change' : 'Create' }}

@@ -1,57 +1,46 @@
 'use strict';
 
 export default class DevApplicationController {
-  applications = [];
-  selected = [];
+  applications: Array;
   limitOptions = [10, 50, 100];
-  categories = [];
-  status = [
-    {
-      name: 'Publish',
-      value: 'publish'
-    }, {
-      name: 'Unpublish',
-      value: 'unpublish'
-    }, {
-      name: 'Depublish',
-      value: 'depublish'
-    }, {
-      name: 'Block',
-      value: 'block'
-    }
-  ];
-  query = {
-    order: 'name',
-    limit: 10,
-    page: 1
-  };
-  ApplicationResource;
-  User;
-  userId;
+  categories: Array;
+  status: Array;
+  query: Object;
+  ApplicationResource: Object;
 
   /*@ngInject*/
-  constructor(ApplicationResource, CategoryResource, User, Auth) {
-    Auth.getCurrentUser()
-      .then(currentUser => {
-        this.userId = currentUser._id;
-        this.applications = this.getApplicationList();
-      });
-
+  constructor(ApplicationResource, CategoryResource) {
+    this.applications = ApplicationResource.query({ role: 'dev' });
     this.categories = CategoryResource.query();
     this.ApplicationResource = ApplicationResource;
-    this.User = User;
-  }
-
-  getApplicationList() {
-    return this.User.getListApp({ id: this.userId });
+    this.status = [
+      {
+        name: 'Publish',
+        value: 'publish'
+      }, {
+        name: 'Unpublish',
+        value: 'unpublish'
+      }, {
+        name: 'Depublish',
+        value: 'depublish'
+      }, {
+        name: 'Block',
+        value: 'block'
+      }
+    ];
+    this.query = {
+      order: 'name',
+      limit: 10,
+      page: 1
+    };
   }
 
   reload() {
-    this.applications = this.getApplicationList();
+    this.applications = this.ApplicationResource.query({ role: 'dev' });
   }
 
   delete(application) {
-    application.$remove();
+    application.$remove({ role: 'dev' });
     this.applications.splice(this.applications.indexOf(application), 1);
   }
 }
