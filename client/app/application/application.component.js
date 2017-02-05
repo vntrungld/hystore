@@ -12,16 +12,19 @@ export default class ApplicationComponent {
   ReviewService: Object;
   mdToast: Object;
   review: Object;
+  starClasses: Array;
 
   /*@ngInject*/
   constructor($state, ApplicationResource, CategoryResource, Auth, $mdDialog, ReviewResource, Review, $mdToast) {
+    this.starClasses = ['one', 'two', 'three', 'four', 'five'];
+
     ApplicationResource.get({ slug: $state.params.slug }).$promise.then(app => {
       this.application = app;
       this.isLoggedIn = Auth.isLoggedInSync; // eslint-disable-line
       this.mdDialog = $mdDialog;
       this.ReviewResource = ReviewResource;
       this.ReviewService = Review;
-      this.reviews = ApplicationResource.getReviews({ slug: $state.params.slug });
+      this.reviews = ReviewResource.query({ application: $state.params.slug });
       this.mdToast = $mdToast;
       this.review = {
         for: app.slug,
@@ -29,9 +32,7 @@ export default class ApplicationComponent {
         content: '',
       };
 
-      CategoryResource.getAppsByCat({ slug: app.category._id }).$promise.then(apps => {
-        this.similarApps = apps;
-      });
+      this.similarApps = ApplicationResource.query({ category: app.category.slug });
     });
   }
 
@@ -62,23 +63,53 @@ export default class ApplicationComponent {
       });
   }
 
-  getAverageStar(stars) {
+  getTotalStar() {
     let totalStar = 0;
-    let count = 0;
+    this.application.stars.forEach(function(star) {
+      totalStar += star;
+    });
+
+    return totalStar;
+  }
+
+  getAverageStar() {
+    let totalStar = 0;
     let averageStar = 0;
+    const count = this.getTotalStar();
 
-    for(let i = 0; i < stars.lenth; i += 1) {
-      const starValue = i + 1;
-      const totalStarEachValue = stars[i];
+    this.application.stars.forEach(function(star, idx) {
+      const starValue = idx + 1;
 
-      count += totalStarEachValue;
-      totalStar += totalStarEachValue * starValue;
-    }
+      totalStar += star * starValue;
+    });
 
     if(count) {
       averageStar = totalStar / count;
     }
 
-    return averageStar;
+    return averageStar.toFixed(1);
+  }
+
+  getTopStarType() {
+    let max = 0;
+    let starType = 0;
+    this.application.stars.forEach(function(star, idx) {
+      if(star > max) {
+        max = star;
+        starType = idx;
+      }
+    });
+
+    return starType;
+  }
+
+  getStarPercent(idx) {
+    const topIdx = this.getTopStarType();
+
+    return this.application.stars[idx] / this.application.stars[topIdx] * 100;
+  }
+
+  getRepeatTime(no) {
+    return new Array(no);
   }
 }

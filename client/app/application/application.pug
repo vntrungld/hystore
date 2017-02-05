@@ -8,11 +8,12 @@ div(
     flex-offset-gt-sm="20",
     flex-gt-sm="50"
   )
-    md-card
+    md-card(ng-if="vm.application")
       img.hide-gt-sm(
         ng-src="{{ vm.application.feature }}",
         alt="{{ vm.application.name }} Feature Image"
       )
+
       md-card-title
         md-card-title-media.detail-app-icon
           .md-media-lg.hide-sm.hide-xs
@@ -48,7 +49,7 @@ div(
         md-card-title-text
           span.md-title {{ vm.application.name }}
           span.md-subhead(layout="row")
-            a(ui-sref="author({ id: vm.application.author._id })") {{ vm.application.author.name || 'Unknown' }}
+            a(ui-sref="author({ id: vm.application.author.email })") {{ vm.application.author.name || 'Unknown' }}
             | &nbsp;
             a(ui-sref="category({ id: vm.application.category._id })") {{ vm.application.category.name || 'Unknown' }}
 
@@ -92,65 +93,51 @@ div(
               flex-xs="50",
               layout="column"
             )
-              .score.md-display-3 4.5
+              .score.md-display-3 {{ vm.getAverageStar() }}
               .reviews-stats.md-title
                 md-icon person
-                | 999.999 users
+                | {{ vm.getTotalStar() }}
 
             .rating-histogram(
               flex,
               layout="column"
+              ng-if="vm.application.stars"
             )
-              .rating-bar-container.five(layout="row")
+              .rating-bar-container(
+                layout="row",
+                ng-repeat="star in vm.application.stars",
+                ng-class="vm.starClasses[$index]"
+              )
                 .bar-label(flex-nogrow)
                   md-icon star
-                  | 5
+                  | {{ $index + 1 }}
                 .bar(flex)
-                  .bar-background
-                    span.bar-number.md-body-1 1234
-              .rating-bar-container.four(layout="row")
-                .bar-label(flex-nogrow)
-                  md-icon star
-                  | 4
-                .bar(flex)
-                  .bar-background
-                    span.bar-number.md-body-1 1234
-              .rating-bar-container.three(layout="row")
-                .bar-label(flex-nogrow)
-                  md-icon star
-                  | 3
-                .bar(flex)
-                  .bar-background
-                    span.bar-number.md-body-1 1234
-              .rating-bar-container.two(layout="row")
-                .bar-label(flex-nogrow)
-                  md-icon star
-                  | 2
-                .bar(flex)
-                  .bar-background
-                    span.bar-number.md-body-1 1234
-              .rating-bar-container.one(layout="row")
-                .bar-label(flex-nogrow)
-                  md-icon star
-                  | 1
-                .bar(flex)
-                  .bar-background
-                    span.bar-number.md-body-1 1234
+                  .bar-background(style="width: {{ vm.getStarPercent($index) }}%")
+                    span.bar-number.md-body-1 {{ star }}
 
           md-list
             md-list-item.md-3-line.md-long-text(ng-repeat="review in vm.reviews")
               img.md-avatar(
-                ng-src="{{}}",
-                alt="Unknown"
+                ng-src="{{ review.avatar }}",
+                alt="{{ review.email }}"
               )
               .md-list-item-text
-                span.md-headline {{ review.from.name || 'Unknown' }}
+                span.md-headline {{ review.name }}
                 | &nbsp;
-                span.md-subhead {{ review.createdAt }}
-                h4.md-title Rate here
+                span.md-subhead(am-time-ago="review.createdAt")
+                .md-title
+                  md-icon(ng-repeat="star in vm.getRepeatTime(review.star) track by $index") star
+                  md-icon(ng-repeat="star in vm.getRepeatTime(5 - review.star) track by $index") star_border
                 p.md-body-1 {{ review.content }}
 
-      md-divider
+        md-divider(ng-if="vm.application.whatsnew")
+
+        div(ng-if="vm.application.whatsnew")
+          md-card-title
+            md-card-title-text
+              h2.md-title What's New
+
+          p {{ vm.application.whatsnew }}
 
   div(flex)
     md-card(ng-repeat="similarApp in vm.similarApps")
@@ -162,6 +149,7 @@ div(
                 ng-src="{{ similarApp.icon }}",
                 alt="{{ similarApp.name }}"
               )
+
         md-card-title-text.text-overflow
           a.md-headline(ui-sref="application({ slug: similarApp.slug })") {{ similarApp.name || 'Unknown' }}
           a.md-subhead(ui-sref="author({ id: similarApp.author._id })") {{ similarApp.author.name || 'Unknown' }}
