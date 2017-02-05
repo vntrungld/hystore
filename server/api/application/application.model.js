@@ -115,4 +115,27 @@ ApplicationSchema
       archive: currentVersion.archive
     };
   });
+
+ApplicationSchema.virtual('dev')
+  .get(function() {
+    const category = {
+      name: this.category.name,
+      slug: this.category.slug
+    };
+
+    return {
+      name: this.name,
+      icon: this.icon,
+      feature: this.feature,
+      screenshots: this.screenshots,
+      description: this.description,
+      category,
+      stars: this.stars,
+      versions: this.versions,
+      currentVersionIndex: this.currentVersionIndex,
+      status: this.status,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
+    };
+  });
 export default mongoose.model('Application', ApplicationSchema);
