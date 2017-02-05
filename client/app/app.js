@@ -35,6 +35,8 @@ import './app.scss';
 const ngTouch = require('angular-touch'); // eslint-disable-line
 const carousel = require('angular-carousel/dist/angular-carousel'); // eslint-disable-line
 
+const angularMoment = require('angular-moment');
+
 angular.module('hystoreApp', [
   ngCookies,
   ngResource,
@@ -58,6 +60,7 @@ angular.module('hystoreApp', [
   'angular-carousel',
   starRating,
   review,
+  angularMoment,
 ])
   .config(routeConfig)
   .config(['$mdAriaProvider', ariaConfig])
