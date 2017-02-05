@@ -1,28 +1,8 @@
 'use strict';
 
 import User from './user.model';
-import Application from '../application/application.model';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
-
-const respondWithResult = (res, statusCode) => {
-  statusCode = statusCode || 200;
-  return entity => {
-    if(entity) {
-      const prefix = '/api/file/';
-
-      entity.icon = prefix + entity.icon;
-      entity.feature = prefix + entity.feature;
-      if(entity.screenshots !== undefined) {
-        entity.screenshots = entity.screenshots.map(screenshot => `${prefix}${screenshot}`
-        );
-      }
-
-      return res.status(statusCode).json(entity);
-    }
-    return null;
-  };
-};
 
 const validationError = (res, statusCode) => {
   statusCode = statusCode || 422;
@@ -75,17 +55,6 @@ export const show = (req, res, next) => {
       res.json(user.profile);
     })
     .catch(err => next(err));
-};
-
-/**
- * Get list application of user
- */
-export const listApp = (req, res) => {
-  var userId = req.params.id;
-
-  return Application.find({ author: userId }).exec()
-    .then(respondWithResult(res))
-    .catch(handleError(res));
 };
 
 /**
