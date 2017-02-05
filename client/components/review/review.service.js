@@ -20,6 +20,25 @@ export function ReviewService(Util, ReviewResource) {
         err => safeCb(callback)(err)
       )
         .$promise;
+    },
+
+    /**
+     * Update a exist review
+     *
+     * @param {Object} id - review id
+     * @param {Object} change - review object change info
+     * @param {Function} callback - function(error, review)
+     * @return {Promise}
+     */
+    devPatch(id, change, callback ? : Function) {
+      return ReviewResource.devPatch({
+        id
+      }, change, function() {
+        return safeCb(callback)(null);
+      }, function(err) {
+        return safeCb(callback)(err);
+      })
+        .$promise;
     }
   };
 
