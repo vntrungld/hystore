@@ -8,7 +8,7 @@ export function ApplicationService(Util, ApplicationResource, Upload) {
   const Application = {
     upload(application) {
       return upload({
-        url: 'api/applications/',
+        url: 'api/dev/applications/',
         arrayKey: '',
         data: application
       });

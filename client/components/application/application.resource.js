@@ -3,16 +3,28 @@
 export function ApplicationResource($resource) {
   'ngInject';
 
-  return $resource('api/applications/:slug/:controller', {
+  return $resource('api/:role/applications/:slug', {
+    role: '@role',
     slug: '@slug'
   }, {
-    upload: { method: 'POST' },
-    getReviews: {
-      method: 'GET',
-      isArray: true,
+    upload: {
+      method: 'POST',
       params: {
-        slug: '@slug',
-        controller: 'reviews'
+        role: 'dev'
+      }
+    },
+    devPatch: {
+      method: 'PATCH',
+      params: {
+        role: 'dev',
+        slug: '@slug'
+      }
+    },
+    adminPatch: {
+      method: 'PATCH',
+      params: {
+        role: 'admin',
+        slug: '@slug'
       }
     }
   });
