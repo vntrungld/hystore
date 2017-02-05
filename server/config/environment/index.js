@@ -46,7 +46,24 @@ var all = {
   },
 
   // Hard disk storage location
-  path: '/data/hystore/'
+  path: '/tmp/',
+  upload: [{
+    name: 'archive',
+    maxCount: 1
+  }, {
+    name: 'icon',
+    maxCount: 1
+  }, {
+    name: 'feature',
+    maxCount: 1
+  }, {
+    name: 'screenshots',
+    maxCount: 8
+  }],
+  s3: {
+    Bucket: 'hystore',
+    ACL: 'public-read'
+  }
 };
 
 // Export the config object based on the NODE_ENV
