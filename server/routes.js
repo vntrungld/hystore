@@ -6,9 +6,14 @@
 
 import errors from './components/errors';
 import path from 'path';
+import * as auth from './auth/auth.service';
 
 export default function(app) {
   // Insert routes below
+  app.use('/api/dev/reviews', auth.hasRole('dev'), require('./api/dev/review'));
+  app.use('/api/admin/applications', auth.hasRole('admin'), require('./api/admin/application'));
+  app.use('/api/dev/applications', auth.hasRole('dev'), require('./api/dev/application'));
+  app.use('/api/reviews', require('./api/review'));
   app.use('/api/applications', require('./api/application'));
   app.use('/api/categories', require('./api/category'));
   app.use('/api/users', require('./api/user'));

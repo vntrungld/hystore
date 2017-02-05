@@ -7,5 +7,6 @@ var router = express.Router();
 
 router.get('/', controller.index);
 router.get('/:slug', controller.show);
+router.patch('/:slug', controller.patch);
 
 module.exports = router;

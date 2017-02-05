@@ -13,7 +13,6 @@
 
 import jsonpatch from 'fast-json-patch';
 import Category from './category.model';
-import Application from '../application/application.model';
 
 const util = require('../../utilities');
 
@@ -21,15 +20,6 @@ const respondWithResult = (res, statusCode) => {
   statusCode = statusCode || 200;
   return entity => {
     if(entity) {
-      if(Array.isArray(entity)) {
-        entity = entity.map(e => {
-          const prefix = '/api/file/';
-          if(e.icon) {
-            e.icon = `${prefix}${e.icon}`;
-          }
-          return e;
-        });
-      }
       return res.status(statusCode).json(entity);
     }
     return null;
@@ -88,14 +78,6 @@ export const show = (req, res) =>
     .populate('parent')
     .exec()
     .then(handleEntityNotFound(res))
-    .then(respondWithResult(res))
-    .catch(handleError(res));
-
-// Gets a list of Applications with specify Category
-export const apps = (req, res) =>
-  Application.find({ category: req.params.slug })
-    .populate('author')
-    .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
 
