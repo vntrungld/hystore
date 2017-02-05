@@ -29,15 +29,17 @@ export function isAuthenticated() {
     })
     // Attach user to request
     .use(function(req, res, next) {
-      User.findById(req.user._id).exec()
-        .then(user => {
+      return User.findById(req.user._id).exec()
+        .then(function(user) {
           if(!user) {
             return res.status(401).end();
           }
           req.user = user;
-          next();
+          return next();
         })
-        .catch(err => next(err));
+        .catch(function(err) {
+          return next(err);
+        });
     });
 }
 
