@@ -5,8 +5,9 @@ export default function routes($stateProvider) {
 
   $stateProvider.state('dev', {
     url: '/dev',
-    abstract: true,
     template: require('./dev.pug'),
+    controller: 'DevController',
+    controllerAs: 'vm',
     authenticate: 'dev'
   })
     .state('dev.dashboard', {
@@ -27,6 +28,20 @@ export default function routes($stateProvider) {
       url: '/application/:slug',
       template: require('./application/edit/edit.pug'),
       controller: 'DevApplicationEditController',
+      controllerAs: 'vm',
+      authenticate: 'dev'
+    })
+    .state('dev.applicationUpdate', {
+      url: '/application/:slug/update',
+      template: require('./application/update/update.pug'),
+      controller: 'DevApplicationUpdateController',
+      controllerAs: 'vm',
+      authenticate: 'dev'
+    })
+    .state('dev.review', {
+      url: '/reviews',
+      template: require('./review/review.pug'),
+      controller: 'DevReviewController',
       controllerAs: 'vm',
       authenticate: 'dev'
     });

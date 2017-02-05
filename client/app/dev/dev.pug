@@ -19,9 +19,11 @@ section(
 
         md-list-item(ui-sref="dev.review")
           md-icon email
+
           p Message
-          .md-secondary
-            | 99
+
+          span.md-badge.bg-primary(ng-if="vm.reviews")
+            | {{ vm.reviews.length }}
 
         md-divider
 
