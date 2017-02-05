@@ -3,7 +3,6 @@
  * GET     /api/applications                ->  index
  * POST    /api/applications                ->  create
  * GET     /api/applications/:slug          ->  show
- * GET     /api/applications/:slug/reviews          ->  reviews
  * PUT     /api/applications/:slug          ->  upsert
  * PATCH   /api/applications/:slug          ->  patch
  * DELETE  /api/applications/:slug          ->  destroy
@@ -13,7 +12,6 @@
 
 import jsonpatch from 'fast-json-patch';
 import Application from './application.model';
-import Review from '../review/review.model';
 
 const util = require('../../utilities');
 
@@ -94,14 +92,7 @@ export function show(req, res) {
     .catch(handleError(res));
 }
 
-// Gets Application reviews
-export function reviews(req, res) {
-  return Review.find({ for: req.params.slug })
-    .populate('from')
     .exec()
-    .then(respondWithResult(res))
-    .catch(handleError(res));
-}
 
 // Creates a new Application in the DB
 export function create(req, res) {

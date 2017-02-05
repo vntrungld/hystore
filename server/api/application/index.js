@@ -9,7 +9,6 @@ var router = express.Router();
 
 router.get('/', controller.index);
 router.get('/:slug', controller.show);
-router.get('/:slug/reviews', controller.reviews);
 router.post('/', auth.hasRole('dev'), File.upload, controller.create);
 router.put('/:slug', auth.hasRole('dev'), controller.upsert);
 router.patch('/:slug', auth.hasRole('dev'), controller.patch);
