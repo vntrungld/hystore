@@ -3,10 +3,13 @@
 import mongoose from 'mongoose';
 
 var CategorySchema = new mongoose.Schema({
-  _id: String,
   name: {
     type: String,
     required: true,
+  },
+  slug: {
+    type: String,
+    required: true
   },
   parent: {
     type: String,
