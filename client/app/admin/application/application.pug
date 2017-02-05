@@ -39,9 +39,6 @@ div(
             )
               span Name
 
-            th(md-column)
-              span Description
-
             th(
               md-column,
               md-order-by="version"
@@ -62,21 +59,22 @@ div(
             md-row,
             md-select="application",
             md-on-select="logItem",
-            ng-repeat="application in vm.applications | filter: filter.search | orderBy: vm.query.order | limitTo: vm.query.limit : (vm.query.page -1) * vm.query.limit"
+            ng-repeat="application in vm.applications | limitTo: vm.query.limit : (vm.query.page -1) * vm.query.limit"
           )
             td(md-cell) {{ application.author.email }}
 
             td(md-cell) {{ application.name }}
 
-            td(md-cell) {{ application.description }}
-
             td(md-cell) {{ application.version }}
 
             td(md-cell)
-              md-select(ng-model="application.status")
+              md-select(
+                ng-model="application.status",
+                ng-change="vm.changeStatus({{ $index }})"
+              )
                 md-option(
                   ng-value="status.value",
-                  ng-repeat="status in vm.status"
+                  ng-repeat="status in vm.status",
                 )
                   | {{ status.name }}
 
