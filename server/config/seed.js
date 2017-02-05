@@ -4,260 +4,352 @@
  */
 
 'use strict';
+
 import User from '../api/user/user.model';
 import Category from '../api/category/category.model';
 import Application from '../api/application/application.model';
 import Review from '../api/review/review.model';
+const Promise = require('bluebird');
 
-User.find({}).remove()
-  .then(() => {
-    User.create({
-      provider: 'local',
-      name: 'user',
-      email: 'user@user.com',
-      password: 'user'
-    }, {
-      provider: 'local',
-      role: 'dev',
-      name: 'Dev',
-      email: 'dev@dev.com',
-      password: 'dev'
-    }, {
-      provider: 'local',
-      role: 'admin',
-      name: 'Admin',
-      email: 'admin@admin.com',
-      password: 'admin'
-    }, {
-      provider: 'local',
-      name: 'delete',
-      email: 'delete@delete.com',
-      password: 'delete',
-      status: 'delete'
-    }, {
-      provider: 'local',
-      name: 'inactive',
-      email: 'inactive@inactive.com',
-      password: 'inactive',
-      status: 'inactive'
-    }, {
-      provider: 'local',
-      name: 'deactive',
-      email: 'deactive@deactive.com',
-      password: 'deactive',
-      status: 'deactive'
-    })
-    .then(() => {
-      console.log('finished populating users');
-    });
-  });
-
-Category.find({}).remove()
-  .then(() => Category.create({
-    name: 'Books',
-    _id: 'books',
-    info: 'Book category'
-  }, {
-    name: 'Business',
-    _id: 'business',
-    info: 'Business category'
-  }, {
-    name: 'Catalogues',
-    _id: 'catalogues',
-    info: 'Catalogues category'
-  }, {
-    name: 'Education',
-    _id: 'education',
-    info: 'Education category'
-  }, {
-    name: 'Entertainment',
-    _id: 'entertainment',
-    info: 'Entertainment category'
-  }, {
-    name: 'Finance',
-    _id: 'finance',
-    info: 'Finance category'
-  }, {
-    name: 'Food & Drink',
-    _id: 'food_and_drink',
-    info: 'Food & Drink category'
-  }, {
+let user = {};
+let dev = {};
+let gameCategory = {};
+let app = {};
+const gameCategoriesQuery = [
+  {
     name: 'Action',
-    _id: 'action',
+    slug: 'action',
     info: 'Game Action Category'
   }, {
     name: 'Adventure',
-    _id: 'adventure',
+    slug: 'adventure',
     info: 'Game Adventure'
   }, {
     name: 'Arcade',
-    _id: 'arcade',
+    slug: 'arcade',
     info: 'Game Arcade Category'
   }, {
     name: 'Board',
-    _id: 'board',
+    slug: 'board',
     info: 'Game Board Category'
   }, {
     name: 'Card',
-    _id: 'card',
+    slug: 'card',
     info: 'Game Card Category'
   }, {
     name: 'Casino',
-    _id: 'casino',
+    slug: 'casino',
     info: 'Game Casino Category'
   }, {
     name: 'Dice',
-    _id: 'dice',
+    slug: 'dice',
     info: 'Game Dice Category'
   }, {
     name: 'Education',
-    _id: 'game_education',
+    slug: 'game_education',
     info: 'Game Education Category'
   }, {
     name: 'Family',
-    _id: 'family',
+    slug: 'family',
     info: 'Game Family Category'
   }, {
     name: 'Music',
-    _id: 'game_music',
+    slug: 'game_music',
     info: 'Game Music Category'
   }, {
     name: 'Puzzle',
-    _id: 'puzzle',
+    slug: 'puzzle',
     info: 'Game Puzzle Category'
   }, {
     name: 'Racing',
-    _id: 'racing',
+    slug: 'racing',
     info: 'Game Racing Category'
   }, {
     name: 'Role-Playing',
-    _id: 'role_playing',
+    slug: 'role_playing',
     info: 'Game Role-Playing Category'
   }, {
     name: 'Simulation',
-    _id: 'simulation',
+    slug: 'simulation',
     info: 'Game Simulation Category'
   }, {
     name: 'Sport',
-    _id: 'sport',
+    slug: 'sport',
     info: 'Game Sport Category'
   }, {
     name: 'Strategy',
-    _id: 'strategy',
+    slug: 'strategy',
     info: 'Game Strategy Category'
   }, {
     name: 'Travia',
-    _id: 'travia',
+    slug: 'travia',
     info: 'Game Travia Category'
   }, {
     name: 'Word',
-    _id: 'word',
+    slug: 'word',
     info: 'Game Word Category'
+  },
+];
+
+const normalCategoriesQuery = [
+  {
+    name: 'Books',
+    slug: 'books',
+    info: 'Book category'
   }, {
-    name: 'Games',
-    _id: 'games',
-    info: 'Games Category'
+    name: 'Business',
+    slug: 'business',
+    info: 'Business category'
+  }, {
+    name: 'Catalogues',
+    slug: 'catalogues',
+    info: 'Catalogues category'
+  }, {
+    name: 'Education',
+    slug: 'education',
+    info: 'Education category'
+  }, {
+    name: 'Entertainment',
+    slug: 'entertainment',
+    info: 'Entertainment category'
+  }, {
+    name: 'Finance',
+    slug: 'finance',
+    info: 'Finance category'
+  }, {
+    name: 'Food & Drink',
+    slug: 'food_and_drink',
+    info: 'Food & Drink category'
   }, {
     name: 'Health & Fitness',
-    _id: 'health_and_fitness',
+    slug: 'health_and_fitness',
     info: 'Health & Fitness category'
   }, {
     name: 'Kids',
-    _id: 'kids',
+    slug: 'kids',
     info: 'Kids category'
   }, {
     name: 'Lifestyle',
-    _id: 'lifestyle',
+    slug: 'lifestyle',
     info: 'Lifestyle category'
   }, {
     name: 'Magazines & Newspapers',
-    _id: 'magazines_and_newspapers',
+    slug: 'magazines_and_newspapers',
     info: 'Magazines & Newspapers category'
   }, {
     name: 'Medical',
-    _id: 'medical',
+    slug: 'medical',
     info: 'Medical category'
   }, {
     name: 'Music',
-    _id: 'music',
+    slug: 'music',
     info: 'Music category'
   }, {
     name: 'Navigation',
-    _id: 'navigation',
+    slug: 'navigation',
     info: 'Navigation category'
   }, {
     name: 'News',
-    _id: 'news',
+    slug: 'news',
     info: 'News category'
   }, {
     name: 'Photo & Video',
-    _id: 'photo_and_video',
+    slug: 'photo_and_video',
     info: 'Photo & Video category'
   }, {
     name: 'Productivity',
-    _id: 'productivity',
+    slug: 'productivity',
     info: 'Productivity category'
   }, {
     name: 'Reference',
-    _id: 'reference',
+    slug: 'reference',
     info: 'Reference category'
   }, {
     name: 'Shopping',
-    _id: 'shopping',
+    slug: 'shopping',
     info: 'Shopping category'
   }, {
     name: 'Social Networking',
-    _id: 'social_networking',
+    slug: 'social_networking',
     info: 'Social Networking category'
   }, {
     name: 'Sports',
-    _id: 'sports',
+    slug: 'sports',
     info: 'Sports category'
   }, {
     name: 'Travel',
-    _id: 'travel',
+    slug: 'travel',
     info: 'Travel category'
   }, {
     name: 'Utilities',
-    _id: 'utilities',
+    slug: 'utilities',
     info: 'Utilities category'
   }, {
     name: 'Weather',
-    _id: 'weather',
+    slug: 'weather',
     info: 'Weather category'
   }, {
     name: 'Deletes',
-    _id: 'deletes',
+    slug: 'deletes',
     info: 'Delete category',
     status: 'delete'
   }, {
     name: 'Deactives',
-    _id: 'deactives',
+    slug: 'deactives',
     info: 'Deactive category',
     status: 'deactive'
-  }))
-  .then(() => {
-    const gameChildren = ['action', 'adventure', 'arcade', 'board', 'card',
-      'casino', 'dice', 'game_education', 'family', 'game_music', 'puzzle',
-      'racing', 'role_playing', 'simulation', 'sport', 'strategy', 'travia', 'word'];
+  }
+];
 
-    Category.find({ _id: { $in: gameChildren } })
-      .then(entities => {
-        const entitiesSlug = entities.map(entity => entity._id);
+const gameCategoryQuery = {
+  name: 'Games',
+  slug: 'games',
+  info: 'Games Category'
+};
 
-        Category.findOne({ _id: 'games' })
-          .then(gamesCategory => {
-            entities.forEach(entity => {
-              entity.parent = gamesCategory._id;
-              entity.save();
-            });
-
-            gamesCategory.children = entitiesSlug;
-            gamesCategory.save();
-          });
+function seedUser() {
+  return User.find({}).remove()
+    .then(function() {
+      return User.create({
+        provider: 'local',
+        name: 'user',
+        email: 'user@user.com',
+        password: 'user'
+      }).then(function(entity) {
+        user = entity;
       });
-  });
+    })
+    .then(function() {
+      return User.create({
+        provider: 'local',
+        role: 'dev',
+        name: 'Dev',
+        email: 'dev@dev.com',
+        password: 'dev'
+      })
+      .then(function(entity) {
+        dev = entity;
+      });
+    })
+    .then(function() {
+      return User.create({
+        provider: 'local',
+        role: 'admin',
+        name: 'Admin',
+        email: 'admin@admin.com',
+        password: 'admin'
+      }, {
+        provider: 'local',
+        name: 'delete',
+        email: 'delete@delete.com',
+        password: 'delete',
+        status: 'delete'
+      }, {
+        provider: 'local',
+        name: 'inactive',
+        email: 'inactive@inactive.com',
+        password: 'inactive',
+        status: 'inactive'
+      }, {
+        provider: 'local',
+        name: 'deactive',
+        email: 'deactive@deactive.com',
+        password: 'deactive',
+        status: 'deactive'
+      });
+    })
+    .then(function() {
+      console.log('finished populating users');
+    });
+}
 
-Application.find({}).remove();
+function insertCategoryRelationship(category) {
+  return function(entities) {
+    const entityIds = entities.map(function(entity) {
+      let addedParrentEntity = entity;
+      addedParrentEntity.parent = category._id;
+      addedParrentEntity.save();
+      return addedParrentEntity._id;
+    });
+    category.children = entityIds;
+    return category.save();
+  };
+}
 
-Review.find({}).remove();
+function seedCategory() {
+  return Category.find({}).remove()
+    .then(function() {
+      return Category.create(normalCategoriesQuery);
+    })
+    .then(function() {
+      return Category.create(gameCategoryQuery)
+        .then(function(entity) {
+          gameCategory = entity;
+        });
+    })
+    .then(function() {
+      return Category.create(gameCategoriesQuery).then(insertCategoryRelationship(gameCategory));
+    })
+    .then(function() {
+      console.log('finished populating categories');
+    });
+}
+
+function seedApplication() {
+  return Application.find({}).remove()
+    .then(function() {
+      return Application.create({
+        author: dev._id,
+        name: 'Clash Of Clans',
+        slug: 'clash-of-clans',
+        category: gameCategory._id,
+        icon: 'https://s3-ap-southeast-1.amazonaws.com/hystore/dev%40dev.com/clash-of-clans/icon.png',
+        feature: 'https://s3-ap-southeast-1.amazonaws.com/hystore/dev%40dev.com/clash-of-clans/feature.jpg',
+        screenshots: [
+          'https://s3-ap-southeast-1.amazonaws.com/hystore/dev%40dev.com/clash-of-clans/screenshot-1.jpg',
+          'https://s3-ap-southeast-1.amazonaws.com/hystore/dev%40dev.com/clash-of-clans/screenshot-2.jpg',
+          'https://s3-ap-southeast-1.amazonaws.com/hystore/dev%40dev.com/clash-of-clans/screenshot-3.jpg',
+          'https://s3-ap-southeast-1.amazonaws.com/hystore/dev%40dev.com/clash-of-clans/screenshot-4.jpg',
+          'https://s3-ap-southeast-1.amazonaws.com/hystore/dev%40dev.com/clash-of-clans/screenshot-5.jpg'
+        ],
+        versions: [{
+          major: 1,
+          minor: 2,
+          maintenance: 3,
+          whatsnew: 'Merry Clashmas! • A slew of special events are in store • New levels for Heroes, Golem and more • Dragon and P.E.K.K.A are striking so fast • Discounts and boosting, it’s Clashmas at last!', // eslint-disable-line
+          archive: 'https://s3-ap-southeast-1.amazonaws.com/hystore/dev%40dev.com/clash-of-clans/v1.0.0/coc.zip'
+        }],
+        description: 'From rage-­filled Barbarians with glorious mustaches to pyromaniac wizards, raise your own army and lead your clan to victory! Build your village to fend off raiders, battle against millions of players worldwide, and forge a powerful clan with others to destroy enemy clans. PLEASE NOTE! Clash of Clans is free to download and play, however some game items can also be purchased for real money. If you do not want to use this feature, please set up password protection for purchases in the settings of your Google Play Store app. Also, under our Terms of Service and Privacy Policy, you must be at least 13 years of age to play or download Clash of Clans. A network connection is also required. FEATURES ●	Build your village into an unbeatable fortress ●	Raise your own army of Barbarians, Archers, Hog Riders, Wizards, Dragons and other mighty fighters ●	Battle with players worldwide and take their Trophies ●	Join together with other players to form the ultimate Clan ●	Fight against rival Clans in epic Clan Wars ●	Build 20 unique units with multiple levels of upgrades ●	Discover your favorite attacking army from countless combinations of troops, spells, Heroes and Clan reinforcements ●	Defend your village with a multitude of Cannons, Towers, Mortars, Bombs, Traps and Walls ●	Fight against the Goblin King in a campaign through the realm PLAYER REVIEWS Clash of Clans proudly announces over five million five star reviews on Google Play. SUPPORT Chief, are you having problems? Visit http://supercell.helpshift.com/a/clash-of-clans/ or http://supr.cl/ClashForum or contact us in game by going to Settings > Help and Support. Privacy Policy: http://www.supercell.net/privacy-policy/ Terms of Service: http://www.supercell.net/terms-of-service/ Parent’s Guide: http://www.supercell.net/parents', // eslint-disable-line
+        stars: [123, 4, 56, 7, 89],
+        status: 'publish'
+      })
+        .then(function(entity) {
+          app = entity;
+        });
+    })
+    .then(function() {
+      console.log('finished populating applications');
+    });
+}
+
+function seedReview() {
+  return Review.find({}).remove()
+    .then(function() {
+      return Review.create({
+        from: user._id,
+        to: dev._id,
+        for: app._id,
+        star: 5,
+        content: 'Awesome!!'
+      });
+    })
+    .then(function() {
+      console.log('finished populating reviews');
+    });
+}
+
+const steps = [seedUser, seedCategory, seedApplication, seedReview];
+
+Promise.each(steps, function(step) {
+  return step();
+});
