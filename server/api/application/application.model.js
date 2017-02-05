@@ -1,14 +1,18 @@
 'use strict';
+/*eslint no-sync:0*/
+/*eslint no-invalid-this:0*/
+/*eslint prefer-rest-params:0*/
 
 import mongoose from 'mongoose';
 
 const ObjectId = mongoose.Schema.Types.ObjectId;
+const mongoosePaginate = require('mongoose-paginate');
 
 var ApplicationSchema = new mongoose.Schema({
   author: {
     type: ObjectId,
-    ref: 'User',
-    required: true
+    required: true,
+    ref: 'User'
   },
   name: {
     type: String,
@@ -182,4 +186,7 @@ ApplicationSchema.methods = {
     return this.current;
   }
 };
+
+ApplicationSchema.plugin(mongoosePaginate);
+
 export default mongoose.model('Application', ApplicationSchema);
