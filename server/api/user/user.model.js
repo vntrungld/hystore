@@ -6,6 +6,8 @@ import crypto from 'crypto';
 mongoose.Promise = require('bluebird');
 import mongoose, {Schema} from 'mongoose';
 
+const ObjectId = Schema.Types.ObjectId;
+
 var UserSchema = new Schema({
   name: String,
   email: {
@@ -23,6 +25,13 @@ var UserSchema = new Schema({
     type: String,
     required: true
   },
+  avatar: {
+    type: String,
+    default: 'https://s3-ap-southeast-1.amazonaws.com/hystore/default-avatar.jpg'
+  },
+  applications: [{
+    type: ObjectId
+  }],
   provider: String,
   salt: String,
   status: {
@@ -44,6 +53,8 @@ UserSchema
     return {
       name: this.name,
       role: this.role,
+      avatar: this.avatar,
+      applications: this.applications,
       status: this.status
     };
   });
