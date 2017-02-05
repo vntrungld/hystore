@@ -1,10 +1,9 @@
 /**
  * Using Rails-like standard naming convention for endpoints.
- * GET     /api/applications              ->  index
- * POST    /api/applications              ->  create
+ * GET     /api/applications                ->  index
+ * POST    /api/applications                ->  create
  * GET     /api/applications/:slug          ->  show
  * GET     /api/applications/:slug/reviews          ->  reviews
- * GET     /api/applications/file/:filename  ->  file
  * PUT     /api/applications/:slug          ->  upsert
  * PATCH   /api/applications/:slug          ->  patch
  * DELETE  /api/applications/:slug          ->  destroy
@@ -22,22 +21,6 @@ function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
     if(entity) {
-      const prefix = '/api/file/';
-
-      if(entity.length) {
-        entity = entity.map(app => {
-          app.icon = `${prefix}${app.icon}`;
-          return app;
-        });
-      } else {
-        entity.icon = prefix + entity.icon;
-        entity.feature = prefix + entity.feature;
-      }
-
-      if(entity.screenshots !== undefined) {
-        entity.screenshots = entity.screenshots.map(screenshot => prefix + screenshot);
-      }
-
       return res.status(statusCode).json(entity);
     }
     return null;
