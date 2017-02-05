@@ -147,4 +147,9 @@ ApplicationSchema.virtual('dev')
 function starLimit(val) {
   return val.length == 5;
 }
+
+// Validate screenshot limit of 3 to 8
+function screenshotRange(val) {
+  return val.length >= 3 && val.length <= 8;
+}
 export default mongoose.model('Application', ApplicationSchema);
