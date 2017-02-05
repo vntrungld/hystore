@@ -138,4 +138,13 @@ ApplicationSchema.virtual('dev')
       updatedAt: this.updatedAt
     };
   });
+
+/**
+ * Validations
+ */
+
+// Validate star limit of 5
+function starLimit(val) {
+  return val.length == 5;
+}
 export default mongoose.model('Application', ApplicationSchema);
