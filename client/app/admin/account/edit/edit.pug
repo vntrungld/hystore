@@ -25,6 +25,19 @@ div(
         p(ng-message="mongoose") {{ vm.errors.other }}
 
     md-input-container
+      Label Email
+
+      input(
+        type="text",
+        name="email",
+        ng-model="vm.user.email",
+        disabled
+      )
+
+      div(ng-messages="form.email.$error")
+        p(ng-message="mongoose") {{ vm.errors.other }}
+
+    md-input-container
       label Role
 
       md-select(
