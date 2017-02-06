@@ -52,6 +52,7 @@ UserSchema
   .get(function() {
     return {
       name: this.name,
+      email: this.email,
       role: this.role,
       avatar: this.avatar,
       applications: this.applications,
