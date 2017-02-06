@@ -30,21 +30,31 @@ div(
               md-order-by="name"
             )
               span Name
+
             th(
               md-column,
               md-order-by="email"
             )
               span Email
+
             th(
               md-column,
               md-order-by="role"
             )
               span Role
+
             th(
               md-column,
               md-order-by="status"
             )
               span Status
+
+            th(md-column)
+              span Updated At
+
+            th(md-column)
+              span Created At
+
             th(md-column)
               span Action
         tbody(md-body)
@@ -55,7 +65,9 @@ div(
             ng-repeat="user in vm.users | filter: filter.search | orderBy: vm.query.order | limitTo: vm.query.limit : (vm.query.page -1) * vm.query.limit"
           )
             td(md-cell) {{ user.name }}
+
             td(md-cell) {{ user.email }}
+
             td(md-cell)
               md-select(ng-model="user.role")
                 md-option(
@@ -63,6 +75,7 @@ div(
                   ng-repeat="roles in vm.roles"
                 )
                   | {{ roles.name }}
+
             td(md-cell)
               md-select(ng-model="user.status")
                 md-option(
@@ -70,6 +83,13 @@ div(
                   ng-repeat="status in vm.status"
                 )
                   | {{ status.name }}
+
+            td(md-cell)
+              span(am-time-ago="user.updatedAt")
+
+            td(md-cell)
+              span(am-time-ago="user.createdAt")
+
             td(md-cell)
               span.md-button.md-icon-button(ui-sref="admin.accountEdit({ id: user._id })")
                 md-icon mode_edit
