@@ -4,11 +4,16 @@ var proxyquire = require('proxyquire').noPreserveCache();
 
 var reviewCtrlStub = {
   index: 'reviewCtrl.index',
-  show: 'reviewCtrl.show',
   create: 'reviewCtrl.create',
   upsert: 'reviewCtrl.upsert',
   patch: 'reviewCtrl.patch',
   destroy: 'reviewCtrl.destroy'
+};
+
+var authServiceStub = {
+  isAuthenticated() {
+    return 'authService.isAuthenticated';
+  }
 };
 
 var routerStub = {
@@ -26,7 +31,8 @@ var reviewIndex = proxyquire('./index.js', {
       return routerStub;
     }
   },
-  './review.controller': reviewCtrlStub
+  './review.controller': reviewCtrlStub,
+  '../../auth/auth.service': authServiceStub
 });
 
 describe('Review API Router:', function() {
@@ -42,18 +48,10 @@ describe('Review API Router:', function() {
     });
   });
 
-  describe('GET /api/reviews/:id', function() {
-    it('should route to review.controller.show', function() {
-      routerStub.get
-        .withArgs('/:id', 'reviewCtrl.show')
-        .should.have.been.calledOnce;
-    });
-  });
-
   describe('POST /api/reviews', function() {
     it('should route to review.controller.create', function() {
       routerStub.post
-        .withArgs('/', 'reviewCtrl.create')
+        .withArgs('/', 'authService.isAuthenticated', 'reviewCtrl.create')
         .should.have.been.calledOnce;
     });
   });
@@ -61,7 +59,7 @@ describe('Review API Router:', function() {
   describe('PUT /api/reviews/:id', function() {
     it('should route to review.controller.upsert', function() {
       routerStub.put
-        .withArgs('/:id', 'reviewCtrl.upsert')
+        .withArgs('/:id', 'authService.isAuthenticated', 'reviewCtrl.upsert')
         .should.have.been.calledOnce;
     });
   });
@@ -69,7 +67,7 @@ describe('Review API Router:', function() {
   describe('PATCH /api/reviews/:id', function() {
     it('should route to review.controller.patch', function() {
       routerStub.patch
-        .withArgs('/:id', 'reviewCtrl.patch')
+        .withArgs('/:id', 'authService.isAuthenticated', 'reviewCtrl.patch')
         .should.have.been.calledOnce;
     });
   });
@@ -77,7 +75,7 @@ describe('Review API Router:', function() {
   describe('DELETE /api/reviews/:id', function() {
     it('should route to review.controller.destroy', function() {
       routerStub.delete
-        .withArgs('/:id', 'reviewCtrl.destroy')
+        .withArgs('/:id', 'authService.isAuthenticated', 'reviewCtrl.destroy')
         .should.have.been.calledOnce;
     });
   });
