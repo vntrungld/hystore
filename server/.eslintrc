@@ -1,5 +1,9 @@
 {
     "extends": "../.eslintrc",
+    "plugins": "sinon",
+    "rules": {
+        "sinon/no-fakes": 2
+    },
     "env": {
         "node": true
     }

@@ -4,9 +4,7 @@
         "es6": true,
         "jasmine": true
     },
-    "globals": {
-      "sinon": true
-    },
+    "globals": {},
     "rules": {
         //Possible Errors
         "comma-dangle": 0,                                          //disallow or enforce trailing commas
