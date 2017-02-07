@@ -5,7 +5,11 @@ var proxyquire = require('proxyquire').noPreserveCache();
 var applicationCtrlStub = {
   index: 'applicationCtrl.index',
   show: 'applicationCtrl.show',
-  create: 'applicationCtrl.create',
+  storeToHardDisk: 'applicationCtrl.storeToHardDisk',
+  createWithNoUrl: 'applicationCtrl.createWithNoUrl',
+  fileValidate: 'applicationCtrl.fileValidate',
+  upload: 'applicationCtrl.upload',
+  updateUrlAfterCreate: 'applicationCtrl.updateUrlAfterCreate',
   upsert: 'applicationCtrl.upsert',
   patch: 'applicationCtrl.patch',
   destroy: 'applicationCtrl.destroy'
@@ -42,10 +46,10 @@ describe('Application API Router:', function() {
     });
   });
 
-  describe('GET /api/dev/applications/:id', function() {
+  describe('GET /api/dev/applications/:slug', function() {
     it('should route to application.controller.show', function() {
       routerStub.get
-        .withArgs('/:id', 'applicationCtrl.show')
+        .withArgs('/:slug', 'applicationCtrl.show')
         .should.have.been.calledOnce;
     });
   });
@@ -53,31 +57,31 @@ describe('Application API Router:', function() {
   describe('POST /api/dev/applications', function() {
     it('should route to application.controller.create', function() {
       routerStub.post
-        .withArgs('/', 'applicationCtrl.create')
+        .withArgs('/', 'applicationCtrl.storeToHardDisk', 'applicationCtrl.createWithNoUrl', 'applicationCtrl.fileValidate', 'applicationCtrl.upload', 'applicationCtrl.updateUrlAfterCreate')
         .should.have.been.calledOnce;
     });
   });
 
-  describe('PUT /api/dev/applications/:id', function() {
+  describe('PUT /api/dev/applications/:slug', function() {
     it('should route to application.controller.upsert', function() {
       routerStub.put
-        .withArgs('/:id', 'applicationCtrl.upsert')
+        .withArgs('/:slug', 'applicationCtrl.storeToHardDisk', 'applicationCtrl.fileValidate', 'applicationCtrl.upload', 'applicationCtrl.upsert')
         .should.have.been.calledOnce;
     });
   });
 
-  describe('PATCH /api/dev/applications/:id', function() {
+  describe('PATCH /api/dev/applications/:slug', function() {
     it('should route to application.controller.patch', function() {
       routerStub.patch
-        .withArgs('/:id', 'applicationCtrl.patch')
+        .withArgs('/:slug', 'applicationCtrl.patch')
         .should.have.been.calledOnce;
     });
   });
 
-  describe('DELETE /api/dev/applications/:id', function() {
+  describe('DELETE /api/dev/applications/:slug', function() {
     it('should route to application.controller.destroy', function() {
       routerStub.delete
-        .withArgs('/:id', 'applicationCtrl.destroy')
+        .withArgs('/:slug', 'applicationCtrl.destroy')
         .should.have.been.calledOnce;
     });
   });
