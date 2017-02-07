@@ -16,7 +16,7 @@ var authServiceStub = {
     return 'authService.isAuthenticated';
   },
   hasRole(role) {
-    return 'authService.hasRole.' + role;
+    return `authService.hasRole.${role}`;
   }
 };
 
@@ -29,7 +29,7 @@ var routerStub = {
 
 // require the index with our stubbed out modules
 var userIndex = proxyquire('./index', {
-  'express': {
+  express: {
     Router() {
       return routerStub;
     }
