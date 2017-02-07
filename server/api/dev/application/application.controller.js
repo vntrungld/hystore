@@ -302,7 +302,7 @@ export function updateUrlAfterCreate(req, res) {
 }
 
 // Upserts the given Application in the DB at the specified ID
-export function update(req, res) {
+export function upsert(req, res) {
   return Application.findOne({ slug: req.params.slug }).exec()
     .then(insertVersion(req.body, req.query.current))
     .then(respondWithResult(res))
