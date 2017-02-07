@@ -38,14 +38,6 @@ describe('Application API Router:', function() {
     });
   });
 
-  describe('GET /api/applications', function() {
-    it('should route to application.controller.index', function() {
-      routerStub.get
-        .withArgs('?category=games', 'applicationCtrl.index')
-        .should.have.been.calledOnce;
-    });
-  });
-
   describe('GET /api/applications/:slug', function() {
     it('should route to application.controller.show', function() {
       routerStub.get
