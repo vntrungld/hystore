@@ -4,11 +4,13 @@ var proxyquire = require('proxyquire').noPreserveCache();
 
 var reviewCtrlStub = {
   index: 'reviewCtrl.index',
-  show: 'reviewCtrl.show'
+  show: 'reviewCtrl.show',
+  patch: 'reviewCtrl.patch'
 };
 
 var routerStub = {
-  get: sinon.spy()
+  get: sinon.spy(),
+  patch: sinon.spy()
 };
 
 // require the index with our stubbed out modules
@@ -38,6 +40,14 @@ describe('Review API Router:', function() {
     it('should route to review.controller.show', function() {
       routerStub.get
         .withArgs('/:id', 'reviewCtrl.show')
+        .should.have.been.calledOnce;
+    });
+  });
+
+  describe('PATCH /api/dev/reviews/:id', function() {
+    it('should route to review.controller.patch', function() {
+      routerStub.patch
+        .withArgs('/:id', 'reviewCtrl.patch')
         .should.have.been.calledOnce;
     });
   });
