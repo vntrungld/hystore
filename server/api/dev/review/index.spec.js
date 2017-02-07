@@ -23,7 +23,7 @@ var reviewIndex = proxyquire('./index.js', {
   './review.controller': reviewCtrlStub
 });
 
-describe('Review API Router:', function() {
+describe('Review Dev API Router:', function() {
   it('should return an express router instance', function() {
     reviewIndex.should.equal(routerStub);
   });

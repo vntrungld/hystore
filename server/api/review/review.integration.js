@@ -11,7 +11,7 @@ describe('Review API:', function() {
 
     beforeEach(function(done) {
       request(app)
-        .get('/api/reviews')
+        .get('/api/reviews?application=clash-of-clans')
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {

@@ -33,7 +33,7 @@ var applicationIndex = proxyquire('./index.js', {
   './application.controller': applicationCtrlStub
 });
 
-describe('Application API Router:', function() {
+describe('Application Dev API Router:', function() {
   it('should return an express router instance', function() {
     applicationIndex.should.equal(routerStub);
   });

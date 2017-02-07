@@ -5,7 +5,7 @@ import request from 'supertest';
 
 var newApplication;
 
-describe('Application API:', function() {
+describe('Application Admin API:', function() {
   describe('GET /api/admin/applications', function() {
     var applications;
 
