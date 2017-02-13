@@ -11,6 +11,10 @@ module.exports = {
   },
 
   // Seed database on startup
-  seedDB: true
+  seedDB: true,
 
+  s3: {
+    Bucket: 'hystore-dev',
+    ACL: 'public-read'
+  }
 };

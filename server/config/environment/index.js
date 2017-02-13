@@ -59,11 +59,7 @@ var all = {
   }, {
     name: 'screenshots',
     maxCount: 8
-  }],
-  s3: {
-    Bucket: 'hystore',
-    ACL: 'public-read'
-  }
+  }]
 };
 
 // Export the config object based on the NODE_ENV

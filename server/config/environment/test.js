@@ -17,5 +17,9 @@ module.exports = {
         timestamps: false
       }
     }
+  },
+  s3: {
+    Bucket: 'hystore-test',
+    ACL: 'public-read'
   }
 };

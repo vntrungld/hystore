@@ -303,23 +303,23 @@ function seedApplication() {
         name: 'Clash Of Clans',
         slug: 'clash-of-clans',
         category: gameCategory._id,
-        icon: 'https://s3-ap-southeast-1.amazonaws.com/hystore/dev%40dev.com/clash-of-clans/icon.png',
-        feature: 'https://s3-ap-southeast-1.amazonaws.com/hystore/dev%40dev.com/clash-of-clans/feature.jpg',
+        icon: 'https://s3-ap-southeast-1.amazonaws.com/hystore-dev/dev@dev.com/clash-of-clans/icon.png',
+        feature: 'https://s3-ap-southeast-1.amazonaws.com/hystore-dev/dev@dev.com/clash-of-clans/feature.jpg',
         screenshots: [
-          'https://s3-ap-southeast-1.amazonaws.com/hystore/dev%40dev.com/clash-of-clans/screenshot-1.jpg',
-          'https://s3-ap-southeast-1.amazonaws.com/hystore/dev%40dev.com/clash-of-clans/screenshot-2.jpg',
-          'https://s3-ap-southeast-1.amazonaws.com/hystore/dev%40dev.com/clash-of-clans/screenshot-3.jpg',
-          'https://s3-ap-southeast-1.amazonaws.com/hystore/dev%40dev.com/clash-of-clans/screenshot-4.jpg',
-          'https://s3-ap-southeast-1.amazonaws.com/hystore/dev%40dev.com/clash-of-clans/screenshot-5.jpg'
+          'https://s3-ap-southeast-1.amazonaws.com/hystore-dev/dev@dev.com/clash-of-clans/screenshot-1.jpg',
+          'https://s3-ap-southeast-1.amazonaws.com/hystore-dev/dev@dev.com/clash-of-clans/screenshot-2.jpg',
+          'https://s3-ap-southeast-1.amazonaws.com/hystore-dev/dev@dev.com/clash-of-clans/screenshot-3.jpg',
+          'https://s3-ap-southeast-1.amazonaws.com/hystore-dev/dev@dev.com/clash-of-clans/screenshot-4.jpg',
+          'https://s3-ap-southeast-1.amazonaws.com/hystore-dev/dev@dev.com/clash-of-clans/screenshot-5.jpg'
         ],
         versions: [{
           major: 1,
           minor: 2,
           maintenance: 3,
           whatsnew: 'Merry Clashmas! • A slew of special events are in store • New levels for Heroes, Golem and more • Dragon and P.E.K.K.A are striking so fast • Discounts and boosting, it’s Clashmas at last!', // eslint-disable-line
-          archive: 'https://s3-ap-southeast-1.amazonaws.com/hystore/dev%40dev.com/clash-of-clans/v1.0.0/coc.zip'
+          archive: 'https://s3-ap-southeast-1.amazonaws.com/hystore-dev/dev@dev.com/clash-of-clans/v1.2.3/coc.zip'
         }],
-        description: 'From rage-­filled Barbarians with glorious mustaches to pyromaniac wizards, raise your own army and lead your clan to victory! Build your village to fend off raiders, battle against millions of players worldwide, and forge a powerful clan with others to destroy enemy clans. PLEASE NOTE! Clash of Clans is free to download and play, however some game items can also be purchased for real money. If you do not want to use this feature, please set up password protection for purchases in the settings of your Google Play Store app. Also, under our Terms of Service and Privacy Policy, you must be at least 13 years of age to play or download Clash of Clans. A network connection is also required. FEATURES ●	Build your village into an unbeatable fortress ●	Raise your own army of Barbarians, Archers, Hog Riders, Wizards, Dragons and other mighty fighters ●	Battle with players worldwide and take their Trophies ●	Join together with other players to form the ultimate Clan ●	Fight against rival Clans in epic Clan Wars ●	Build 20 unique units with multiple levels of upgrades ●	Discover your favorite attacking army from countless combinations of troops, spells, Heroes and Clan reinforcements ●	Defend your village with a multitude of Cannons, Towers, Mortars, Bombs, Traps and Walls ●	Fight against the Goblin King in a campaign through the realm PLAYER REVIEWS Clash of Clans proudly announces over five million five star reviews on Google Play. SUPPORT Chief, are you having problems? Visit http://supercell.helpshift.com/a/clash-of-clans/ or http://supr.cl/ClashForum or contact us in game by going to Settings > Help and Support. Privacy Policy: http://www.supercell.net/privacy-policy/ Terms of Service: http://www.supercell.net/terms-of-service/ Parent’s Guide: http://www.supercell.net/parents', // eslint-disable-line
+        description: '<div><!--block-->From rage-­filled Barbarians with glorious mustaches to pyromaniac wizards, raise your own army and lead your clan to victory! Build your village to fend off raiders, battle against millions of players worldwide, and forge a powerful clan with others to destroy enemy clans.<br><br>PLEASE NOTE! Clash of Clans is free to download and play, however some game items can also be purchased for real money. If you do not want to use this feature, please set up password protection for purchases in the settings of your Google Play Store app. Also, under our Terms of Service and Privacy Policy, you must be at least 13 years of age to play or download Clash of Clans.<br><br>A network connection is also required.<br><br>FEATURES</div><ul><li><!--block-->Build your village into an unbeatable fortress&nbsp;</li><li><!--block-->Raise your own army of Barbarians, Archers, Hog Riders, Wizards, Dragons and other mighty fighters</li><li><!--block-->Battle with players worldwide and take their Trophies</li><li><!--block-->Join together with other players to form the ultimate Clan</li><li><!--block-->Fight against rival Clans in epic Clan Wars&nbsp;</li><li><!--block-->Build 20 unique units with multiple levels of upgrades</li><li><!--block-->Discover your favorite attacking army from countless combinations of troops, spells, Heroes and Clan reinforcements&nbsp;</li><li><!--block-->Defend your village with a multitude of Cannons, Towers, Mortars, Bombs, Traps and Walls</li><li><!--block-->Fight against the Goblin King in a campaign through the realm</li></ul><div><!--block--><br><br>PLAYER REVIEWS&nbsp;<br>Clash of Clans proudly announces over five million five star reviews on Google Play.<br><br><br>SUPPORT<br>Chief, are you having problems? Visit http://supercell.helpshift.com/a/clash-of-clans/ or http://supr.cl/ClashForum or contact us in game by going to Settings &gt; Help and Support.<br><br>Privacy Policy:<br>http://www.supercell.net/privacy-policy/<br><br>Terms of Service:<br>http://www.supercell.net/terms-of-service/<br><br>Parent’s Guide:<br>http://www.supercell.net/parents</div>', // eslint-disable-line
         stars: [123, 4, 56, 7, 89],
         status: 'publish'
       })
