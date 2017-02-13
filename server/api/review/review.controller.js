@@ -4,7 +4,6 @@
  * POST    /api/reviews              ->  create
  * PUT     /api/reviews/:id          ->  upsert
  * PATCH   /api/reviews/:id          ->  patch
- * DELETE  /api/reviews/:id          ->  destroy
  */
 
 'use strict';
@@ -31,16 +30,6 @@ const patchUpdates = patches =>
       return Promise.reject(err);
     }
     return entity.save();
-  };
-
-const removeEntity = res =>
-  entity => {
-    if(entity) {
-      return entity.remove()
-        .then(() => {
-          res.status(204).end();
-        });
-    }
   };
 
 const handleEntityNotFound = res =>
@@ -77,25 +66,46 @@ export const index = function(req, res) {
     .catch(handleError(res));
 };
 
+// Gets own review
+export const show = (req, res) => {
+  Application.findOne({ slug: req.query.application }).exec()
+    .then(function(app) {
+      Review.findOne({ from: req.user._id, for: app._id }).exec()
+        .then(function(entity) {
+          return entity.public;
+        })
+        .then(respondWithResult(res))
+        .catch(handleError(res));
+    });
+};
+
 // Creates a new Review in the DB
 export const create = (req, res) => {
   Application.findOne({ slug: req.body.for }).exec()
     .then(app => {
-      req.body.from = req.user._id;
-      req.body.to = app.author;
-      req.body.for = app._id;
+      Review.findOne({ from: req.user._id, for: app._id }).exec()
+        .then(existedReview => {
+          if(existedReview) {
+            res.status(500).send('You already review for this app');
+          } else {
+            req.body.from = req.user._id;
+            req.body.to = app.author;
+            req.body.for = app._id;
 
-      return Review.create(req.body)
-        .then(function(review) {
-          let stars = app.stars;
-          const starIdx = req.body.star - 1;
-          stars[starIdx]++;
+            return Review.create(req.body)
+              .then(function(review) {
+                let stars = app.stars;
+                const starIdx = req.body.star - 1;
+                stars[starIdx]++;
 
-          app.update({ $set: { stars } }).exec();
+                app.update({ $set: { stars } }).exec();
 
-          return review;
+                return review;
+              })
+              .then(respondWithResult(res, 201))
+              .catch(handleError(res));
+          }
         })
-        .then(respondWithResult(res, 201))
         .catch(handleError(res));
     })
     .catch(handleError(res));
@@ -104,10 +114,8 @@ export const create = (req, res) => {
 
 // Upserts the given Review in the DB at the specified ID
 export const upsert = (req, res) => {
-  if(req.body._id) {
-    delete req.body._id; // eslint-disable-line
-  }
-  return Review.findOneAndUpdate({_id: req.params.id}, req.body, {upsert: true, setDefaultsOnInsert: true, runValidators: true}).exec()
+  const updateReview = { star: req.body.star, content: req.body.content };
+  return Review.findByIdAndUpdate(req.params.id, updateReview, {upsert: true, setDefaultsOnInsert: true, runValidators: true}).exec()
 
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -124,10 +132,3 @@ export const patch = (req, res) => {
     .then(respondWithResult(res))
     .catch(handleError(res));
 };
-
-// Deletes a Review from the DB
-export const destroy = (req, res) =>
-  Review.findById(req.params.id).exec()
-    .then(handleEntityNotFound(res))
-    .then(removeEntity(res))
-    .catch(handleError(res));
