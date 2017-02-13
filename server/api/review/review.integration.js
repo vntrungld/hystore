@@ -1,17 +1,105 @@
 'use strict';
 
 var app = require('../..');
+var Promise = require('bluebird');
+import User from '../user/user.model';
+import Category from '../category/category.model';
+import Application from '../application/application.model';
 import request from 'supertest';
 
 var newReview;
 
 describe('Review API:', function() {
+  var application;
+  var user;
+  var token;
+
+  before(function(done) {
+    var category;
+
+    return Promise.each([
+      function() {
+        return User.remove().then(function() {
+          user = new User({
+            name: 'Fake User',
+            email: 'test@example.com',
+            password: 'password',
+            role: 'dev'
+          });
+
+          return user.save();
+        });
+      },
+      function() {
+        return Category.remove().then(function() {
+          category = new Category({
+            name: 'Fake Category',
+            slug: 'fake-category',
+            info: 'This is fake category'
+          });
+
+          return category.save();
+        });
+      },
+      function() {
+        return Application.remove().then(function() {
+          application = new Application({
+            author: user._id,
+            name: 'Fake Application',
+            slug: 'fake-application',
+            icon: 'fake-icon.png',
+            feature: 'fake-feature.jpg',
+            screenshots: [
+              'fake-screenshot-1.jpg',
+              'fake-screenshot-2.jpg',
+              'fake-screenshot-3.jpg',
+            ],
+            versions: [
+              {
+                major: 0,
+                minor: 0,
+                maintenance: 1,
+                archive: 'fake-achive.zip'
+              }
+            ],
+            description: 'This is application description',
+            category: category._id
+          });
+
+          return application.save();
+        });
+      }
+    ], function(step) {
+      return step();
+    }).then(function() {
+      done();
+    });
+  });
+
+  after(function(done) {
+    return Promise.each([
+      function() {
+        return Application.remove();
+      },
+      function() {
+        return User.remove();
+      },
+      function() {
+        return Category.remove();
+      }
+    ], function(step) {
+      return step();
+    }).then(function() {
+      done();
+    });
+  });
+
   describe('GET /api/reviews', function() {
     var reviews;
 
     beforeEach(function(done) {
       request(app)
-        .get('/api/reviews?application=clash-of-clans')
+        .get(`/api/reviews?application=${application.slug}`)
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {
@@ -29,12 +117,29 @@ describe('Review API:', function() {
   });
 
   describe('POST /api/reviews', function() {
-    beforeEach(function(done) {
+    before(function(done) {
+      request(app)
+        .post('/auth/local')
+        .send({
+          email: 'test@example.com',
+          password: 'password'
+        })
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .then(res => {
+          token = res.body.token;
+          done();
+        });
+    });
+
+    it('should respond with the newly created review', function(done) {
       request(app)
         .post('/api/reviews')
+        .set('authorization', `Bearer ${token}`)
         .send({
-          name: 'New Review',
-          info: 'This is the brand new review!!!'
+          for: application.slug,
+          star: 1,
+          content: 'This is the brand new review!!!'
         })
         .expect(201)
         .expect('Content-Type', /json/)
@@ -43,40 +148,23 @@ describe('Review API:', function() {
             return done(err);
           }
           newReview = res.body;
+          newReview.star.should.equal(1);
+          newReview.content.should.equal('This is the brand new review!!!');
           done();
         });
     });
 
-    it('should respond with the newly created review', function() {
-      newReview.name.should.equal('New Review');
-      newReview.info.should.equal('This is the brand new review!!!');
-    });
-  });
-
-  describe('GET /api/reviews/:id', function() {
-    var review;
-
-    beforeEach(function(done) {
+    it('should respond error with multiple review by one user', function(done) {
       request(app)
-        .get(`/api/reviews/${newReview._id}`)
-        .expect(200)
-        .expect('Content-Type', /json/)
-        .end((err, res) => {
-          if(err) {
-            return done(err);
-          }
-          review = res.body;
-          done();
-        });
-    });
-
-    afterEach(function() {
-      review = {};
-    });
-
-    it('should respond with the requested review', function() {
-      review.name.should.equal('New Review');
-      review.info.should.equal('This is the brand new review!!!');
+        .post('/api/reviews')
+        .set('authorization', `Bearer ${token}`)
+        .send({
+          for: application.slug,
+          star: 1,
+          content: 'Duplicate review'
+        })
+        .expect(500)
+        .end(done);
     });
   });
 
@@ -86,9 +174,10 @@ describe('Review API:', function() {
     beforeEach(function(done) {
       request(app)
         .put(`/api/reviews/${newReview._id}`)
+        .set('authorization', `Bearer ${token}`)
         .send({
-          name: 'Updated Review',
-          info: 'This is the updated review!!!'
+          star: 2,
+          content: 'This is the updated review!!!'
         })
         .expect(200)
         .expect('Content-Type', /json/)
@@ -105,14 +194,15 @@ describe('Review API:', function() {
       updatedReview = {};
     });
 
-    it('should respond with the original review', function() {
-      updatedReview.name.should.equal('New Review');
-      updatedReview.info.should.equal('This is the brand new review!!!');
+    it('should respond with the updated review', function() {
+      updatedReview.star.should.equal(1);
+      updatedReview.content.should.equal('This is the brand new review!!!');
     });
 
     it('should respond with the updated review on a subsequent GET', function(done) {
       request(app)
-        .get(`/api/reviews/${newReview._id}`)
+        .get(`/api/reviews/me?application=${application.slug}`)
+        .set('authorization', `Bearer ${token}`)
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {
@@ -121,8 +211,8 @@ describe('Review API:', function() {
           }
           let review = res.body;
 
-          review.name.should.equal('Updated Review');
-          review.info.should.equal('This is the updated review!!!');
+          review.star.should.equal(2);
+          review.content.should.equal('This is the updated review!!!');
 
           done();
         });
@@ -135,9 +225,10 @@ describe('Review API:', function() {
     beforeEach(function(done) {
       request(app)
         .patch(`/api/reviews/${newReview._id}`)
+        .set('authorization', `Bearer ${token}`)
         .send([
-          { op: 'replace', path: '/name', value: 'Patched Review' },
-          { op: 'replace', path: '/info', value: 'This is the patched review!!!' }
+          { op: 'replace', path: '/star', value: 1 },
+          { op: 'replace', path: '/content', value: 'This is the patched review!!!' }
         ])
         .expect(200)
         .expect('Content-Type', /json/)
@@ -155,34 +246,8 @@ describe('Review API:', function() {
     });
 
     it('should respond with the patched review', function() {
-      patchedReview.name.should.equal('Patched Review');
-      patchedReview.info.should.equal('This is the patched review!!!');
-    });
-  });
-
-  describe('DELETE /api/reviews/:id', function() {
-    it('should respond with 204 on successful removal', function(done) {
-      request(app)
-        .delete(`/api/reviews/${newReview._id}`)
-        .expect(204)
-        .end(err => {
-          if(err) {
-            return done(err);
-          }
-          done();
-        });
-    });
-
-    it('should respond with 404 when review does not exist', function(done) {
-      request(app)
-        .delete(`/api/reviews/${newReview._id}`)
-        .expect(404)
-        .end(err => {
-          if(err) {
-            return done(err);
-          }
-          done();
-        });
+      patchedReview.star.should.equal(1);
+      patchedReview.content.should.equal('This is the patched review!!!');
     });
   });
 });
