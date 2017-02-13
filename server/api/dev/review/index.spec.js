@@ -4,7 +4,6 @@ var proxyquire = require('proxyquire').noPreserveCache();
 
 var reviewCtrlStub = {
   index: 'reviewCtrl.index',
-  show: 'reviewCtrl.show',
   patch: 'reviewCtrl.patch'
 };
 
@@ -32,14 +31,6 @@ describe('Review Dev API Router:', function() {
     it('should route to review.controller.index', function() {
       routerStub.get
         .withArgs('/', 'reviewCtrl.index')
-        .should.have.been.calledOnce;
-    });
-  });
-
-  describe('GET /api/dev/reviews/:id', function() {
-    it('should route to review.controller.show', function() {
-      routerStub.get
-        .withArgs('/:id', 'reviewCtrl.show')
         .should.have.been.calledOnce;
     });
   });
