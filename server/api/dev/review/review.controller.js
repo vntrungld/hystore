@@ -1,13 +1,13 @@
 /**
  * Using Rails-like standard naming convention for endpoints.
  * GET     /api/dev/reviews              ->  index
- * GET     /api/dev/reviews/:id          ->  show
  * PATCH   /api/dev/reviews/:id          ->  patch
  */
 
 'use strict';
 /* eslint prefer-reflect: 0 */
 
+import jsonpatch from 'fast-json-patch';
 import Review from '../../review/review.model';
 
 function respondWithResult(res, statusCode) {
@@ -39,7 +39,11 @@ function handleError(res, statusCode) {
 
 function patchUpdates(patches) {
   return function(entity) {
-    entity = Object.assign(entity, patches);
+    try {
+      jsonpatch.apply(entity, patches, /*validate*/ true); // eslint-disable-line
+    } catch(err) {
+      return Promise.reject(err);
+    }
     return entity.save();
   };
 }
@@ -54,14 +58,6 @@ export function index(req, res) {
         return review.dev;
       });
     })
-    .then(respondWithResult(res))
-    .catch(handleError(res));
-}
-
-// Gets a single Review from the DB
-export function show(req, res) {
-  return Review.findById(req.params.id).exec()
-    .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
