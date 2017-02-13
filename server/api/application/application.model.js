@@ -36,29 +36,32 @@ var ApplicationSchema = new mongoose.Schema({
     type: [{
       type: String
     }],
-    validate: [screenshotRange, '{PATH} limit 3 to 8']
   },
-  versions: [
-    {
-      major: {
-        type: Number,
-        required: true
-      },
-      minor: {
-        type: Number,
-        required: true
-      },
-      maintenance: {
-        type: Number,
-        required: true
-      },
-      whatsnew: String,
-      archive: {
-        type: String,
-        required: true
-      },
+  versions: [{
+    major: {
+      type: Number,
+      min: 0,
+      default: 0,
+      required: true
+    },
+    minor: {
+      type: Number,
+      min: 0,
+      default: 0,
+      required: true
+    },
+    maintenance: {
+      type: Number,
+      min: 1,
+      default: 1,
+      required: true
+    },
+    whatsnew: String,
+    archive: {
+      type: String,
+      required: true
     }
-  ],
+  }],
   currentVersionIndex: {
     type: Number,
     required: true,
@@ -70,12 +73,12 @@ var ApplicationSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    ref: 'Category'
+    ref: 'Category',
+    required: true
   },
   stars: {
     type: [{ type: Number }],
-    default: [0, 0, 0, 0, 0],
-    validate: [starLimit, '{PATH} exceeds the limit of 5']
+    default: [0, 0, 0, 0, 0]
   },
   status: {
     type: String,
