@@ -2,6 +2,8 @@
 
 import mongoose from 'mongoose';
 
+const ObjectId = mongoose.Schema.Types.ObjectId;
+
 var CategorySchema = new mongoose.Schema({
   name: {
     type: String,
@@ -9,15 +11,16 @@ var CategorySchema = new mongoose.Schema({
   },
   slug: {
     type: String,
+    unique: true,
     required: true
   },
   parent: {
-    type: String,
+    type: ObjectId,
     ref: 'Category'
   },
   children: [
     {
-      type: String,
+      type: ObjectId,
       ref: 'Category'
     }
   ],
