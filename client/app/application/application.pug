@@ -68,7 +68,7 @@ div(
             li(ng-repeat="screenshot in vm.application.screenshots")
               img.img-fluid(ng-src="{{screenshot}}")
 
-        p {{ vm.application.description }}
+        div(ng-bind-html="vm.application.description")
 
         md-divider
 

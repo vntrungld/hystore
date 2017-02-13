@@ -157,15 +157,12 @@ div(
 
               p(ng-message="mongoose") {{ vm.errors.other }}
 
-        md-input-container.md-block
+        .md-block
           label Description
 
-          textarea(
-            type='text',
-            name='desc',
-            rows=5,
-            ng-model='vm.application.description',
-            required
+          trix-editor(
+            angular-trix,
+            ng-model="vm.application.description"
           )
 
           div(ng-messages='form.desc.$error')

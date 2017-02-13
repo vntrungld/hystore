@@ -10,6 +10,11 @@ import uiRouter from 'angular-ui-router';
 import ngMaterial from 'angular-material';
 import ngMessages from 'angular-messages';
 import mdDataTable from 'angular-material-data-table';
+import angularMoment from 'angular-moment';
+import 'angular-carousel';
+import 'angular-touch';
+import 'trix';
+import 'angular-trix';
 
 // import ngValidationMatch from 'angular-validation-match';
 
@@ -32,10 +37,6 @@ import review from '../components/review/review.module';
 
 import './app.scss';
 
-const ngTouch = require('angular-touch'); // eslint-disable-line
-const carousel = require('angular-carousel/dist/angular-carousel'); // eslint-disable-line
-
-const angularMoment = require('angular-moment');
 
 angular.module('hystoreApp', [
   ngCookies,
@@ -61,6 +62,7 @@ angular.module('hystoreApp', [
   starRating,
   review,
   angularMoment,
+  'angularTrix',
 ])
   .config(routeConfig)
   .config(['$mdAriaProvider', ariaConfig])

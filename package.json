@@ -16,6 +16,7 @@
     "angular-resource": "~1.5.5",
     "angular-sanitize": "~1.5.5",
     "angular-touch": "^1.6.0",
+    "angular-trix": "^1.0.2",
     "angular-ui-router": "~0.3.1",
     "angular-validation-match": "^1.9.0",
     "aws-sdk": "^2.7.26",
@@ -50,7 +51,8 @@
     "pug": "2.0.0-beta4",
     "serve-favicon": "^2.3.0",
     "shrink-ray": "^0.1.3",
-    "sprint-js": "~0.1.0"
+    "sprint-js": "~0.1.0",
+    "trix": "^0.10.1"
   },
   "devDependencies": {
     "angular-mocks": "~1.5.5",
