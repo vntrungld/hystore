@@ -4,10 +4,10 @@ var proxyquire = require('proxyquire').noPreserveCache();
 
 var reviewCtrlStub = {
   index: 'reviewCtrl.index',
+  show: 'reviewCtrl.show',
   create: 'reviewCtrl.create',
   upsert: 'reviewCtrl.upsert',
   patch: 'reviewCtrl.patch',
-  destroy: 'reviewCtrl.destroy'
 };
 
 var authServiceStub = {
@@ -21,7 +21,6 @@ var routerStub = {
   put: sinon.spy(),
   patch: sinon.spy(),
   post: sinon.spy(),
-  delete: sinon.spy()
 };
 
 // require the index with our stubbed out modules
@@ -48,6 +47,14 @@ describe('Review API Router:', function() {
     });
   });
 
+  describe('GET /api/reviews/me', function() {
+    it('should route to review.controller.show', function() {
+      routerStub.get
+        .withArgs('/me', 'authService.isAuthenticated', 'reviewCtrl.show')
+        .should.have.been.calledOnce;
+    });
+  });
+
   describe('POST /api/reviews', function() {
     it('should route to review.controller.create', function() {
       routerStub.post
@@ -68,14 +75,6 @@ describe('Review API Router:', function() {
     it('should route to review.controller.patch', function() {
       routerStub.patch
         .withArgs('/:id', 'authService.isAuthenticated', 'reviewCtrl.patch')
-        .should.have.been.calledOnce;
-    });
-  });
-
-  describe('DELETE /api/reviews/:id', function() {
-    it('should route to review.controller.destroy', function() {
-      routerStub.delete
-        .withArgs('/:id', 'authService.isAuthenticated', 'reviewCtrl.destroy')
         .should.have.been.calledOnce;
     });
   });
