@@ -1,39 +1,133 @@
 'use strict';
 
 var app = require('../../..');
+var Promise = require('bluebird');
+import User from '../../user/user.model';
+import Category from '../../category/category.model';
+import Application from '../../application/application.model';
 import request from 'supertest';
 
-var newApplication;
-
 describe('Application Admin API:', function() {
-  describe('GET /api/admin/applications', function() {
-    var applications;
+  var fakeApp;
+  var user;
+  var token;
 
-    beforeEach(function(done) {
+  before(function() {
+    var category;
+
+    return Promise.each([
+      function() {
+        return User.remove().then(function() {
+          user = new User({
+            name: 'Fake User',
+            email: 'test@example.com',
+            password: 'password',
+            role: 'admin'
+          });
+
+          return user.save();
+        });
+      },
+      function() {
+        return Category.remove().then(function() {
+          category = new Category({
+            name: 'Fake Category',
+            slug: 'fake-category',
+            info: 'This is fake category'
+          });
+
+          return category.save();
+        });
+      },
+      function() {
+        return Application.remove().then(function() {
+          fakeApp = new Application({
+            author: user._id,
+            name: 'Fake Application',
+            slug: 'fake-application',
+            icon: 'fake-icon.png',
+            feature: 'fake-feature.jpg',
+            screenshots: [
+              'fake-screenshot-1.jpg',
+              'fake-screenshot-2.jpg',
+              'fake-screenshot-3.jpg',
+            ],
+            versions: [
+              {
+                major: 0,
+                minor: 0,
+                maintenance: 1,
+                archive: 'fake-achive.zip'
+              }
+            ],
+            description: 'This is application description',
+            category: category._id
+          });
+
+          return fakeApp.save();
+        });
+      }
+    ], function(step) {
+      return step();
+    });
+  });
+
+  after(function() {
+    return Promise.each([
+      function() {
+        return Application.remove();
+      },
+      function() {
+        return User.remove();
+      },
+      function() {
+        return Category.remove();
+      }
+    ], function(step) {
+      return step();
+    });
+  });
+
+
+  describe('GET /api/admin/applications', function() {
+    before(function(done) {
+      request(app)
+        .post('/auth/local')
+        .send({
+          email: 'test@example.com',
+          password: 'password'
+        })
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .then(res => {
+          token = res.body.token;
+          done();
+        });
+    });
+
+    it('should respond with JSON array', function(done) {
       request(app)
         .get('/api/admin/applications')
+        .set('authorization', `Bearer ${token}`)
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {
           if(err) {
             return done(err);
           }
-          applications = res.body;
+          res.body.should.be.instanceOf(Array);
           done();
         });
     });
-
-    it('should respond with JSON array', function() {
-      applications.should.be.instanceOf(Array);
-    });
   });
 
-  describe('GET /api/admin/applications/:id', function() {
+  describe('GET /api/admin/applications/:slug', function() {
     var application;
 
     beforeEach(function(done) {
       request(app)
-        .get(`/api/admin/applications/${newApplication._id}`)
+        .get(`/api/admin/applications/${fakeApp.slug}`)
+        .set('authorization', `Bearer ${token}`)
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {
@@ -50,21 +144,19 @@ describe('Application Admin API:', function() {
     });
 
     it('should respond with the requested application', function() {
-      application.name.should.equal('New Application');
-      application.info.should.equal('This is the brand new application!!!');
+      application.name.should.equal('Fake Application');
+      application.slug.should.equal('fake-application');
     });
   });
 
-  describe('PATCH /api/admin/applications/:id', function() {
+  describe('PATCH /api/admin/applications/:slug', function() {
     var patchedApplication;
 
     beforeEach(function(done) {
       request(app)
-        .patch(`/api/admin/applications/${newApplication._id}`)
-        .send([
-          { op: 'replace', path: '/name', value: 'Patched Application' },
-          { op: 'replace', path: '/info', value: 'This is the patched application!!!' }
-        ])
+        .patch(`/api/admin/applications/${fakeApp.slug}`)
+        .set('authorization', `Bearer ${token}`)
+        .send({ status: 'block' })
         .expect(200)
         .expect('Content-Type', /json/)
         .end(function(err, res) {
@@ -81,8 +173,7 @@ describe('Application Admin API:', function() {
     });
 
     it('should respond with the patched application', function() {
-      patchedApplication.name.should.equal('Patched Application');
-      patchedApplication.info.should.equal('This is the patched application!!!');
+      patchedApplication.status.should.equal('block');
     });
   });
 });
