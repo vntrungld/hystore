@@ -33,7 +33,7 @@ var ReviewSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['unread', 'read', 'delete'],
+    enum: ['unread', 'read'],
     default: 'unread'
   }
 }, { timestamps: true });
