@@ -27,7 +27,7 @@ var UserSchema = new Schema({
   },
   avatar: {
     type: String,
-    default: 'https://s3-ap-southeast-1.amazonaws.com/hystore/default-avatar.jpg'
+    default: 'https://s3-ap-southeast-1.amazonaws.com/hystore-dev/default-avatar.jpg'
   },
   applications: [{
     type: ObjectId
