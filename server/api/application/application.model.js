@@ -151,14 +151,51 @@ ApplicationSchema.virtual('dev')
  */
 
 // Validate star limit of 5
-function starLimit(val) {
-  return val.length == 5;
-}
+ApplicationSchema
+  .path('stars')
+  .validate(function(val) {
+    return val.length == 5;
+  }, '{PATH} exceeds the limit of 5');
 
 // Validate screenshot limit of 3 to 8
-function screenshotRange(val) {
-  return val.length >= 3 && val.length <= 8;
-}
+ApplicationSchema
+  .path('screenshots')
+  .validate(function(val) {
+    return val.length >= 3 && val.length <= 8;
+  }, '{PATH} limit 3 to 8');
+
+ApplicationSchema
+  .path('versions')
+  .validate(function(val) {
+    const totalVersion = this.versions.length;
+    if(totalVersion >= 2) {
+      const highestVersion = val[totalVersion - 2];
+      const currentVersion = val[totalVersion - 1];
+      const minMajor = highestVersion.major;
+      const minMinor = highestVersion.minor;
+      const minMaintenance = highestVersion.maintenance;
+      const currentMajor = currentVersion.major;
+      const currentMinor = currentVersion.minor;
+      const currentMaintenance = currentVersion.maintenance;
+
+      if(currentMajor > minMajor) {
+        return true;
+      } else if(currentMajor === minMajor) {
+        if(currentMinor > minMinor) {
+          return true;
+        } else if(currentMinor === minMinor) {
+          if(currentMaintenance > minMaintenance) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+      }
+      return false;
+    } else {
+      return true;
+    }
+  }, 'Your version must higher the highest version');
 
 /**
  * Methods
