@@ -4,6 +4,7 @@
       "sinon": true
     },
     "env": {
-        "node": true
+        "node": true,
+        "mocha": true
     }
 }
