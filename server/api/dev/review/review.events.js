@@ -5,7 +5,7 @@
 'use strict';
 
 import {EventEmitter} from 'events';
-import Review from './review.model';
+import Review from '../../review/review.model';
 var ReviewEvents = new EventEmitter();
 
 // Set max event listeners (0 == unlimited)
