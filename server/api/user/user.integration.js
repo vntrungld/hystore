@@ -37,7 +37,7 @@ describe('User API:', function() {
         })
         .expect(200)
         .expect('Content-Type', /json/)
-        .end((err, res) => {
+        .then(res => {
           token = res.body.token;
           done();
         });
@@ -46,10 +46,10 @@ describe('User API:', function() {
     it('should respond with a user profile when authenticated', function(done) {
       request(app)
         .get('/api/users/me')
-        .set('authorization', 'Bearer ' + token)
+        .set('authorization', `Bearer ${token}`)
         .expect(200)
         .expect('Content-Type', /json/)
-        .end((err, res) => {
+        .then(res => {
           res.body._id.toString().should.equal(user._id.toString());
           done();
         });
