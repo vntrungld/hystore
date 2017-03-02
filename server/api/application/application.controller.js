@@ -1,17 +1,12 @@
 /**
  * Using Rails-like standard naming convention for endpoints.
- * GET     /api/applications                ->  index
- * POST    /api/applications                ->  create
- * GET     /api/applications/:slug          ->  show
- * PUT     /api/applications/:slug          ->  upsert
- * PATCH   /api/applications/:slug          ->  patch
- * DELETE  /api/applications/:slug          ->  destroy
+ * GET     /api/applications              ->  index
+ * GET     /api/applications/:id          ->  show
  */
 
 'use strict';
 
 import Application from './application.model';
-import Category from '../category/category.model';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -40,44 +35,26 @@ function handleError(res, statusCode) {
   };
 }
 
-function applicationFind(query) {
-  let queries = [{ status: 'publish' }];
-
-  if(query) {
-    queries.push(query);
-  }
-
-  return Application.find({ $and: queries })
-    .populate('category author')
-    .exec()
-    .then(function(entities) {
-      return entities.map(function(entity) {
-        return entity.current;
-      });
-    });
-}
-
 // Gets a list of Applications
 export function index(req, res) {
-  if(req.query.category) {
-    return Category.findOne({ slug: req.query.category })
-      .exec()
-      .then(function(cat) {
-        applicationFind({ category: cat._id })
-          .then(respondWithResult(res))
-          .catch(handleError(res));
-      })
-      .catch(handleError(res));
+  let query = req.query;
+  query.status = 'publish';
+
+  if(query.search) {
+    query.name = new RegExp(`^.*${query.search}.*$`, 'i');
+    delete query.search;
   }
 
-  return applicationFind()
+  return Application.find(query)
+    .populate('category author')
+    .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
 
 // Gets a single Application from the DB
 export function show(req, res) {
-  return Application.findOne({ slug: req.params.slug })
+  return Application.findById(req.params.id)
     .populate('author category')
     .exec()
     .then(function(entity) {

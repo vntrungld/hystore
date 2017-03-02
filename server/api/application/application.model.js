@@ -4,6 +4,7 @@
 /*eslint prefer-rest-params:0*/
 
 import mongoose from 'mongoose';
+import {slugify} from '../../utilities';
 
 const ObjectId = mongoose.Schema.Types.ObjectId;
 const mongoosePaginate = require('mongoose-paginate');
@@ -14,12 +15,8 @@ var ApplicationSchema = new mongoose.Schema({
     required: true,
     ref: 'User'
   },
+  slug: String,
   name: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  slug: {
     type: String,
     required: true,
     unique: true
@@ -98,18 +95,18 @@ ApplicationSchema
   .get(function() {
     const currentVersion = this.versions[this.currentVersionIndex];
     const author = {
+      _id: this.author._id,
       name: this.author.name,
       email: this.author.email
     };
     const category = {
+      _id: this.category._id,
       name: this.category.name,
-      slug: this.category.slug
     };
 
     return {
       author,
       name: this.name,
-      slug: this.slug,
       icon: this.icon,
       feature: this.feature,
       screenshots: this.screenshots,
@@ -127,7 +124,6 @@ ApplicationSchema.virtual('dev')
   .get(function() {
     const category = {
       name: this.category.name,
-      slug: this.category.slug
     };
 
     return {
@@ -209,7 +205,6 @@ ApplicationSchema.methods = {
       return {
         author: this.author,
         name: this.name,
-        slug: this.slug,
         icon: this.icon,
         feature: this.feature,
         screenshots: this.screenshots,
@@ -226,6 +221,18 @@ ApplicationSchema.methods = {
     return this.current;
   }
 };
+
+/**
+ *  Pre
+ */
+
+ApplicationSchema
+  .pre('save', function(next) {
+    if(!this.slug) {
+      this.slug = slugify(this.name);
+    }
+    next();
+  });
 
 ApplicationSchema.plugin(mongoosePaginate);
 

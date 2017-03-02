@@ -31,7 +31,6 @@ describe('Application API:', function() {
         Category.remove().then(function() {
           category = new Category({
             name: 'Fake Category',
-            slug: 'fake-category',
             info: 'This is fake category'
           });
 
@@ -43,7 +42,6 @@ describe('Application API:', function() {
           fakeApp = new Application({
             author: user._id,
             name: 'Fake Application',
-            slug: 'fake-application',
             icon: 'fake-icon.png',
             feature: 'fake-feature.jpg',
             screenshots: [
@@ -113,12 +111,12 @@ describe('Application API:', function() {
     });
   });
 
-  describe('GET /api/applications/:slug', function() {
+  describe('GET /api/applications/:id', function() {
     var application;
 
     beforeEach(function(done) {
       request(app)
-        .get(`/api/applications/${fakeApp.slug}`)
+        .get(`/api/applications/${fakeApp._id}`)
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {

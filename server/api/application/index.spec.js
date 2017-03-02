@@ -38,10 +38,10 @@ describe('Application API Router:', function() {
     });
   });
 
-  describe('GET /api/applications/:slug', function() {
+  describe('GET /api/applications/:id', function() {
     it('should route to application.controller.show', function() {
       routerStub.get
-        .withArgs('/:slug', 'applicationCtrl.show')
+        .withArgs('/:id', 'applicationCtrl.show')
         .should.have.been.calledOnce;
     });
   });
