@@ -35,7 +35,6 @@ describe('Review Dev API:', function() {
         return Category.remove().then(function() {
           category = new Category({
             name: 'Fake Category',
-            slug: 'fake-category',
             info: 'This is fake category'
           });
 
@@ -47,7 +46,6 @@ describe('Review Dev API:', function() {
           fakeApp = new Application({
             author: user._id,
             name: 'Fake Application',
-            slug: 'fake-application',
             icon: 'fake-icon.png',
             feature: 'fake-feature.jpg',
             screenshots: [
