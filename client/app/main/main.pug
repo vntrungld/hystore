@@ -1,37 +1,59 @@
 div(
   flex,
-  layout="column"
+  layout="column",
 )
+  md-toolbar.md-hue-1
+    .md-toolbar-tools
+      md-select.md-no-underline(
+        ng-model="vm.category",
+        placeholder="Category"
+      )
+        md-option(
+          ng-repeat="cat in vm.categories",
+          ng-click="vm.goCategory(cat._id)",
+          ng-value="cat._id"
+        ) {{ cat.name }}
+
   div(
-    flex-offset-md="20"
-    flex-offset-gt-md="20"
     flex,
-    layout="row",
-    layout-wrap
+    layout="column"
   )
-    md-card(
-      ng-repeat="application in vm.applications",
-      flex-xs="100",
-      flex-sm="50",
-      flex-md="20",
-      flex="15",
-      layout-gt-sm="column",
-      layout-sm="row",
-      layout-xs="row"
+    div(
+      layout="row",
     )
+      h2.md-headline(
+        flex,
+        layout-margin
+      )
+        span(ng-if="vm.applications.length") New + Updated Apps
+        span(ng-if="!vm.applications.length") No applications found
 
-      md-card-content
-        .md-media-md.card-media
-          a.full-cover(
-            ui-sref="application({ slug: application.slug })",
-            style="background-image: url('{{ application.icon }}')"
-          )
-            img.img-semantic.img-responsive(
-              ng-src="{{ application.icon }}",
-              alt="{{ application.name }}"
+    div(
+      flex,
+      layout="row",
+      layout-wrap
+    )
+      md-card(
+        ng-repeat="application in vm.applications",
+        flex-xs="45",
+        flex-gt-xs="20",
+        flex-gt-sm="15",
+        flex="10",
+        layout-gt-sm="column",
+        layout-padding
+      )
+        md-card-content
+          .md-media-md.card-media
+            a.full-cover(
+              ui-sref="application({ id: application._id })",
+              style="background-image: url('{{ application.icon }}')"
             )
+              img.img-responsive(
+                ng-src="{{ application.icon }}",
+                alt="{{ application.name }}"
+              )
 
-      md-card-title
-        md-card-title-text.text-overflow
-          a.md-headline(ui-sref="application({ slug: application.slug })") {{ application.name }}
-          a.md-subhead(ui-sref="application({ slug: application.slug })") {{ application.author.name || 'Unknown' }}
+        md-card-title
+          md-card-title-text.text-overflow
+            a.md-title(ui-sref="application({ id: application._id })") {{ application.name }}
+            a.md-subhead.np(ui-sref="main({ author: application.author._id })") {{ application.author.name }}
