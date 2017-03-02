@@ -1,9 +1,9 @@
 /**
  * Using Rails-like standard naming convention for endpoints.
  * POST    /api/admin/categories        ->  create
- * PUT     /api/admin/categories/:slug  ->  upsert
- * PATCH   /api/admin/categories/:slug  ->  patch
- * DELETE  /api/admin/categories/:slug  ->  destroy
+ * PUT     /api/admin/categories/:id  ->  upsert
+ * PATCH   /api/admin/categories/:id  ->  patch
+ * DELETE  /api/admin/categories/:id  ->  destroy
  */
 
 'use strict';
@@ -11,8 +11,6 @@
 
 import jsonpatch from 'fast-json-patch';
 import Category from '../../category/category.model';
-
-const util = require('../../../utilities');
 
 const respondWithResult = (res, statusCode) => {
   statusCode = statusCode || 200;
@@ -37,7 +35,9 @@ const patchUpdates = patches =>
 const removeEntity = res =>
   entity => {
     if(entity) {
-      return entity.remove()
+      entity.status = 'delete';
+
+      return entity.save()
         .then(() => {
           res.status(204).end();
         });
@@ -60,43 +60,42 @@ const handleError = (res, statusCode) => {
   };
 };
 
-const insertChildrenIdToParent = childId =>
-  parent => {
+function insertChildrenIdToParent(childId) {
+  return function(parent) {
     if(parent) {
       parent.children.push(childId);
-      parent.save();
+      return parent.save();
     }
   };
+}
 
-const updateChildren = parentId =>
-  child => {
-    if(child) {
-      if(parentId) {
-        Category.findOne({ _id: parentId })
-          .then(insertChildrenIdToParent(child.id));
+function updateChildren(parentId) {
+  if(parentId) {
+    return function(child) {
+      if(child) {
+        return Category.findById(parentId)
+          .then(insertChildrenIdToParent(child._id));
       }
-      return child;
-    }
-    return null;
-  };
+      return null;
+    };
+  }
+}
 
 // Creates a new Category in the DB
-export const create = (req, res) => {
-  req.body.slug = util.slugify(req.body.name);
-
+export function create(req, res) {
   return Category.create(req.body)
     .then(updateChildren(req.body.parent))
     .then(respondWithResult(res, 201))
     .catch(handleError(res));
-};
+}
 
 // Upserts the given Category in the DB at the specified ID
 export const upsert = (req, res) => {
   if(req.body._id) {
     delete req.body._id;
   }
-  return Category.findOneAndUpdate(
-    { _id: req.params.slug },
+  return Category.findByIdAndUpdate(
+    req.params.id,
     req.body,
     {
       upsert: true,
@@ -116,7 +115,7 @@ export const patch = (req, res) => {
     delete req.body.createdAt;
     delete req.body.updatedAt;
   }
-  return Category.findOne({ slug: req.params.slug })
+  return Category.findById(req.params.id)
     .exec()
     .then(handleEntityNotFound(res))
     .then(patchUpdates(req.body))
@@ -126,7 +125,7 @@ export const patch = (req, res) => {
 
 // Deletes a Category from the DB
 export const destroy = (req, res) =>
-  Category.findOne({ _id: req.params.id })
+  Category.findById(req.params.id)
     .exec()
     .then(handleEntityNotFound(res))
     .then(removeEntity(res))

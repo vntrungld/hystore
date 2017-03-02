@@ -39,26 +39,26 @@ describe('Category Admin API Router:', function() {
     });
   });
 
-  describe('PUT /api/admin/categories/:slug', function() {
+  describe('PUT /api/admin/categories/:id', function() {
     it('should route to category.controller.upsert', function() {
       routerStub.put
-        .withArgs('/:slug', 'categoryCtrl.upsert')
+        .withArgs('/:id', 'categoryCtrl.upsert')
         .should.have.been.calledOnce;
     });
   });
 
-  describe('PATCH /api/admin/categories/:slug', function() {
+  describe('PATCH /api/admin/categories/:id', function() {
     it('should route to category.controller.patch', function() {
       routerStub.patch
-        .withArgs('/:slug', 'categoryCtrl.patch')
+        .withArgs('/:id', 'categoryCtrl.patch')
         .should.have.been.calledOnce;
     });
   });
 
-  describe('DELETE /api/admin/categories/:slug', function() {
+  describe('DELETE /api/admin/categories/:id', function() {
     it('should route to category.controller.destroy', function() {
       routerStub.delete
-        .withArgs('/:slug', 'categoryCtrl.destroy')
+        .withArgs('/:id', 'categoryCtrl.destroy')
         .should.have.been.calledOnce;
     });
   });

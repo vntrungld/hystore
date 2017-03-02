@@ -6,13 +6,12 @@ import User from '../../user/user.model';
 import Category from '../../category/category.model';
 import request from 'supertest';
 
-var category;
-
 describe('Category Admin API:', function() {
   var user;
   var token;
+  var category;
 
-  before(function() {
+  before(function(done) {
     return Promise.each([
       function() {
         return User.remove().then(function() {
@@ -27,22 +26,16 @@ describe('Category Admin API:', function() {
         });
       },
       function() {
-        Category.remove().then(function() {
-          category = new Category({
-            name: 'Fake Category',
-            slug: 'fake-category',
-            info: 'This is fake category'
-          });
-
-          return category.save();
-        });
+        return Category.remove();
       }
     ], function(step) {
       return step();
+    }).then(function() {
+      return done();
     });
   });
 
-  after(function() {
+  after(function(done) {
     return Promise.each([
       function() {
         return User.remove();
@@ -52,6 +45,8 @@ describe('Category Admin API:', function() {
       }
     ], function(step) {
       return step();
+    }).then(function() {
+      return done();
     });
   });
 
@@ -85,20 +80,21 @@ describe('Category Admin API:', function() {
           if(err) {
             return done(err);
           }
-          res.body.name.should.equal('New Category');
-          res.body.slug.should.equal('new-category');
-          res.body.info.should.equal('This is the brand new category!!!');
+
+          category = res.body;
+          category.name.should.equal('New Category');
+          category.info.should.equal('This is the brand new category!!!');
           done();
         });
     });
   });
 
-  describe('PATCH /api/admin/categories/:slug', function() {
+  describe('PATCH /api/admin/categories/:id', function() {
     var patchedCategory;
 
     beforeEach(function(done) {
       request(app)
-        .patch(`/api/admin/categories/${category.slug}`)
+        .patch(`/api/admin/categories/${category._id}`)
         .set('authorization', `Bearer ${token}`)
         .send([{ op: 'replace', path: '/status', value: 'deactive' }])
         .expect(200)

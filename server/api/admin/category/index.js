@@ -6,8 +6,8 @@ import * as controller from './category.controller';
 const router = new Router();
 
 router.post('/', controller.create);
-router.put('/:slug', controller.upsert);
-router.patch('/:slug', controller.patch);
-router.delete('/:slug', controller.destroy);
+router.put('/:id', controller.upsert);
+router.patch('/:id', controller.patch);
+router.delete('/:id', controller.destroy);
 
 module.exports = router;
