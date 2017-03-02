@@ -25,14 +25,14 @@ export default function routes($stateProvider) {
       authenticate: 'dev'
     })
     .state('dev.applicationEdit', {
-      url: '/application/:slug',
+      url: '/application/:id',
       template: require('./application/edit/edit.pug'),
       controller: 'DevApplicationEditController',
       controllerAs: 'vm',
       authenticate: 'dev'
     })
     .state('dev.applicationUpdate', {
-      url: '/application/:slug/update',
+      url: '/application/:id/update',
       template: require('./application/update/update.pug'),
       controller: 'DevApplicationUpdateController',
       controllerAs: 'vm',

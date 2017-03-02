@@ -1,40 +1,36 @@
-section(
-  flex,
-  layout="row",
-  layout-fill
+md-sidenav.md-sidenav-left(
+  md-component-id="sidenav",
+  md-whiteframe="3",
+  md-is-locked-open="$mdMedia('gt-sm')",
 )
-  md-sidenav.md-sidenav-left(
-    md-component-id='left',
-    md-whiteframe='3',
-  )
-    md-content
-      md-list.np
-        md-toolbar
-          h1.md-toolbar-tools Dev site
-        md-list-item(ui-sref="dev.dashboard")
-          md-icon dashboard
-          p Dashboard
+  md-content
+    md-list.np
+      md-toolbar
+        h1.md-toolbar-tools Dev site
+      md-list-item(ui-sref="dev.dashboard")
+        md-icon dashboard
+        p Dashboard
 
-        md-divider
+      md-divider
 
-        md-list-item(ui-sref="dev.review")
-          md-icon email
+      md-list-item(ui-sref="dev.review")
+        md-icon email
 
-          p Message
+        p Message
 
-          span.md-badge.bg-primary(ng-if="vm.reviews")
-            | {{ vm.reviews.length }}
+        span.md-badge.bg-primary(ng-if="vm.reviews")
+          | {{ vm.reviews.length }}
 
-        md-divider
+      md-divider
 
-        md-list-item(ui-sref="dev.application")
-          md-icon apps
-          p Application manager
+      md-list-item(ui-sref="dev.application")
+        md-icon apps
+        p Application manager
 
-        md-divider
+      md-divider
 
-  md-content(
-    flex,
-    layout="column",
-    ui-view=""
-  )
+md-content(
+  flex,
+  layout="column",
+  ui-view=""
+)
