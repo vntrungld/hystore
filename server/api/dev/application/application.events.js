@@ -5,7 +5,7 @@
 'use strict';
 
 import {EventEmitter} from 'events';
-import Application from './application.model';
+import Application from '../../application/application.model';
 var ApplicationEvents = new EventEmitter();
 
 // Set max event listeners (0 == unlimited)

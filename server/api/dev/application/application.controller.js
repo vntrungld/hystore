@@ -2,21 +2,21 @@
  * Using Rails-like standard naming convention for endpoints.
  * GET     /api/dev/applications                ->  index
  * POST    /api/dev/applications                ->  create
- * GET     /api/dev/applications/:slug          ->  show
- * PUT     /api/dev/applications/:slug          ->  update
- * PATCH   /api/dev/applications/:slug          ->  patch
- * DELETE  /api/dev/applications/:slug          ->  destroy
+ * GET     /api/dev/applications/:id            ->  show
+ * PUT     /api/dev/applications/:id            ->  update
+ * PATCH   /api/dev/applications/:id            ->  patch
+ * DELETE  /api/dev/applications/:id            ->  destroy
  */
 
 'use strict';
 /*eslint no-sync:0*/
 
+import jsonpatch from 'fast-json-patch';
 import Application from '../../application/application.model';
-import Category from '../../category/category.model';
 import mime from 'mime';
-import { slugify } from '../../../utilities';
 import AWS from 'aws-sdk';
 import multer from 'multer';
+import { slugify } from '../../../utilities';
 
 const Promise = require('bluebird');
 
@@ -39,8 +39,7 @@ const storage = multer.diskStorage({
 });
 const uploadFields = multer({ storage }).fields(uploadConfig);
 
-function respondWithResult(res, statusCode) {
-  statusCode = statusCode || 200;
+function respondWithResult(res, statusCode = 200) {
   return function(entity) {
     if(entity) {
       return res.status(statusCode).json(entity);
@@ -50,11 +49,15 @@ function respondWithResult(res, statusCode) {
 }
 
 function patchUpdates(patches) {
+  if(Object.prototype.toString.call(patches) === '[object Object]') { // eslint-disable-line
+    patches = [patches];
+  }
+
   return function(entity) {
-    for(let key in patches) {
-      if(entity[key]) {
-        entity[key] = patches[key];
-      }
+    try {
+      jsonpatch.apply(entity, patches, /*validate*/ true); // eslint-disable-line
+    } catch(err) {
+      return Promise.reject(err);
     }
     return entity.save();
   };
@@ -86,16 +89,6 @@ function handleError(res, statusCode) {
   statusCode = statusCode || 500;
   return function(err) {
     res.status(statusCode).send(err);
-  };
-}
-
-function insertVersion(newVer, current = false) {
-  return function(entity) {
-    entity.versions.push(newVer);
-    if(current) {
-      entity.currentVersionIndex++;
-    }
-    return entity.save();
   };
 }
 
@@ -181,7 +174,7 @@ export function index(req, res) {
 }
 
 export function storeToHardDisk(req, res, next) {
-  console.log('Store file to hard disk');
+  console.log('store to hard disk');
   return uploadFields(req, res, function(err) {
     if(err) {
       return res.status(500).send(err)
@@ -192,128 +185,152 @@ export function storeToHardDisk(req, res, next) {
 }
 
 export function fileValidate(req, res, next) {
-  console.log('File validate');
-  const archivePath = `${path}${req.files.archive[0].filename}`;
-  const zip = new AdmZip(archivePath);
-  let zipEntries = zip.getEntries();
+  console.log('file validate');
+  if(req.body._id) {
+    const archivePath = `${path}${req.files.archive[0].filename}`;
+    const zip = new AdmZip(archivePath);
+    let zipEntries = zip.getEntries();
 
-  if(isEntriesHaveIndexHTML(zipEntries)) {
-    return next();
-  } else {
-    removeTemp(req.files)
-      .catch(function(err) {
-        console.log(err);
-      });
-    return res.status(400).end();
-  }
-}
-
-export function upload(req, res, next) {
-  console.log('Upload to s3');
-  const email = req.user.email;
-  const appSlug = req.app.slug;
-  const version = `v${req.body.major}.${req.body.minor}.${req.body.maintenance}`;
-  const files = req.files;
-  const prefix = `${email}/${appSlug}/`;
-  const objWithFunc = convertToObjectWithUploadMultiple(prefix, version, files);
-  Promise.props(objWithFunc)
-    .then(function(result) {
-      return removeTemp(req.files)
-        .then(function() {
-          req.files = result;
-          return next();
-        })
+    if(isEntriesHaveIndexHTML(zipEntries)) {
+      return next();
+    } else {
+      removeTemp(req.files)
         .catch(function(err) {
           console.log(err);
         });
-    });
+      return res.status(400).end();
+    }
+  } else {
+    return next();
+  }
+}
+
+export function getSlug(req, res, next) {
+  return Application.findById(req.params.id).exec()
+    .then(handleEntityNotFound(res))
+    .then(function(app) {
+      req.slug = app.slug;
+      next();
+    })
+    .catch(handleError(res));
+}
+
+export function upload(req, res, next) {
+  console.log('upload to s3');
+  const files = req.files;
+
+  if(files) {
+    let data = req.body;
+    const email = req.user.email;
+    const appSlug = req.slug || slugify(req.body.name);
+    const major = data.major;
+    const minor = data.minor;
+    const maintenance = data.maintenance;
+    const version = `v${major}.${minor}.${maintenance}`;
+    const prefix = `${email}/${appSlug}/`;
+    const objWithFunc = convertToObjectWithUploadMultiple(prefix, version, files);
+
+    Promise.props(objWithFunc)
+      .then(function(result) {
+        return removeTemp(req.files)
+          .then(function() {
+            req.files = result;
+            return next();
+          })
+          .catch(handleError(res));
+      });
+  } else {
+    return next();
+  }
 }
 
 // Gets a single Application from the DB
 export function show(req, res) {
   return Application.findOne({
     author: req.user._id,
-    slug: req.params.slug
+    _id: req.params.id
   })
     .populate('category')
     .exec()
     .then(handleEntityNotFound(res))
-    .then(function(app) {
-      return app.dev;
-    })
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
 
 // Creates a new Application in the DB
-export function createWithNoUrl(req, res, next) {
-  console.log('create new application to database');
-  const categorySlug = req.body.category.slug;
-  return Category.findOne({ slug: categorySlug }).exec()
-    .then(function(cat) {
-      const fakeLink = 'unknown';
-      const data = {
-        author: req.user._id,
-        name: req.body.name,
-        slug: slugify(req.body.name),
-        icon: fakeLink,
-        feature: fakeLink,
-        screenshots: [
-          fakeLink,
-          fakeLink,
-          fakeLink
-        ],
-        versions: [
-          {
-            major: 0,
-            minor: 0,
-            maintenance: 0,
-            archive: fakeLink
-          }
-        ],
-        description: req.body.description,
-        category: cat._id
-      };
+export function create(req, res) {
+  console.log('create app in db');
+  const data = {
+    author: req.user._id,
+    name: req.body.name,
+    icon: req.files.icon[0],
+    feature: req.files.feature[0],
+    screenshots: req.files.screenshots,
+    versions: [{
+      major: req.body.major,
+      minor: req.body.minor,
+      maintenance: req.body.maintenance,
+      archive: req.files.archive[0]
+    }],
+    description: req.body.description,
+    category: req.body.category
+  };
 
-      console.log(data);
-
-      return Application.create(data)
-        .then(function(app) {
-          req.app = app;
-          return next();
-        })
-        .catch(handleError(res));
-    })
-    .catch(handleError(res));
-}
-
-export function updateUrlAfterCreate(req, res) {
-  let app = req.app;
-  const appId = app._id;
-  const files = req.files;
-  app.versions[0].archive = files.archive[0];
-  app.icon = files.icon[0];
-  app.feature = files.feature[0];
-  app.screenshots = files.screenshots;
-
-  return Application.findOneAndUpdate({ _id: appId }, app)
-    .then(respondWithResult(res))
+  return Application.create(data)
+    .then(respondWithResult(res, 201))
     .catch(handleError(res));
 }
 
 // Upserts the given Application in the DB at the specified ID
 export function upsert(req, res) {
-  return Application.findOne({ slug: req.params.slug }).exec()
-    .then(insertVersion(req.body, req.query.current))
+  const files = req.files;
+  const data = req.body;
+  if(files) {
+    for(let key in files) {
+      if(files[key].length === 1) {
+        data[key] = files[key][0];
+      } else {
+        data[key] = files[key];
+      }
+    }
+  }
+
+  return Application.findByIdAndUpdate(req.params.id, data).exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
 
+export function handlePatchObjectRequest(req, res, next) {
+  if(Object.prototype.toString.call(req.body) === '[object Object]') { // eslint-disable-line
+    req.body = [req.body];
+  }
+  return next();
+}
+
+export function handlePatchVersionRequest(req, res, next) {
+  const version = req.body[0].value;
+
+  if(typeof version !== 'undefined') {
+    req.body.major = version.major;
+    req.body.minor = version.minor;
+    req.body.maintenance = version.maintenance;
+  }
+
+  return next();
+}
+
 // Updates an existing Application in the DB
 export function patch(req, res) {
+  const files = req.files;
+
   if(req.body._id) {
     delete req.body._id; // eslint-disable-line
   }
+
+  if(files) {
+    req.body[0].value.archive = files.archive[0];
+  }
+
   return Application.findById(req.params.id).exec()
     .then(handleEntityNotFound(res))
     .then(patchUpdates(req.body))
@@ -326,7 +343,7 @@ export function destroy(req, res) {
   return Application.findOne({
     $and: [
       { status: { $ne: 'delete' } },
-      { slug: req.params.slug }
+      { _id: req.params.id }
     ]
   }).exec()
     .then(handleEntityNotFound(res))
