@@ -82,7 +82,7 @@ div(
             td(md-cell)
               md-select(
                 ng-model="review.status"
-                ng-change="vm.changeStatus($index)"
+                ng-change="vm.changeStatus(review)"
               )
                 md-option(
                   ng-repeat="status in vm.status"

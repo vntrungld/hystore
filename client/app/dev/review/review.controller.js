@@ -30,14 +30,20 @@ export default class DevReviewController {
     this.reviews = this.ReviewResource.query({ role: 'dev' });
   }
 
-  changeStatus(idx) {
-    const currentReview = this.reviews[idx];
-    const self = this; // eslint-disable-line
+  changeStatus(review) {
+    const mdToast = this.mdToast;
+    const data = [{
+      op: 'replace',
+      path: '/status',
+      value: review.status
+    }];
 
-    this.Review.devPatch(currentReview._id, { status: currentReview.status })
-      .then(function(review) {
-        self.mdToast.showSimple('Review changed');
-        self.reviews[idx] = review;
+    this.ReviewResource.devPatch({ id: review._id }, data).$promise
+      .then(function() {
+        mdToast.showSimple('Review changed');
+      })
+      .catch(function(err) {
+        mdToast.showSimple(`Error: ${err.data.message}`);
       });
   }
 }
