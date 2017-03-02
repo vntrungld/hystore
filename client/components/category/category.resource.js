@@ -3,15 +3,32 @@
 export function CategoryResource($resource) {
   'ngInject';
 
-  return $resource('api/categories/:slug/:controller', {
-    slug: '@_slug'
+  return $resource('api/:role/categories/:id/:controller', {
+    id: '@_id'
   }, {
-    changeCategoryContent: { method: 'PUT' },
-    getAppsByCat: {
-      method: 'GET',
-      isArray: true,
+    save: {
+      method: 'POST',
       params: {
-        controller: 'applications'
+        role: 'admin'
+      }
+    },
+    remove: {
+      method: 'DELETE',
+      params: {
+        role: 'admin'
+      }
+    },
+    changeCategoryContent: {
+      method: 'PUT',
+      params: {
+        role: 'admin'
+      }
+    },
+    adminPatch: {
+      method: 'PATCH',
+      params: {
+        role: 'admin',
+        id: '@id'
       }
     }
   });
