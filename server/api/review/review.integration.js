@@ -34,7 +34,6 @@ describe('Review API:', function() {
         return Category.remove().then(function() {
           category = new Category({
             name: 'Fake Category',
-            slug: 'fake-category',
             info: 'This is fake category'
           });
 
@@ -46,7 +45,6 @@ describe('Review API:', function() {
           application = new Application({
             author: user._id,
             name: 'Fake Application',
-            slug: 'fake-application',
             icon: 'fake-icon.png',
             feature: 'fake-feature.jpg',
             screenshots: [
@@ -99,7 +97,7 @@ describe('Review API:', function() {
 
     beforeEach(function(done) {
       request(app)
-        .get(`/api/reviews?application=${application.slug}`)
+        .get(`/api/reviews?application=${application._id}`)
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {
@@ -137,7 +135,7 @@ describe('Review API:', function() {
         .post('/api/reviews')
         .set('authorization', `Bearer ${token}`)
         .send({
-          for: application.slug,
+          for: application._id,
           star: 1,
           content: 'This is the brand new review!!!'
         })
@@ -159,7 +157,7 @@ describe('Review API:', function() {
         .post('/api/reviews')
         .set('authorization', `Bearer ${token}`)
         .send({
-          for: application.slug,
+          for: application._id,
           star: 1,
           content: 'Duplicate review'
         })
@@ -172,13 +170,13 @@ describe('Review API:', function() {
     var updatedReview;
 
     beforeEach(function(done) {
+      var updateReq = newReview;
+      updateReq.star = 2;
+      updateReq.content = 'This is the updated review!!!';
       request(app)
         .put(`/api/reviews/${newReview._id}`)
         .set('authorization', `Bearer ${token}`)
-        .send({
-          star: 2,
-          content: 'This is the updated review!!!'
-        })
+        .send(updateReq)
         .expect(200)
         .expect('Content-Type', /json/)
         .end(function(err, res) {
@@ -201,7 +199,7 @@ describe('Review API:', function() {
 
     it('should respond with the updated review on a subsequent GET', function(done) {
       request(app)
-        .get(`/api/reviews/me?application=${application.slug}`)
+        .get(`/api/reviews/me?application=${application._id}`)
         .set('authorization', `Bearer ${token}`)
         .expect(200)
         .expect('Content-Type', /json/)

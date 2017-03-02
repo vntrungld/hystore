@@ -1,6 +1,7 @@
 /**
  * Using Rails-like standard naming convention for endpoints.
  * GET     /api/reviews              ->  index
+ * GET     /api/reviews/:id          ->  show
  * POST    /api/reviews              ->  create
  * PUT     /api/reviews/:id          ->  upsert
  * PATCH   /api/reviews/:id          ->  patch
@@ -50,38 +51,31 @@ const handleError = (res, statusCode) => {
 
 // Gets a list of Reviews
 export const index = function(req, res) {
-  Application.findOne({ slug: req.query.application }).exec()
-    .then(function(app) {
-      Review.find({ for: app._id })
-        .populate('from')
-        .exec()
-        .then(function(entities) {
-          return entities.map(function(entity) {
-            return entity.public;
-          });
-        })
-        .then(respondWithResult(res))
-        .catch(handleError(res));
+  Review.find({ for: req.query.application })
+    .populate('from')
+    .exec()
+    .then(function(entities) {
+      return entities.map(function(entity) {
+        return entity.public;
+      });
     })
+    .then(respondWithResult(res))
     .catch(handleError(res));
 };
 
 // Gets own review
-export const show = (req, res) => {
-  Application.findOne({ slug: req.query.application }).exec()
-    .then(function(app) {
-      Review.findOne({ from: req.user._id, for: app._id }).exec()
-        .then(function(entity) {
-          return entity.public;
-        })
-        .then(respondWithResult(res))
-        .catch(handleError(res));
-    });
-};
+export function show(req, res) {
+  return Review.findOne({ from: req.user._id, for: req.query.application }).exec()
+    .then(function(entity) {
+      return entity.public;
+    })
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+}
 
 // Creates a new Review in the DB
 export const create = (req, res) => {
-  Application.findOne({ slug: req.body.for }).exec()
+  Application.findById(req.body.for).exec()
     .then(app => {
       Review.findOne({ from: req.user._id, for: app._id }).exec()
         .then(existedReview => {
@@ -113,13 +107,12 @@ export const create = (req, res) => {
 
 
 // Upserts the given Review in the DB at the specified ID
-export const upsert = (req, res) => {
-  const updateReview = { star: req.body.star, content: req.body.content };
-  return Review.findByIdAndUpdate(req.params.id, updateReview, {upsert: true, setDefaultsOnInsert: true, runValidators: true}).exec()
+export function upsert(req, res) {
+  return Review.findByIdAndUpdate(req.params.id, req.body, {upsert: true, setDefaultsOnInsert: true, runValidators: true}).exec()
 
     .then(respondWithResult(res))
     .catch(handleError(res));
-};
+}
 
 // Updates an existing Review in the DB
 export const patch = (req, res) => {
