@@ -34,10 +34,10 @@ describe('Category API Router:', function() {
     });
   });
 
-  describe('GET /api/categories/:slug', function() {
+  describe('GET /api/categories/:id', function() {
     it('should route to category.controller.show', function() {
       routerStub.get
-        .withArgs('/:slug', 'categoryCtrl.show')
+        .withArgs('/:id', 'categoryCtrl.show')
         .should.have.been.calledOnce;
     });
   });

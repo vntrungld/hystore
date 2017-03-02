@@ -37,18 +37,16 @@ const handleError = (res, statusCode) => {
 
 // Gets a list of Categories
 export const index = (req, res) =>
-  Category.find()
-    .populate('parent')
-    .populate('children')
+  Category.find({ status: { $ne: 'delete' } })
+    .populate('parent children')
     .exec()
     .then(respondWithResult(res))
     .catch(handleError(res));
 
 // Gets a single Category from the DB
 export const show = (req, res) =>
-  Category.findOne({ slug: req.params.slug })
-    .populate('children')
-    .populate('parent')
+  Category.findById(req.params.id)
+    .populate('parent children')
     .exec()
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))

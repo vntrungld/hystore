@@ -11,7 +11,7 @@ describe('Category API:', function() {
     return Category.remove().then(function() {
       fakeCategory = new Category({
         name: 'Fake Category',
-        slug: 'fake-category'
+        info: 'This is fake category'
       });
 
       return fakeCategory.save().then(function() {
@@ -21,7 +21,7 @@ describe('Category API:', function() {
   });
 
   after(function(done) {
-    return fakeCategory.remove().then(function() {
+    return Category.remove().then(function() {
       done();
     });
   });
@@ -48,12 +48,12 @@ describe('Category API:', function() {
     });
   });
 
-  describe('GET /api/categories/:slug', function() {
+  describe('GET /api/categories/:id', function() {
     var category;
 
     beforeEach(function(done) {
       request(app)
-        .get(`/api/categories/${fakeCategory.slug}`)
+        .get(`/api/categories/${fakeCategory._id}`)
         .expect(200)
         .expect('Content-Type', /json/)
         .end((err, res) => {
