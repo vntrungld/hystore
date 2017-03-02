@@ -3,9 +3,15 @@
 export function UserResource($resource) {
   'ngInject';
 
-  return $resource('/api/users/:id/:controller', {
+  return $resource('/api/:role/users/:id/:controller', {
     id: '@_id'
   }, {
+    remove: {
+      method: 'DELETE',
+      params: {
+        role: 'admin'
+      }
+    },
     changePassword: {
       method: 'PUT',
       params: {
@@ -15,7 +21,16 @@ export function UserResource($resource) {
     changeProfile: {
       method: 'PUT',
       params: {
+        id: '@id',
+        role: '@role',
         controller: 'profile'
+      }
+    },
+    query: {
+      method: 'GET',
+      isArray: true,
+      params: {
+        role: 'admin'
       }
     },
     get: {
@@ -24,11 +39,10 @@ export function UserResource($resource) {
         id: 'me'
       }
     },
-    getListApp: {
-      method: 'GET',
-      isArray: true,
+    adminPatch: {
+      method: 'PATCH',
       params: {
-        controller: 'applications'
+        role: 'admin'
       }
     }
   });
