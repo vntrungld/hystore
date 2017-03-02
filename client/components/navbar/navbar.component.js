@@ -15,6 +15,7 @@ export class NavbarComponent {
   isCollapsed = true;
   mdSidenav: Object;
   state: Object;
+  searchText: String;
 
   constructor(Auth, $state, $mdSidenav) {
     'ngInject';
@@ -29,6 +30,10 @@ export class NavbarComponent {
 
   isStateAuth(state) {
     return state == this.state.current.authenticate;
+  }
+
+  search() {
+    this.state.go('main', { search: this.searchText });
   }
 }
 

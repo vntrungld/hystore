@@ -1,13 +1,30 @@
 md-toolbar
   .md-toolbar-tools
     md-button.md-icon-button(
+      hide-gt-sm,
       ng-if="$ctrl.isStateAuth('admin') || $ctrl.isStateAuth('dev')",
-      ng-click="$ctrl.mdSidenav('left').toggle()"
+      ng-click="$ctrl.mdSidenav('sidenav').toggle()"
     )
       md-icon menu
-    a(
-      ui-sref="main",
+
+    a.logo(
+      ui-sref="main({})",
+      ui-sref-opts="{reload: true, inherit: false}"
     ) Hystore
+
+    form(
+      ng-submit="$ctrl.search()",
+      hide,
+      show-gt-xs
+    )
+      input(
+        type="text",
+        ng-model="$ctrl.searchText",
+        placeholder="Search"
+      )
+
+      md-button.md-icon-button(type="submit")
+        md-icon search
 
     span(flex)
 
@@ -55,3 +72,21 @@ md-toolbar
           md-button(ui-sref="logout")
             md-icon exit_to_app
             | Logout
+
+md-toolbar(
+  hide-gt-xs,
+  ng-if="!$ctrl.isStateAuth('admin') && !$ctrl.isStateAuth('dev')"
+)
+  .md-toolbar-tools
+    form(
+      ng-submit="$ctrl.search()",
+      class="mobile-search"
+    )
+      input(
+        type="text",
+        ng-model="$ctrl.searchText",
+        placeholder="Search"
+      )
+
+      md-button.md-icon-button(type="submit")
+        md-icon(md-colors="{color: 'grey-500'}") search

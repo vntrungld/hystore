@@ -13,3 +13,26 @@
     margin-left: -40px;
   }
 }
+
+.logo {
+  margin-right: 30px;
+}
+
+.mobile-search {
+  position: relative;
+  width: 100%;
+
+  input {
+    display: inline-block;
+    width: 100%;
+    padding-right: 40px;
+  }
+
+  button,
+  a {
+    display: block;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+  }
+}
