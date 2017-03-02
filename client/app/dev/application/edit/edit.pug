@@ -2,14 +2,14 @@ div(
   flex,
   layout="column"
 )
-  form(
-    name="form",
-    ng-submit="vm.saveApplication(form)"
-  )
-    md-card
-      md-card-header
-        md-card-header-text
-          span.md-title {{ vm.isEdit ? 'Edit' : 'Add' }} Application
+  md-card(flex="none")
+    md-card-header
+      md-card-header-text
+        span.md-title {{ vm.isEdit ? 'Edit' : 'Add' }} Application
+    form(
+      name="form",
+      ng-submit="vm.saveApplication(form)"
+    )
       md-card-content
         md-input-container.md-block
           label Name
@@ -25,100 +25,134 @@ div(
             p(ng-message="required") What's your application name?
             p(ng-message="mongoose") {{ vm.errors.other }}
 
-        div.input-wrapper(
+        .input-wrapper(
           ng-if="!vm.isEdit"
           flex="none",
           layout="row"
         )
-          input(
-            id="archiveInput",
-            ng-hide="true",
+          input.ng-hide(
             type="file",
+            id="archive",
             ngf-select,
             ng-model="vm.application.archive",
             name="archive",
             required,
-            ngf-model-invalid="errorFile",
             flex
           )
-          label.md-button.md-raised.md-primary(for="archiveInput") Choose an archive file
 
-        div.input-wrapper(
+          label.md-button.md-raised.md-primary(for="archive") Select zip
+
+          p {{ vm.application.archive.name || 'No file chosen' }}
+
+        .input-preview(
           flex="none",
           layout="column"
         )
-          div.input-and-label(
-            flex,
+          .input-wrapper(
+            flex="none",
             layout="row"
           )
-            label(flex="20") Icon *:
-
             input(
-              type="file",
-              ngf-select,
+              type="hidden",
               ng-model="vm.application.icon",
               name="icon",
-              required,
-              ngf-model-invalid="errorFile",
-              flex="none"
+              required
             )
 
-          div.input-preview(
-            flex,
-            layout="row",
-            ng-if="vm.application.icon"
+            .button-wrapper(
+              flex="none",
+              layout="row"
+            )
+              md-button.md-raised.md-primary(
+                ngf-select,
+                ng-model="vm.temp.icon",
+                accept="image/*"
+              )
+                | Select icon
+
+            p {{ vm.temp.icon.name || 'No file chosen' }}
+
+          .preview-wrapper(
+            flex="none",
+            layout="row"
           )
-            img(
-              ngf-thumbnail="vm.application.icon",
-              flex="none"
+            .crop-area.crop-area--square(
+              flex="none",
+              ng-if="vm.temp.icon",
+              ngf-drop,
+              ng-model="vm.temp.icon",
+              ngf-pattern="image/*"
             )
+              img-crop(
+                image="vm.temp.icon | ngfDataUrl",
+                result-image="vm.application.icon",
+                ng-init="vm.application.icon = ''"
+                area-type="square",
+                flex="none"
+              )
 
-        div.input-wrapper(
+            div(ng-if="vm.application.icon")
+              img(ng-src="{{ vm.application.icon }}")
+
+        .input-preview(
           flex="none",
           layout="column"
         )
-          div.input-and-label(
-            flex,
+          .input-wrapper(
+            flex="none",
             layout="row"
           )
-            label(flex="20") Feature Image *:
-
-            input(
+            input.ng-hide(
               type="file",
+              id="feature",
               ngf-select,
               ng-model="vm.application.feature",
               name="feature",
               required,
-              ngf-model-invalid="errorFile",
-              flex="none"
+              accept="image/*"
             )
 
-          div.image-preview(ng-if="vm.application.feature")
-            img.img-fill(ngf-src="vm.application.feature")
+            label.md-button.md-raised.md-primary(for="feature") Select feature
 
-        div.input-wrapper(
-          flex="none",
+            p {{ vm.application.feature.name || 'No file chosen' }}
+
+          .preview-wrapper(
+            flex="none",
+            layout="row",
+            ng-if="vm.application.feature"
+          )
+            .image-preview(flex)
+              img.img-fill(ngf-src="vm.application.feature")
+
+        .input-preview(
+          flex="grow",
           layout="column"
         )
-          div.input-and-label(
+          .input-wrapper(
             flex="none",
             layout="row"
           )
-            label(flex="20") Screenshots *:
-
-            input(
+            input.ng-hide(
               type="file",
+              id="screenshots",
               ngf-select,
+              multiple,
               ng-model="vm.application.screenshots",
               name="screenshots",
               required,
-              ngf-model-invalid="errorFile",
-              ngf-multiple="true",
-              flex="none"
+//              accept="image/*"
             )
 
+            label.md-button.md-raised.md-primary(for="screenshots") Select screenshots(3 -> 8 pics)
+
+            p(ng-if="vm.application.screenshots")
+              span(ng-repeat="screenshot in vm.application.screenshots") {{ screenshot.name }},&nbsp;
+
+            p(ng-if="!vm.application.screenshots") No file chosen
+
           md-grid-list.input-preview(
-            flex,
+            flex="none",
+            ng-if="vm.application.screenshots"
             md-cols='1',
             md-cols-sm='2',
             md-cols-md='3',
@@ -126,8 +160,7 @@ div(
             md-row-height-gt-md='1:1',
             md-row-height='4:3',
             md-gutter='8px',
-            md-gutter-gt-sm='4px',
-            ng-if="vm.application.screenshots"
+            md-gutter-gt-sm='4px'
           )
             md-grid-tile(ng-repeat="screenshot in vm.application.screenshots")
               img.img-fill(
@@ -224,3 +257,45 @@ div(
 
       md-card-actions
         button.md-button.md-primary(type="submit") {{ vm.isEdit ? 'Save change' : 'Create' }}
+
+  md-card(
+    flex="none",
+    ng-if="this.application.versions"
+  )
+    md-toolbar.md-table-toolbar.md-default
+      .md-toolbar-tools
+        span Versions
+
+        div(flex)
+
+        md-button.md-icon-button(ui-sref="dev.applicationUpdate({ id: vm.application._id })")
+          md-icon add
+
+        md-button.md-icon-button(ng-click="vm.reload()")
+          md-icon refresh
+
+    md-table-container
+      table(md-table)
+        thead(md-head)
+          tr(md-row)
+            th(md-column)
+              span Version
+
+            th(md-column)
+              span What's new
+
+            th(md-column)
+              span Status
+
+        tbody(md-body)
+          tr(
+            md-row,
+            ng-repeat="version in vm.application.versions"
+          )
+            td(md-cell) {{ version.major }}.{{ version.minor }}.{{version.maintenance}}
+
+            td(md-cell) {{ version.whatsnew }}
+
+            td(md-cell) depublish
+
+    md-table-pagination

@@ -54,19 +54,27 @@ div(
             md-row,
             md-select="application",
             md-on-select="logItem",
-            ng-repeat="application in vm.applications | filter: filter.search | orderBy: vm.query.order | limitTo: vm.query.limit : (vm.query.page -1) * vm.query.limit"
+            ng-repeat="application in vm.applications | filter: filter.search | orderBy: vm.query.order | limitTo: vm.query.limit : (vm.query.page -1) * vm.query.limit",
+            ng-if="vm.applications"
           )
             td(md-cell) {{ application.name }}
 
             td(md-cell)
-              md-select(ng-model="vm.version")
+              md-select(
+                ng-model="application.currentVersionIndex",
+                ng-change="vm.changeVersion(application)"
+              )
                 md-option(
-                  ng-repeat="version in application.versions"
+                  ng-repeat="version in application.versions",
+                  ng-value="$index"
                 )
                   | {{ version.major }}.{{ version.minor }}.{{ version.maintenance }}
 
             td(md-cell)
-              md-select(ng-model="application.status")
+              md-select(
+                ng-model="application.status",
+                ng-change="vm.changeStatus(application)"
+              )
                 md-option(
                   ng-value="status.value",
                   ng-repeat="status in vm.status"
@@ -74,10 +82,13 @@ div(
                   | {{ status.name }}
 
             td(md-cell)
-              span.md-button.md-icon-button(ui-sref="dev.applicationEdit({ slug: application.slug })")
+              md-button.md-icon-button(ui-sref="dev.applicationEdit({ id: application._id })")
                 md-icon mode_edit
 
-              span.md-button.md-icon-button(ng-click="vm.delete(application)")
+              md-button.md-icon-button(ui-sref="dev.applicationUpdate({ id: application._id })")
+                md-icon update
+
+              md-button.md-icon-button(ng-click="vm.delete(application)")
                 md-icon delete
 
     md-table-pagination(

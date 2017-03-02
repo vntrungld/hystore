@@ -2,97 +2,98 @@ div(
   flex,
   layout="column"
 )
-  form(
-    name="form",
-    ng-submit="vm.updateApplication(form)"
-  )
     md-card
       md-card-header
         md-card-header-text
           span.md-title Update {{ vm.update.name }}
 
-      md-card-content
-        div.input-wrapper(
-          flex="none",
-          layout="row"
-        )
-          input(
-            id="archiveInput",
-            ng-hide="true",
-            type="file",
-            ngf-select,
-            ng-model="vm.update.archive",
-            name="archive",
-            required,
-            ngf-model-invalid="errorFile",
-            flex
-          )
+      form(
+        name="form",
+        ng-submit="vm.updateApplication(form)"
+      )
 
-          label.md-button.md-raised.md-primary(for="archiveInput") Choose an archive file
-
-        md-input-container.md-block
-          label What's new
-
-          textarea(
-            type="text",
-            name="desc",
-            rows=5,
-            ng-model="vm.update.whatsnew",
-            required
-          )
-
-          div(ng-messages="form.desc.$error")
-            p(ng-message="required") What's new?
-            p(ng-message="mongoose") {{ vm.errors.other }}
-
-        .version-wrapper(
-          flex="none",
-          layout="column"
-        )
-          h4.md-title Version
-
-          .version-input-group(
+        md-card-content
+          .input-wrapper(
             flex="none",
             layout="row"
           )
-            md-input-container(flex="none")
-              label Major
+            .input-and-label
+              label(flex="20") Choose an archive file
 
               input(
-                type="number",
-                name="major",
-                ng-model="vm.update.major",
-                required
+                type="file",
+                ngf-select,
+                ng-model="vm.update.archive",
+                name="archive",
+                required,
+                ngf-model-invalid="errorFile",
+                flex
               )
 
-              div(ng-messages="form.version.$error")
-                p(ng-message="required") What's your application version?
-                p(ng-message="mongoose") {{ vm.errors.other }}
+          .md-block
+            label What's new
 
-            md-input-container(flex="none")
-              Label Minor
+            trix-editor(
+              angular-trix,
+              ng-model="vm.update.whatsnew",
+              required
+            )
 
-              input(
-                type="number",
-                name="minor",
-                ng-model="vm.update.minor",
-                required
-              )
+            div(ng-messages="form.desc.$error")
+              p(ng-message="required") What's new?
+              p(ng-message="mongoose") {{ vm.errors.other }}
 
-              div(ng-messages="form.version.$error")
-                p(ng-message="required") What's your application version?
-                p(ng-message="mongoose") {{ vm.errors.other }}
+          .version-wrapper(
+            flex="none",
+            layout="column"
+          )
+            h4.md-title Version
 
-            md-input-container(flex="none")
-              Label Maintenance
+            .version-input-group(
+              flex="none",
+              layout="row"
+            )
+              md-input-container(flex="none")
+                label Major
 
-              input(
-                type="number",
-                name="maintenance",
-                ng-model="vm.update.maintenance",
-                required
-              )
+                input(
+                  type="number",
+                  name="major",
+                  ng-model="vm.update.major",
+                  required
+                )
 
-              div(ng-messages="form.version.$error")
-                p(ng-message="required") What's your application version?
-                p(ng-message="mongoose") {{ vm.errors.other }}
+                div(ng-messages="form.version.$error")
+                  p(ng-message="required") What's your application version?
+                  p(ng-message="mongoose") {{ vm.errors.other }}
+
+              md-input-container(flex="none")
+                Label Minor
+
+                input(
+                  type="number",
+                  name="minor",
+                  ng-model="vm.update.minor",
+                  required
+                )
+
+                div(ng-messages="form.version.$error")
+                  p(ng-message="required") What's your application version?
+                  p(ng-message="mongoose") {{ vm.errors.other }}
+
+              md-input-container(flex="none")
+                Label Maintenance
+
+                input(
+                  type="number",
+                  name="maintenance",
+                  ng-model="vm.update.maintenance",
+                  required
+                )
+
+                div(ng-messages="form.version.$error")
+                  p(ng-message="required") What's your application version?
+                  p(ng-message="mongoose") {{ vm.errors.other }}
+
+        md-card-actions
+          md-button.md-primary(type="submit") Update
