@@ -15,17 +15,6 @@ const handleError = (res, statusCode) => {
 };
 
 /**
- * Get list of users
- * restriction: 'admin'
- */
-export const index = (req, res) =>
-  User.find({status: { $ne: 'delete' }}, '-salt -password').exec()
-    .then(users => {
-      res.status(200).json(users);
-    })
-    .catch(handleError(res));
-
-/**
  * Creates a new user
  */
 export const create = (req, res) => {
@@ -58,24 +47,6 @@ export const show = (req, res, next) => {
 };
 
 /**
- * Deletes a user
- * restriction: 'admin'
- */
-export const destroy = (req, res) =>
-  User.findById(req.params.id)
-    .exec()
-    .then(user => {
-      user.status = 'delete';
-      return user.save()
-        .then(() => {
-          res.status(204).end();
-        })
-        .catch(validationError(res));
-    })
-    .catch(handleError(res));
-
-
-/**
  * Change a users password
  */
 export const changePassword = (req, res) => {
@@ -103,23 +74,28 @@ export const changePassword = (req, res) => {
  */
 export const changeProfile = (req, res) => {
   var profile = req.body.profile;
-  var userId = profile._id;
+  var profileId = profile._id;
+  var userId = req.user._id;
 
-  return User.findById(userId).exec()
-    .then(user => {
-      if(user) {
-        user.name = profile.name;
-        user.role = profile.role;
-        user.status = profile.status;
-        return user.save()
-          .then(() => {
-            res.status(204).end();
-          })
-          .catch(validationError(res));
-      } else {
-        return res.status(403).end();
-      }
-    });
+  if(userId == profileId) {
+    return User.findById(profileId).exec()
+      .then(user => {
+        if(user) {
+          user.name = profile.name;
+          user.role = profile.role;
+          user.status = profile.status;
+          return user.save()
+            .then(() => {
+              res.status(204).end();
+            })
+            .catch(validationError(res));
+        } else {
+          return res.status(403).end();
+        }
+      });
+  } else {
+    return res.status(403).end();
+  }
 };
 
 /**

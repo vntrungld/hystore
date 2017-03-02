@@ -10,6 +10,7 @@ import * as auth from './auth/auth.service';
 
 export default function(app) {
   // Insert routes below
+  app.use('/api/admin/users', auth.hasRole('admin'), require('./api/admin/user'));
   app.use('/api/admin/categories', auth.hasRole('admin'), require('./api/admin/category'));
   app.use('/api/admin/applications', auth.hasRole('admin'), require('./api/admin/application'));
   app.use('/api/dev/reviews', auth.hasRole('dev'), require('./api/dev/review'));
