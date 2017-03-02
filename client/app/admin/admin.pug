@@ -1,42 +1,38 @@
-section(
-  flex,
-  layout='row',
-  layout-fill
+md-sidenav.md-sidenav-left(
+  md-component-id='sidenav',
+  md-whiteframe='3',
+  md-is-locked-open="$mdMedia('gt-sm')"
 )
-  md-sidenav.md-sidenav-left(
-    md-component-id='left',
-    md-whiteframe='3',
-  )
-    md-content
-      md-list.np
-        md-toolbar
-          h1.md-toolbar-tools Admin site
-        md-list-item(ui-sref="admin.dashboard")
-          md-icon dashboard
-          p Dashboard
+  md-content
+    md-list.np
+      md-toolbar
+        h1.md-toolbar-tools Admin site
+      md-list-item(ui-sref="admin.dashboard")
+        md-icon dashboard
+        p Dashboard
 
-        md-divider
+      md-divider
 
-        md-list-item(ui-sref="admin.account")
-          md-icon group
-          p Account manager
+      md-list-item(ui-sref="admin.account")
+        md-icon group
+        p Account manager
 
-        md-divider
+      md-divider
 
-        md-list-item(ui-sref="admin.category")
-          md-icon local_offer
-          p Category manager
+      md-list-item(ui-sref="admin.category")
+        md-icon local_offer
+        p Category manager
 
-        md-divider
+      md-divider
 
-        md-list-item(ui-sref="admin.application")
-          md-icon apps
-          p Application manager
+      md-list-item(ui-sref="admin.application")
+        md-icon apps
+        p Application manager
 
-        md-divider
+      md-divider
 
-  md-content(
-    flex,
-    layout="column",
-    ui-view=""
-  )
+md-content(
+  flex,
+  layout="column",
+  ui-view=""
+)
