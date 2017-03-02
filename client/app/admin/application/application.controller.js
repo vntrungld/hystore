@@ -41,11 +41,14 @@ export default class AdminApplicationController {
   }
 
   changeStatus(index) {
-    const self = this; // eslint-disable-line
+    const mdToast = this.mdToast;
 
     this.applications[index].$adminPatch()
       .then(function() {
-        self.mdToast.showSimple('Application changed');
+        mdToast.showSimple('Application changed');
+      })
+      .catch(function(err) {
+        mdToast.showSimple(err.data.message);
       });
   }
 
