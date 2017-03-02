@@ -14,9 +14,6 @@ export default class AdminAccountController {
     }, {
       name: 'Deactive',
       value: 'deactive'
-    }, {
-      name: 'Delete',
-      value: 'delete'
     }
   ];
   roles = [
@@ -39,7 +36,8 @@ export default class AdminAccountController {
   User;
 
   /*@ngInject*/
-  constructor(User) {
+  constructor(User, $mdToast) {
+    this.mdToast = $mdToast;
     // Use the User $resource to fetch all users
     this.users = User.query();
     this.User = User;
@@ -50,7 +48,48 @@ export default class AdminAccountController {
   }
 
   delete(user) {
-    user.$remove();
+    const self = this; // eslint-disable-line
+    user.$remove()
+      .then(function() {
+        self.mdToast.showSimple('User deleted');
+      })
+      .catch(function(err) {
+        self.mdToast.showSimple(`Error: ${err.data.message}`);
+      });
     this.users.splice(this.users.indexOf(user), 1);
+  }
+
+  changeRole(user) {
+    const self = this; // eslint-disable-line
+    const data = [{
+      op: 'replace',
+      path: '/role',
+      value: user.role
+    }];
+
+    this.User.adminPatch({ id: user._id }, data).$promise
+      .then(function() {
+        self.mdToast.showSimple('User role changed');
+      })
+      .catch(function(err) {
+        self.mdToast.showSimple(`Error: ${err.data.message}`);
+      });
+  }
+
+  changeStatus(user) {
+    const self = this; // eslint-disable-line
+    const data = [{
+      op: 'replace',
+      path: '/status',
+      value: user.status
+    }];
+
+    this.User.adminPatch({ id: user._id }, data).$promise
+      .then(function() {
+        self.mdToast.showSimple('User status changed');
+      })
+      .catch(function(err) {
+        self.mdToast.showSimple(`Error: ${err.data.message}`);
+      });
   }
 }

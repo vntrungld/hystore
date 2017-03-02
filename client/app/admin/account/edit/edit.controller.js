@@ -8,27 +8,33 @@ export default class AdminAccountEditController {
   errors = {
     other: undefined
   };
-  message = '';
   Auth;
 
   /*@ngInject*/
-  constructor($state, User, Auth) {
+  constructor($state, User, Auth, $mdToast) {
     this.id = $state.params.id;
+    this.state = $state;
     this.user = User.get({ id: this.id });
+    this.User = User;
     this.Auth = Auth;
+    this.mdToast = $mdToast;
   }
 
   changeUserProfile(form) {
     if(form.$valid) {
-      this.user._id = this.id;
-      this.Auth.changeProfile(this.user)
+      const mdToast = this.mdToast;
+      const state = this.state;
+      this.User.changeProfile({
+        role: 'admin',
+        id: this.id
+      }, this.user).$promise
         .then(() => {
-          this.message = 'Profile successfully changed.';
+          mdToast.showSimple('Profile successfully changed.');
+          state.go('admin.account');
         })
-        .catch(() => {
+        .catch(err => {
           form.name.$setValidity('mongoose', false);
-          this.errors.other = 'Some error';
-          this.message = '';
+          this.errors.other = err.data.message;
         });
     }
   }

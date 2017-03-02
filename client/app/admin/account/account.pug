@@ -69,7 +69,10 @@ div(
             td(md-cell) {{ user.email }}
 
             td(md-cell)
-              md-select(ng-model="user.role")
+              md-select(
+                ng-model="user.role",
+                ng-change="vm.changeRole(user)"
+              )
                 md-option(
                   ng-value="roles.value",
                   ng-repeat="roles in vm.roles"
@@ -77,7 +80,10 @@ div(
                   | {{ roles.name }}
 
             td(md-cell)
-              md-select(ng-model="user.status")
+              md-select(
+                ng-model="user.status",
+                ng-change="vm.changeStatus(user)"
+              )
                 md-option(
                   ng-value="status.value",
                   ng-repeat="status in vm.status"
