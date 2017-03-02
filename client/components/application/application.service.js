@@ -6,11 +6,20 @@ export function ApplicationService(Util, ApplicationResource, Upload) {
   const upload = Upload.upload;
 
   const Application = {
-    upload(application) {
+    create(application) {
       return upload({
         url: 'api/dev/applications/',
-        arrayKey: '',
-        data: application
+        data: application,
+        method: 'POST'
+      });
+    },
+    edit(application) {
+      delete application.$promise;
+      delete application.$resolved;
+      return upload({
+        url: `api/dev/applications/${application.slug}`,
+        data: application,
+        method: 'PUT'
       });
     }
   };

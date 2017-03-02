@@ -3,10 +3,16 @@
 export function ApplicationResource($resource) {
   'ngInject';
 
-  return $resource('api/:role/applications/:slug', {
-    role: '@role',
-    slug: '@slug'
+  return $resource('api/:role/applications/:id', {
+    id: '@_id'
   }, {
+    remove: {
+      method: 'DELETE',
+      params: {
+        id: '@_id',
+        role: 'dev'
+      }
+    },
     upload: {
       method: 'POST',
       params: {
@@ -17,14 +23,14 @@ export function ApplicationResource($resource) {
       method: 'PATCH',
       params: {
         role: 'dev',
-        slug: '@slug'
+        id: '@id'
       }
     },
     adminPatch: {
       method: 'PATCH',
       params: {
         role: 'admin',
-        slug: '@slug'
+        id: '@id'
       }
     }
   });
