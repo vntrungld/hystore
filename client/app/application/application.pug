@@ -5,11 +5,11 @@ div(
   layout-xs="column"
 )
   div(
-    flex-offset-gt-sm="20",
-    flex-gt-sm="50"
+    flex-offset-gt-sm="15",
+    flex-gt-sm="70"
   )
     md-card(ng-if="vm.application")
-      img.hide-gt-sm(
+      img.hide-gt-sm.img-responsive(
         ng-src="{{ vm.application.feature }}",
         alt="{{ vm.application.name }} Feature Image"
       )
@@ -18,7 +18,7 @@ div(
         md-card-title-media.detail-app-icon
           .md-media-lg.hide-sm.hide-xs
             a.full-cover(
-              ui-sref="application({ slug: vm.application.slug })",
+              ui-sref="application({ id: vm.application._id })",
               style="background-image: url('{{ vm.application.icon }}')"
             )
               img.img-semantic(
@@ -28,7 +28,7 @@ div(
 
           .md-media-md.hide-gt-sm.hide-xs
             a.full-cover(
-              ui-sref="application({ slug: vm.application.slug })",
+              ui-sref="application({ id: vm.application._id })",
               style="background-image: url('{{ vm.application.icon }}')"
             )
               img.img-semantic(
@@ -38,7 +38,7 @@ div(
 
           .md-media-sm.hide-gt-xs
             a.full-cover(
-              ui-sref="application({ slug: vm.application.slug })",
+              ui-sref="application({ id: vm.application._id })",
               style="background-image: url('{{ vm.application.icon }}')"
             )
               img.img-semantic(
@@ -49,12 +49,12 @@ div(
         md-card-title-text
           span.md-title {{ vm.application.name }}
           span.md-subhead(layout="row")
-            a(ui-sref="author({ id: vm.application.author.email })") {{ vm.application.author.name || 'Unknown' }}
+            a(ui-sref="main({ author: vm.application.author._id })") {{ vm.application.author.name || 'Unknown' }}
             | &nbsp;
-            a(ui-sref="category({ id: vm.application.category._id })") {{ vm.application.category.name || 'Unknown' }}
+            a(ui-sref="main({ category: vm.application.category._id })") {{ vm.application.category.name || 'Unknown' }}
 
       md-card-action(ng-if="vm.isLoggedIn()")
-        md-button.md-raised.md-primary Install
+        md-button.md-raised.md-primary(style="margin-left: 16px") Install
 
       md-card-content
         div.carousel-wrapper
@@ -85,13 +85,15 @@ div(
                 | Write Review
 
           div(
-            layout="row",
+            layout="column",
+            layout-gt-xs="row",
             layout-padding
           )
             .score-container(
+              flex,
               flex-gt-xs="33",
-              flex-xs="50",
-              layout="column"
+              layout-gt-xs="column",
+              layout-align="center center"
             )
               .score.md-display-3 {{ vm.getAverageStar() }}
               .reviews-stats.md-title
@@ -139,18 +141,43 @@ div(
 
           p {{ vm.application.whatsnew }}
 
-  div(flex)
-    md-card(ng-repeat="similarApp in vm.similarApps")
-      md-card-title
-        md-card-title-media.detail-app-icon
-          .md-media-lg
-            a.full-cover(ui-sref="application({ slug: similarApp.slug })")
-              img(
-                ng-src="{{ similarApp.icon }}",
-                alt="{{ similarApp.name }}"
-              )
+    div(
+      flex,
+      layout="column",
+      ng-if="vm.similarApps"
+    )
+      div(layout="row")
+        h2.md-headline(
+          flex,
+          layout-margin
+        )
+          | Similar
 
-        md-card-title-text.text-overflow
-          a.md-headline(ui-sref="application({ slug: similarApp.slug })") {{ similarApp.name || 'Unknown' }}
-          a.md-subhead(ui-sref="author({ id: similarApp.author._id })") {{ similarApp.author.name || 'Unknown' }}
-          p.md-body-1 Lorem ipsum dolor sit amet
+      div(
+        flex,
+        layout="row"
+      )
+        md-card(
+          ng-repeat="similarApp in vm.similarApps",
+          flex-xs="45",
+          flex-gt-xs="20",
+          flex-gt-sm="15",
+          flex="10",
+          layout-gt-sm="column",
+          layout-padding
+        )
+          md-card-content
+            .md-media-md.card-media
+              a.full-cover(
+                ui-sref="application({ id: similarApp._id })",
+                style="background-image: url('{{ similarApp.icon }}')"
+              )
+                img.img-responsive(
+                  ng-src="{{ similarApp.icon }}",
+                  alt="{{ similarApp.name }}"
+                )
+
+          md-card-title
+            md-card-title-text.text-overflow
+              a.md-title(ui-sref="application({ id: similarApp._id })") {{ similarApp.name }}
+              a.md-subhead.np(ui-sref="main({ author: similarApp.author._id })") {{ similarApp.author.name }}

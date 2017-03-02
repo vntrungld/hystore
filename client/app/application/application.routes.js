@@ -5,7 +5,7 @@ export default function routes($stateProvider) {
 
   $stateProvider
     .state('application', {
-      url: '/application/:slug',
-      template: '<application></application>'
+      url: '/application/:id',
+      template: '<application flex layout="row"></application>'
     });
 }

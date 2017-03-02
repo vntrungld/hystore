@@ -18,21 +18,21 @@ export default class ApplicationComponent {
   constructor($state, ApplicationResource, CategoryResource, Auth, $mdDialog, ReviewResource, Review, $mdToast) {
     this.starClasses = ['one', 'two', 'three', 'four', 'five'];
 
-    ApplicationResource.get({ slug: $state.params.slug }).$promise.then(app => {
+    ApplicationResource.get($state.params).$promise.then(app => {
       this.application = app;
       this.isLoggedIn = Auth.isLoggedInSync; // eslint-disable-line
       this.mdDialog = $mdDialog;
       this.ReviewResource = ReviewResource;
       this.ReviewService = Review;
-      this.reviews = ReviewResource.query({ application: $state.params.slug });
+      this.reviews = ReviewResource.query({ application: $state.params.id });
       this.mdToast = $mdToast;
       this.review = {
-        for: app.slug,
+        for: app._id,
         star: 1,
         content: '',
       };
 
-      this.similarApps = ApplicationResource.query({ category: app.category.slug });
+      this.similarApps = ApplicationResource.query({ category: app.category._id });
     });
   }
 
