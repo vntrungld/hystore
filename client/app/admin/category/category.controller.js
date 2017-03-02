@@ -11,9 +11,6 @@ export default class AdminCategoryController {
     }, {
       name: 'Deactive',
       value: 'deactive'
-    }, {
-      name: 'Delete',
-      value: 'delete'
     }
   ];
   query = {
@@ -24,10 +21,11 @@ export default class AdminCategoryController {
   CategoryResource;
 
   /*@ngInject*/
-  constructor(CategoryResource) {
+  constructor(CategoryResource, $mdToast) {
     // Use the User $resource to fetch all users
     this.categories = CategoryResource.query();
     this.CategoryResource = CategoryResource;
+    this.mdToast = $mdToast;
   }
 
   reload() {
@@ -35,7 +33,49 @@ export default class AdminCategoryController {
   }
 
   delete(category) {
-    category.$remove();
+    const mdToast = this.mdToast;
+
+    category.$remove()
+      .then(function() {
+        mdToast.showSimple('Category deleted');
+      })
+      .catch(function(err) {
+        mdToast.showSimple(err.data.message);
+      });
     this.categories.splice(this.categories.indexOf(category), 1);
+  }
+
+  changeStatus(category) {
+    const mdToast = this.mdToast;
+    const data = [{
+      op: 'replace',
+      path: '/status',
+      value: category.status
+    }];
+
+    this.CategoryResource.adminPatch({ id: category._id }, data).$promise
+      .then(function() {
+        mdToast.showSimple('Category status changed');
+      })
+      .catch(function(err) {
+        mdToast.showSimple(`Error: ${err.data.message}`);
+      });
+  }
+
+  changeParent(category) {
+    const mdToast = this.mdToast;
+    const data = [{
+      op: 'replace',
+      path: '/parent',
+      value: category.parent
+    }];
+
+    this.CategoryResource.adminPatch({ id: category._id }, data).$promise
+      .then(function() {
+        mdToast.showSimple('Category parent changed');
+      })
+      .catch(function(err) {
+        mdToast.showSimple(`Error: ${err.data.message}`);
+      });
   }
 }

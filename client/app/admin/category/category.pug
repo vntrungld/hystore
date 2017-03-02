@@ -33,12 +33,6 @@ div(
             )
               span Name
 
-            th(
-              md-column,
-              md-order-by="slug"
-            )
-              span Slug
-
             th(md-column)
               span Infomation
 
@@ -66,12 +60,13 @@ div(
           )
             td(md-cell) {{ category.name }}
 
-            td(md-cell) {{ category.slug }}
-
             td(md-cell) {{ category.info }}
 
             td(md-cell)
-              md-select(ng-model="category.parent._id")
+              md-select(
+                ng-model="category.parent._id",
+                ng-change="vm.changeParent(category)"
+              )
                 md-option(
                   ng-value="parent._id",
                   ng-repeat="parent in vm.categories"
@@ -79,7 +74,10 @@ div(
                   | {{ parent.name }}
 
             td(md-cell)
-              md-select(ng-model="category.status")
+              md-select(
+                ng-model="category.status",
+                ng-change="vm.changeStatus(category)"
+              )
                 md-option(
                   ng-value="status.value",
                   ng-repeat="status in vm.status"
@@ -87,7 +85,7 @@ div(
                   | {{ status.name }}
 
             td(md-cell)
-              span.md-button.md-icon-button(ui-sref="admin.categoryEdit({ slug: category._id })")
+              span.md-button.md-icon-button(ui-sref="admin.categoryEdit({ id: category._id })")
                 md-icon mode_edit
 
               span.md-button.md-icon-button(ng-click="vm.delete(category)")

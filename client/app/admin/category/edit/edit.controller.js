@@ -1,4 +1,5 @@
 'use strict';
+/* eslint prefer-reflect: 0 */
 
 export default class AdminCategoryEditController {
   categories = [];
@@ -9,37 +10,40 @@ export default class AdminCategoryEditController {
     other: undefined
   };
   message = '';
-  slug = '';
   isEdit = true;
   state;
   Category;
 
   /*@ngInject*/
-  constructor($state, CategoryResource, Category) {
+  constructor($state, CategoryResource, Category, $mdToast) {
     this.Category = Category;
     this.state = $state;
-    this.slug = $state.params.slug;
+    this.id = $state.params.id;
+    this.mdToast = $mdToast;
 
     this.categories = CategoryResource.query();
 
-    if(this.slug === '') {
+    if(this.id === '') {
       this.isEdit = false;
     }
 
     if(this.isEdit) {
-      this.category = CategoryResource.get({ slug: this.slug });
+      this.category = CategoryResource.get($state.params);
     }
   }
 
   createCategory(form) {
+    const mdToast = this.mdToast;
+    const state = this.state;
     this.Category
       .createCategory(this.category)
       .then(() => {
-        this.state.go('admin.category');
+        mdToast.showSimple('New category created');
+        state.go('admin.category');
       })
-      .catch(() => {
+      .catch(err => {
         form.name.$setValidity('mongoose', false);
-        this.errors.other = 'Some error';
+        this.errors.other = err.data.message;
         this.message = '';
       });
   }
@@ -47,14 +51,18 @@ export default class AdminCategoryEditController {
   changeCategoryContent(form) {
     delete this.category.createdAt;
     delete this.category.updatedAt;
+    const mdToast = this.mdToast;
+    const state = this.state;
+
     this.Category
       .changeCategoryContent(this.category)
       .then(() => {
-        this.state.go('admin.category');
+        mdToast.showSimple('Category changed');
+        state.go('admin.category');
       })
-      .catch(() => {
+      .catch(err => {
         form.name.$setValidity('mongoose', false);
-        this.errors.other = 'Some error';
+        this.errors.other = err.data.message;
         this.message = '';
       });
   }
