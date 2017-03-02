@@ -1,7 +1,7 @@
 'use strict';
 
 import angular from 'angular';
-// import ngAnimate from 'angular-animate';
+import ngAnimate from 'angular-animate';
 import ngCookies from 'angular-cookies';
 import ngResource from 'angular-resource';
 import ngSanitize from 'angular-sanitize';
@@ -15,6 +15,8 @@ import 'angular-carousel';
 import 'angular-touch';
 import 'trix';
 import 'angular-trix';
+import angularLoadingBar from 'angular-loading-bar';
+import 'ng-img-crop/compile/minified/ng-img-crop';
 
 // import ngValidationMatch from 'angular-validation-match';
 
@@ -39,6 +41,7 @@ import './app.scss';
 
 
 angular.module('hystoreApp', [
+  ngAnimate,
   ngCookies,
   ngResource,
   ngSanitize,
@@ -63,6 +66,8 @@ angular.module('hystoreApp', [
   review,
   angularMoment,
   'angularTrix',
+  angularLoadingBar,
+  'ngImgCrop'
 ])
   .config(routeConfig)
   .config(['$mdAriaProvider', ariaConfig])
