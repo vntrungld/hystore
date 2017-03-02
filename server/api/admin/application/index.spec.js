@@ -37,18 +37,18 @@ describe('Application Admin API Router:', function() {
     });
   });
 
-  describe('GET /api/admin/applications/:slug', function() {
+  describe('GET /api/admin/applications/:id', function() {
     it('should route to application.controller.show', function() {
       routerStub.get
-        .withArgs('/:slug', 'applicationCtrl.show')
+        .withArgs('/:id', 'applicationCtrl.show')
         .should.have.been.calledOnce;
     });
   });
 
-  describe('PATCH /api/admin/applications/:slug', function() {
+  describe('PATCH /api/admin/applications/:id', function() {
     it('should route to application.controller.patch', function() {
       routerStub.patch
-        .withArgs('/:slug', 'applicationCtrl.patch')
+        .withArgs('/:id', 'applicationCtrl.patch')
         .should.have.been.calledOnce;
     });
   });

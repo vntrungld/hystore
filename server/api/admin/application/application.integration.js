@@ -32,7 +32,6 @@ describe('Application Admin API:', function() {
         return Category.remove().then(function() {
           category = new Category({
             name: 'Fake Category',
-            slug: 'fake-category',
             info: 'This is fake category'
           });
 
@@ -44,7 +43,6 @@ describe('Application Admin API:', function() {
           fakeApp = new Application({
             author: user._id,
             name: 'Fake Application',
-            slug: 'fake-application',
             icon: 'fake-icon.png',
             feature: 'fake-feature.jpg',
             screenshots: [
@@ -121,12 +119,12 @@ describe('Application Admin API:', function() {
     });
   });
 
-  describe('GET /api/admin/applications/:slug', function() {
+  describe('GET /api/admin/applications/:id', function() {
     var application;
 
     beforeEach(function(done) {
       request(app)
-        .get(`/api/admin/applications/${fakeApp.slug}`)
+        .get(`/api/admin/applications/${fakeApp._id}`)
         .set('authorization', `Bearer ${token}`)
         .expect(200)
         .expect('Content-Type', /json/)
@@ -145,16 +143,15 @@ describe('Application Admin API:', function() {
 
     it('should respond with the requested application', function() {
       application.name.should.equal('Fake Application');
-      application.slug.should.equal('fake-application');
     });
   });
 
-  describe('PATCH /api/admin/applications/:slug', function() {
+  describe('PATCH /api/admin/applications/:id', function() {
     var patchedApplication;
 
     beforeEach(function(done) {
       request(app)
-        .patch(`/api/admin/applications/${fakeApp.slug}`)
+        .patch(`/api/admin/applications/${fakeApp._id}`)
         .set('authorization', `Bearer ${token}`)
         .send({ status: 'block' })
         .expect(200)

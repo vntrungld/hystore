@@ -6,7 +6,7 @@ var controller = require('./application.controller');
 var router = express.Router();
 
 router.get('/', controller.index);
-router.get('/:slug', controller.show);
-router.patch('/:slug', controller.patch);
+router.get('/:id', controller.show);
+router.patch('/:id', controller.patch);
 
 module.exports = router;

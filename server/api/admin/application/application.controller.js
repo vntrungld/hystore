@@ -30,7 +30,6 @@ function patchUpdates(patches) {
         select: 'email name'
       }, {
         path: 'category',
-        select: 'slug name'
       }
     ];
 
@@ -81,7 +80,7 @@ export function index(req, res) {
 
 // Gets a single Application from the DB
 export function show(req, res) {
-  return Application.findOne({ slug: req.params.slug }).exec()
+  return Application.findById(req.params.id).exec()
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))
     .catch(handleError(res));
@@ -93,7 +92,7 @@ export function patch(req, res) {
     if(req.body._id) {
       delete req.body._id; // eslint-disable-line
     }
-    return Application.findOne({ slug: req.params.slug }).exec()
+    return Application.findById(req.params.id).exec()
       .then(handleEntityNotFound(res))
       .then(patchUpdates(req.body))
       .then(respondWithResult(res))
