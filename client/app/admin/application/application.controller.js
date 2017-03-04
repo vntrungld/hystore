@@ -55,4 +55,10 @@ export default class AdminApplicationController {
   reload() {
     this.applications = this.ApplicationResource.query({ role: 'admin' });
   }
+
+  getVersionText(application) {
+    const curVer = application.versions[application.currentVersionIndex];
+
+    return `${curVer.major}.${curVer.minor}.${curVer.maintenance}`;
+  }
 }

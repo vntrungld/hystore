@@ -65,7 +65,7 @@ div(
 
             td(md-cell) {{ application.name }}
 
-            td(md-cell) {{ application.version }}
+            td(md-cell) {{ vm.getVersionText(application) }}
 
             td(md-cell)
               md-select(
