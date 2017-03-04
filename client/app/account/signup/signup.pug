@@ -1,26 +1,26 @@
 div(
   flex,
   layout="row",
-  layout-align="center start"
+  layout-align="center center"
 )
   div(
-    flex-lg="25",
-    flex-md="33",
+    flex,
     flex-sm="50",
-    flex-xs="100",
+    flex-md="33",
+    flex-lg="25",
     layout="column"
   )
-    h1.md-display-1.text-center Sign up
 
     md-card
-      md-card-content
-        form(
-          name="form",
-          ng-submit="vm.register(form)",
-          novalidate,
-          flex,
-          layout="column"
-        )
+      md-card-header
+        md-card-header-text
+          span.md-title.text-center Sign up
+      form(
+        name="form",
+        ng-submit="vm.register(form)",
+        novalidate,
+      )
+        md-card-content(layout="column")
           md-input-container
             label Name
 
@@ -82,6 +82,6 @@ div(
             div(ng-messages="form.confirmPassword.$error")
               p(ng-message="match") Passwords must match.
 
-          md-card-actions
-            button.md-button.md-primary(type="submit") Sign up
-            a.md-button(ui-sref="login") Login
+        md-card-actions
+          button.md-button.md-primary(type="submit") Sign up
+          a.md-button(ui-sref="login") Login
