@@ -1,75 +1,76 @@
 div(
   flex,
-  layout="column",
-  layout-padding
+  layout="column"
 )
-  h1.md-display-1 Edit user
+  md-card(flex="none")
+    md-card-header
+      md-card-header-text
+        span.md-title Edit user
 
-  form(
-    name='form',
-    ng-submit='vm.changeUserProfile(form)',
-    novalidate=''
-    flex,
-    layout="column"
-  )
-    md-input-container
-      label Name
+    form(
+      name='form',
+      ng-submit='vm.changeUserProfile(form)',
+      novalidate=''
+    )
+      md-card-content(layout="column")
+        md-input-container
+          label Name
 
-      input(
-        type='text',
-        name='name',
-        ng-model='vm.user.name'
-      )
+          input(
+            type='text',
+            name='name',
+            ng-model='vm.user.name'
+          )
 
-      div(ng-messages='form.name.$error')
-        p(ng-message="mongoose") {{ vm.errors.other }}
+          div(ng-messages='form.name.$error')
+            p(ng-message="mongoose") {{ vm.errors.other }}
 
-    md-input-container
-      Label Email
+        md-input-container
+          Label Email
 
-      input(
-        type="text",
-        name="email",
-        ng-model="vm.user.email",
-        disabled
-      )
+          input(
+            type="text",
+            name="email",
+            ng-model="vm.user.email",
+            disabled
+          )
 
-      div(ng-messages="form.email.$error")
-        p(ng-message="mongoose") {{ vm.errors.other }}
+          div(ng-messages="form.email.$error")
+            p(ng-message="mongoose") {{ vm.errors.other }}
 
-    md-input-container
-      label Role
+        md-input-container
+          label Role
 
-      md-select(
-        name='role',
-        ng-model="vm.user.role",
-        required
-      )
-        md-option(
-          ng-repeat="option in vm.options.role",
-          value="{{ option }}"
-        ) {{ option }}
+          md-select(
+            name='role',
+            ng-model="vm.user.role",
+            required
+          )
+            md-option(
+              ng-repeat="option in vm.options.role",
+              value="{{ option }}"
+            ) {{ option }}
 
-      div(ng-messages='form.role.$error')
-        p(ng-message="required") Please select role
-        p(ng-message="mongoose") {{ vm.errors.other }}
+          div(ng-messages='form.role.$error')
+            p(ng-message="required") Please select role
+            p(ng-message="mongoose") {{ vm.errors.other }}
 
-    md-input-container
-      label Status
+        md-input-container
+          label Status
 
-      md-select(
-        name='status',
-        ng-model="vm.user.status",
-        required
-      )
-        md-option(
-          ng-repeat="option in vm.options.status",
-          value="{{ option }}"
-        ) {{ option }}
+          md-select(
+            name='status',
+            ng-model="vm.user.status",
+            required
+          )
+            md-option(
+              ng-repeat="option in vm.options.status",
+              value="{{ option }}"
+            ) {{ option }}
 
-      div(ng-messages='form.status.$error')
-        p(ng-message="required") Please select role
-        p(ng-message="mongoose") {{ vm.errors.other }}
+          div(ng-messages='form.status.$error')
+            p(ng-message="required") Please select role
+            p(ng-message="mongoose") {{ vm.errors.other }}
 
-    div
-      button.md-button.md-primary(type="submit") Save changes
+      md-card-actions
+        button.md-button.md-primary(type="submit") Save changes
