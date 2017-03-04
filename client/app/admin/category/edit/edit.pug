@@ -1,72 +1,73 @@
 div(
   flex,
   layout="column",
-  layout-padding
 )
-  h1.md-display-1 {{ vm.isEdit ? 'Edit' : 'Create' }} category
+  md-card(flex="none")
+    md-card-header
+      md-card-header-text
+        span.md-title {{ vm.isEdit ? 'Edit' : 'Create' }} category
 
-  form(
-    name='form',
-    ng-submit='vm.saveCategory(form)',
-    novalidate=''
-    flex,
-    layout="column"
-  )
-    md-input-container
-      label Name
+    form(
+      name='form',
+      ng-submit='vm.saveCategory(form)',
+      novalidate=''
+    )
+      md-card-content(layout="column")
+        md-input-container
+          label Name
 
-      input(
-        type='text',
-        name='name',
-        ng-model='vm.category.name',
-        required
-      )
+          input(
+            type='text',
+            name='name',
+            ng-model='vm.category.name',
+            required
+          )
 
-      div(ng-messages='form.name.$error')
-        p(ng-message="required") What's your category name?
-        p(ng-message="mongoose") {{ vm.errors.other }}
+          div(ng-messages='form.name.$error')
+            p(ng-message="required") What's your category name?
+            p(ng-message="mongoose") {{ vm.errors.other }}
 
-    md-input-container
-      label Info
+        md-input-container
+          label Info
 
-      input(
-        type='text',
-        name='info',
-        ng-model='vm.category.info'
-      )
+          input(
+            type='text',
+            name='info',
+            ng-model='vm.category.info'
+          )
 
-      div(ng-messages='form.info.$error')
-        p(ng-message="mongoose") {{ vm.errors.other }}
+          div(ng-messages='form.info.$error')
+            p(ng-message="mongoose") {{ vm.errors.other }}
 
-    md-input-container
-      label Status
+        md-input-container
+          label Status
 
-      md-select(
-        name='status',
-        ng-model="vm.category.status",
-        required
-      )
-        md-option(
-          ng-repeat="option in vm.options.status",
-          value="{{ option }}"
-        ) {{ option }}
+          md-select(
+            name='status',
+            ng-model="vm.category.status",
+            required
+          )
+            md-option(
+              ng-repeat="option in vm.options.status",
+              value="{{ option }}"
+            ) {{ option }}
 
-    md-input-container
-      label Parent
+        md-input-container
+          label Parent
 
-      md-select(
-        name="parent",
-        ng-model="vm.category.parent",
-      )
-        md-option(
-          ng-repeat="parent in vm.categories",
-          value="{{ parent._id }}"
-        )
-          | {{ parent.name }}
+          md-select(
+            name="parent",
+            ng-model="vm.category.parent",
+          )
+            md-option(
+              ng-repeat="parent in vm.categories",
+              value="{{ parent._id }}"
+            )
+              | {{ parent.name }}
 
-      div(ng-messages='form.status.$error')
-        p(ng-message="required") Please select role
-        p(ng-message="mongoose") {{ vm.errors.other }}
+          div(ng-messages='form.status.$error')
+            p(ng-message="required") Please select role
+            p(ng-message="mongoose") {{ vm.errors.other }}
 
-    div
-      button.md-button.md-primary(type="submit") {{ vm.isEdit ? 'Save change' : 'Create' }}
+      md-card-actions
+        button.md-button.md-primary(type="submit") {{ vm.isEdit ? 'Save change' : 'Create' }}

@@ -67,7 +67,7 @@ export default class AdminCategoryController {
     const data = [{
       op: 'replace',
       path: '/parent',
-      value: category.parent
+      value: category.parent._id
     }];
 
     this.CategoryResource.adminPatch({ id: category._id }, data).$promise
