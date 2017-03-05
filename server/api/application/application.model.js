@@ -116,7 +116,8 @@ ApplicationSchema
       major: currentVersion.major,
       minor: currentVersion.minor,
       maintenance: currentVersion.maintenance,
-      archive: currentVersion.archive
+      archive: currentVersion.archive,
+      whatsnew: currentVersion.whatsnew
     };
   });
 
