@@ -8,7 +8,8 @@ div(
         span.md-title {{ vm.isEdit ? 'Edit' : 'Add' }} Application
     form(
       name="form",
-      ng-submit="vm.saveApplication(form)"
+      ng-submit="vm.saveApplication(form)",
+      novalidate
     )
       md-card-content
         md-input-container.md-block
@@ -52,8 +53,8 @@ div(
             flex="none",
             layout="row"
           )
-            input(
-              type="hidden",
+            input.ng-hide(
+              type="file",
               ng-model="vm.application.icon",
               name="icon",
               required
@@ -136,7 +137,7 @@ div(
               type="file",
               id="screenshots",
               ngf-select,
-              multiple,
+              ngf-multiple="true",
               ng-model="vm.application.screenshots",
               name="screenshots",
               required,

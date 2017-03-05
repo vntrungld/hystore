@@ -35,12 +35,12 @@ export default class DevApplicationEditController {
     }
 
     if(this.isEdit) {
-      let self = this;
+      let that = this;
       ApplicationResource.get({
         role: 'dev',
-        id: this.id
+        id: that.id
       }).$promise.then(function(app) {
-        self.application = app;
+        that.application = app;
       });
     }
   }
@@ -66,24 +66,23 @@ export default class DevApplicationEditController {
   }
 
   saveApplication(form) {
-    console.log(this.application);
     if(form.$valid) {
-      const self = this;
+      const mdToast = this.mdToast;
       if(!this.isEdit) {
         this.applicationService.create(this.application)
           .then(function() {
-            self.mdToast.showSimple('Application created');
+            mdToast.showSimple('Application created');
           })
           .catch(function(err) {
-            self.mdToast.showSimple('Fail to create application');
+            mdToast.showSimple(`Error: ${err}`);
           });
       } else {
         this.applicationService.edit(this.application)
           .then(function() {
-            self.mdToast.showSimple('Application saved');
+            mdToast.showSimple('Application saved');
           })
           .catch(function(err) {
-            self.mdToast.showSimple('Fail to save application');
+            mdToast.showSimple(`Error: ${err}`);
           });
       }
     }
