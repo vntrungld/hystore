@@ -3,8 +3,6 @@
 var proxyquire = require('proxyquire').noPreserveCache();
 
 var userCtrlStub = {
-  index: 'userCtrl.index',
-  destroy: 'userCtrl.destroy',
   me: 'userCtrl.me',
   changePassword: 'userCtrl.changePassword',
   show: 'userCtrl.show',
@@ -41,22 +39,6 @@ var userIndex = proxyquire('./index', {
 describe('User API Router:', function() {
   it('should return an express router instance', function() {
     userIndex.should.equal(routerStub);
-  });
-
-  describe('GET /api/users', function() {
-    it('should verify admin role and route to user.controller.index', function() {
-      routerStub.get
-        .withArgs('/', 'authService.hasRole.admin', 'userCtrl.index')
-        .should.have.been.calledOnce;
-    });
-  });
-
-  describe('DELETE /api/users/:id', function() {
-    it('should verify admin role and route to user.controller.destroy', function() {
-      routerStub.delete
-        .withArgs('/:id', 'authService.hasRole.admin', 'userCtrl.destroy')
-        .should.have.been.calledOnce;
-    });
   });
 
   describe('GET /api/users/me', function() {
