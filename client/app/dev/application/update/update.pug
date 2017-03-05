@@ -11,24 +11,24 @@ div(
         name="form",
         ng-submit="vm.updateApplication(form)"
       )
-
         md-card-content
           .input-wrapper(
             flex="none",
             layout="row"
           )
-            .input-and-label
-              label(flex="20") Choose an archive file
+            input.ng-hide(
+              type="file",
+              id="archive",
+              ngf-select,
+              ng-model="vm.update.archive",
+              name="archive",
+              required,
+              flex
+            )
 
-              input(
-                type="file",
-                ngf-select,
-                ng-model="vm.update.archive",
-                name="archive",
-                required,
-                ngf-model-invalid="errorFile",
-                flex
-              )
+            label.md-button.md-raised.md-primary(for="archive") Select zip
+
+            p {{ vm.update.archive.name || 'No file chosen' }}
 
           .md-block
             label What's new
