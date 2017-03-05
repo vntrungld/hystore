@@ -72,6 +72,15 @@ div(
 
         md-divider
 
+        div(ng-if="vm.application.whatsnew")
+          md-card-title
+            md-card-title-text
+              h2.md-title What's New
+
+          div(ng-bind-html="vm.application.whatsnew")
+
+        md-divider(ng-if="vm.application.whatsnew")
+
         div
           md-card-title
             md-card-title-text(layout="row")
@@ -132,14 +141,6 @@ div(
                   md-icon(ng-repeat="star in vm.getRepeatTime(5 - review.star) track by $index") star_border
                 p.md-body-1 {{ review.content }}
 
-        md-divider(ng-if="vm.application.whatsnew")
-
-        div(ng-if="vm.application.whatsnew")
-          md-card-title
-            md-card-title-text
-              h2.md-title What's New
-
-          p {{ vm.application.whatsnew }}
 
     div(
       flex,
