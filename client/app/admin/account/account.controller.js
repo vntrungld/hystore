@@ -48,19 +48,19 @@ export default class AdminAccountController {
   }
 
   delete(user) {
-    const self = this; // eslint-disable-line
+    const mdToast = this.mdToast;
     user.$remove()
       .then(function() {
-        self.mdToast.showSimple('User deleted');
+        mdToast.showSimple('User deleted');
       })
       .catch(function(err) {
-        self.mdToast.showSimple(`Error: ${err.data.message}`);
+        mdToast.showSimple(`Error: ${err.data.message}`);
       });
     this.users.splice(this.users.indexOf(user), 1);
   }
 
   changeRole(user) {
-    const self = this; // eslint-disable-line
+    const mdToast = this.mdToast;
     const data = [{
       op: 'replace',
       path: '/role',
@@ -69,15 +69,15 @@ export default class AdminAccountController {
 
     this.User.adminPatch({ id: user._id }, data).$promise
       .then(function() {
-        self.mdToast.showSimple('User role changed');
+        mdToast.showSimple('User role changed');
       })
       .catch(function(err) {
-        self.mdToast.showSimple(`Error: ${err.data.message}`);
+        mdToast.showSimple(`Error: ${err.data.message}`);
       });
   }
 
   changeStatus(user) {
-    const self = this; // eslint-disable-line
+    const mdToast = this.mdToast;
     const data = [{
       op: 'replace',
       path: '/status',
@@ -86,10 +86,10 @@ export default class AdminAccountController {
 
     this.User.adminPatch({ id: user._id }, data).$promise
       .then(function() {
-        self.mdToast.showSimple('User status changed');
+        mdToast.showSimple('User status changed');
       })
       .catch(function(err) {
-        self.mdToast.showSimple(`Error: ${err.data.message}`);
+        mdToast.showSimple(`Error: ${err.data.message}`);
       });
   }
 }
