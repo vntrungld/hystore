@@ -16,7 +16,7 @@ import Application from '../../application/application.model';
 import mime from 'mime';
 import AWS from 'aws-sdk';
 import multer from 'multer';
-import { slugify } from '../../../utilities';
+import { slugify, randomString } from '../../../utilities';
 
 const Promise = require('bluebird');
 
@@ -34,7 +34,7 @@ const storage = multer.diskStorage({
     return callback(null, path);
   },
   filename(request, file, callback) {
-    return callback(null, `${file.fieldname}-${Date.now()}.${mime.extension(file.mimetype)}`);
+    return callback(null, `${file.fieldname}-${randomString()}.${mime.extension(file.mimetype)}`);
   }
 });
 const uploadFields = multer({ storage }).fields(uploadConfig);
@@ -110,16 +110,11 @@ function removeTemp(files) {
 
 function isMatchIndexHTML(str) {
   const regx = /^(\w+\/)*index\.html$/g;
-  return regx.test(str);
+  return regx.test(str.entryName);
 }
 
 function isEntriesHaveIndexHTML(entries) {
-  for(let i = 0; i < entries.length; i++) {
-    if(isMatchIndexHTML(entries[i].entryName)) {
-      return true;
-    }
-  }
-  return false;
+  return entries.some(isMatchIndexHTML);
 }
 
 function uploadSingleFileToS3(prefix, file) {
@@ -186,23 +181,24 @@ export function storeToHardDisk(req, res, next) {
 
 export function fileValidate(req, res, next) {
   console.log('file validate');
-  if(req.body._id) {
-    const archivePath = `${path}${req.files.archive[0].filename}`;
+
+  if(req.files && req.files.archive) {
+    const archivePath = `${req.files.archive[0].path}`;
     const zip = new AdmZip(archivePath);
     let zipEntries = zip.getEntries();
 
     if(isEntriesHaveIndexHTML(zipEntries)) {
       return next();
-    } else {
-      removeTemp(req.files)
-        .catch(function(err) {
-          console.log(err);
-        });
-      return res.status(400).end();
     }
-  } else {
-    return next();
+
+    removeTemp(req.files)
+      .catch(function(err) {
+        console.log(err);
+      });
+    return res.status(400).end();
   }
+
+  return next();
 }
 
 export function getSlug(req, res, next) {
@@ -260,17 +256,18 @@ export function show(req, res) {
 // Creates a new Application in the DB
 export function create(req, res) {
   console.log('create app in db');
+  console.log(req.files);
   const data = {
     author: req.user._id,
     name: req.body.name,
-    icon: req.files.icon[0],
-    feature: req.files.feature[0],
+    icon: req.files.icon,
+    feature: req.files.feature,
     screenshots: req.files.screenshots,
     versions: [{
       major: req.body.major,
       minor: req.body.minor,
       maintenance: req.body.maintenance,
-      archive: req.files.archive[0]
+      archive: req.files.archive
     }],
     description: req.body.description,
     category: req.body.category
@@ -327,8 +324,9 @@ export function patch(req, res) {
     delete req.body._id; // eslint-disable-line
   }
 
-  if(files) {
+  if(files && files.archive) {
     req.body[0].value.archive = files.archive[0];
+    req.body = req.body[0];
   }
 
   return Application.findById(req.params.id).exec()
