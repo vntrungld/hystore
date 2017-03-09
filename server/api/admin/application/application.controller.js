@@ -40,17 +40,6 @@ function patchUpdates(patches) {
   };
 }
 
-function removeEntity(res) {
-  return function(entity) {
-    if(entity) {
-      return entity.remove()
-        .then(() => {
-          res.status(204).end();
-        });
-    }
-  };
-}
-
 function handleEntityNotFound(res) {
   return function(entity) {
     if(!entity) {
@@ -100,12 +89,4 @@ export function patch(req, res) {
   } else {
     return res.status(500).end('You can change only the status');
   }
-}
-
-// Deletes a Application from the DB
-export function destroy(req, res) {
-  return Application.findById(req.params.id).exec()
-    .then(handleEntityNotFound(res))
-    .then(removeEntity(res))
-    .catch(handleError(res));
 }
