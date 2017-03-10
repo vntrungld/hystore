@@ -105,6 +105,7 @@ ApplicationSchema
     };
 
     return {
+      _id: this._id,
       author,
       name: this.name,
       icon: this.icon,
