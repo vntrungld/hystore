@@ -580,6 +580,12 @@ gulp.task('buildcontrol:heroku', function(done) {
         function() {done();}
     );
 });
+gulp.task('heroku', cb => {
+    runSequence(
+        'build',
+        'buildcontrol:heroku',
+        cb);
+});
 gulp.task('buildcontrol:openshift', function(done) {
     grunt.tasks(
         ['buildcontrol:openshift'],    //you can add more grunt tasks in this array
