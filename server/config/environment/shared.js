@@ -2,5 +2,6 @@
 
 exports = module.exports = {
   // List of user roles
-  userRoles: ['user', 'dev', 'admin']
+  userRoles: ['user', 'dev', 'admin'],
+  cordovaApiUrl: ''
 };

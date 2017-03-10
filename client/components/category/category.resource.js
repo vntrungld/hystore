@@ -1,9 +1,9 @@
 'use strict';
 
-export function CategoryResource($resource) {
+export function CategoryResource($resource, appConfig) {
   'ngInject';
 
-  return $resource('api/:role/categories/:id/:controller', {
+  return $resource(`${appConfig.cordovaApiUrl}/api/:role/categories/:id/:controller`, {
     id: '@_id'
   }, {
     save: {

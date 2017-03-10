@@ -1,9 +1,9 @@
 'use strict';
 
-export function ReviewResource($resource) {
+export function ReviewResource($resource, appConfig) {
   'ngInject';
 
-  return $resource('api/:role/reviews/:id', {
+  return $resource(`${appConfig.cordovaApiUrl}/api/:role/reviews/:id`, {
     id: '@_id'
   }, {
     devPatch: {

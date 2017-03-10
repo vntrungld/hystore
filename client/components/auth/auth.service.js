@@ -13,7 +13,7 @@ class _User {
   $promise = undefined;
 }
 
-export function AuthService($location, $http, $cookies, $q, appConfig, Util, User) {
+export function AuthService($location, $http, $cookies, $q, appConfig, Util, User, $window) {
   'ngInject';
 
   var safeCb = Util.safeCb;
@@ -44,12 +44,13 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
       email,
       password
     }, callback ? : Function) {
-      return $http.post('/auth/local', {
+      return $http.post(`${appConfig.cordovaApiUrl}/auth/local`, {
         email,
         password
       })
         .then(res => {
           $cookies.put('token', res.data.token);
+          $window.localStorage.setItem('token', res.data.token);
           currentUser = User.get();
           return currentUser.$promise;
         })
@@ -69,6 +70,7 @@ export function AuthService($location, $http, $cookies, $q, appConfig, Util, Use
      */
     logout() {
       $cookies.remove('token');
+      $window.localStorage.removeItem('token');
       currentUser = new User();
     },
 

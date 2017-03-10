@@ -1,9 +1,9 @@
 'use strict';
 
-export function ApplicationResource($resource) {
+export function ApplicationResource($resource, appConfig) {
   'ngInject';
 
-  return $resource('api/:role/applications/:id', {
+  return $resource(`${appConfig.cordovaApiUrl}/api/:role/applications/:id`, {
     id: '@_id'
   }, {
     remove: {

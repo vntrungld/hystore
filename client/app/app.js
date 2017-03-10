@@ -17,6 +17,7 @@ import 'trix';
 import 'angular-trix';
 import angularLoadingBar from 'angular-loading-bar';
 import 'ng-img-crop/compile/minified/ng-img-crop';
+import 'ng-cordova';
 
 // import ngValidationMatch from 'angular-validation-match';
 
@@ -67,7 +68,8 @@ angular.module('hystoreApp', [
   angularMoment,
   'angularTrix',
   angularLoadingBar,
-  'ngImgCrop'
+  'ngImgCrop',
+  'ngCordova'
 ])
   .config(routeConfig)
   .config(['$mdAriaProvider', ariaConfig])
@@ -77,7 +79,7 @@ angular.module('hystoreApp', [
 
     // Redirect to login if route requires auth and you're not logged in
 
-    $rootScope.$on('$stateChangeStart', (event, next) => {
+    $rootScope.$on('$stateChangeStart', (event, next) => { // eslint-disable-line
       Auth.isLoggedIn(loggedIn => {
         if(next.authenticate && !loggedIn) {
           $location.path('/login');
