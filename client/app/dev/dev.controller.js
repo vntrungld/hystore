@@ -5,6 +5,11 @@ export default class DevController {
 
   /*@ngInject*/
   constructor(ReviewResource) {
-    this.reviews = ReviewResource.query({ role: 'dev' });
+    const options = {
+      role: 'dev',
+      status: 'unread'
+    };
+
+    this.reviews = ReviewResource.query(options);
   }
 }

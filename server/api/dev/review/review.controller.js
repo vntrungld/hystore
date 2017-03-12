@@ -50,7 +50,9 @@ function patchUpdates(patches) {
 
 // Gets a list of Reviews
 export function index(req, res) {
-  return Review.find({ to: req.user._id })
+  let query = req.query;
+  query.to = req.user._id;
+  return Review.find(query)
     .populate('from for')
     .exec()
     .then(function(reviews) {
