@@ -67,22 +67,24 @@ export default class DevApplicationEditController {
 
   saveApplication(form) {
     if(form.$valid) {
-      const mdToast = this.mdToast;
+      const that = this;
       if(!this.isEdit) {
         this.applicationService.create(this.application)
           .then(function() {
-            mdToast.showSimple('Application created');
+            that.mdToast.showSimple('Application created');
+            that.state.go('dev.application');
           })
           .catch(function(err) {
-            mdToast.showSimple(`Error: ${err}`);
+            that.mdToast.showSimple(`Error: ${err.data.message}`);
           });
       } else {
         this.applicationService.edit(this.application)
           .then(function() {
-            mdToast.showSimple('Application saved');
+            that.mdToast.showSimple('Application saved');
+            that.state.go('dev.application');
           })
           .catch(function(err) {
-            mdToast.showSimple(`Error: ${err}`);
+            that.mdToast.showSimple(`Error: ${err.data.message}`);
           });
       }
     }
