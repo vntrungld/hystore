@@ -93,19 +93,16 @@ function handleError(res, statusCode) {
 }
 
 function removeTemp(files) {
-  return new Promise(function(resolve, reject) {
-    for(let key in files) {
-      const fileList = files[key];
-      fileList.forEach(function(file) {
-        try {
-          fs.unlinkSync(`${path}${file.filename}`);
-        } catch(err) {
-          reject(err);
-        }
-      });
-    }
-    resolve('Delete files successfully');
-  });
+  for(let key in files) {
+    const fileList = files[key];
+    fileList.forEach(function(file) {
+      try {
+        fs.unlinkSync(`${path}${file.filename}`);
+      } catch(err) {
+        console.log(err);
+      }
+    });
+  }
 }
 
 function isMatchIndexHTML(str) {
@@ -191,10 +188,8 @@ export function fileValidate(req, res, next) {
       return next();
     }
 
-    removeTemp(req.files)
-      .catch(function(err) {
-        console.log(err);
-      });
+    removeTemp(req.files);
+
     return res.status(400).end();
   }
 
@@ -226,15 +221,13 @@ export function upload(req, res, next) {
     const prefix = `${email}/${appSlug}/`;
     const objWithFunc = convertToObjectWithUploadMultiple(prefix, version, files);
 
-    Promise.props(objWithFunc)
+    return Promise.props(objWithFunc)
       .then(function(result) {
-        return removeTemp(req.files)
-          .then(function() {
-            req.files = result;
-            return next();
-          })
-          .catch(handleError(res));
-      });
+        removeTemp(req.files);
+        req.files = result;
+        return next();
+      })
+      .catch(handleError(res));
   } else {
     return next();
   }
@@ -318,6 +311,7 @@ export function handlePatchVersionRequest(req, res, next) {
 
 // Updates an existing Application in the DB
 export function patch(req, res) {
+  console.log('patch to database');
   const files = req.files;
 
   if(req.body._id) {
