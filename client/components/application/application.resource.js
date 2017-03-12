@@ -23,14 +23,14 @@ export function ApplicationResource($resource, appConfig) {
       method: 'PATCH',
       params: {
         role: 'dev',
-        id: '@id'
+        id: '@_id'
       }
     },
     adminPatch: {
       method: 'PATCH',
       params: {
         role: 'admin',
-        id: '@id'
+        id: '@_id'
       }
     }
   });

@@ -24,10 +24,10 @@ export default class AdminApplicationController {
         value: 'publish',
       }, {
         name: 'Unpublish',
-        value: 'unpublish',
+        value: 'unpublish'
       }, {
         name: 'Depublish',
-        value: 'depublish',
+        value: 'depublish'
       }, {
         name: 'Block',
         value: 'block',
