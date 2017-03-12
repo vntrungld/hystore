@@ -300,7 +300,7 @@ export function handlePatchObjectRequest(req, res, next) {
 export function handlePatchVersionRequest(req, res, next) {
   const version = req.body[0].value;
 
-  if(typeof version !== 'undefined') {
+  if(typeof version === 'object') {
     req.body.major = version.major;
     req.body.minor = version.minor;
     req.body.maintenance = version.maintenance;
