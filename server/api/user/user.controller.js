@@ -3,6 +3,7 @@
 import User from './user.model';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
+import jsonpatch from 'fast-json-patch';
 
 const validationError = (res, statusCode) => {
   statusCode = statusCode || 422;
@@ -13,6 +14,16 @@ const handleError = (res, statusCode) => {
   statusCode = statusCode || 500;
   return err => res.status(statusCode).send(err);
 };
+
+const patchUpdates = patches =>
+  entity => {
+    try {
+      jsonpatch.apply(entity, patches, /*validate*/ true);
+    } catch(err) {
+      return Promise.reject(err);
+    }
+    return entity.save();
+  };
 
 /**
  * Creates a new user
@@ -96,6 +107,20 @@ export const changeProfile = (req, res) => {
   } else {
     return res.status(403).end();
   }
+};
+
+/**
+ * Patch my user
+ */
+export const patch = (req, res) => {
+  if(req.body._id) {
+    delete req.body._id;
+  }
+
+  return User.findById(req.user._id)
+    .exec()
+    .then(patchUpdates(req.body))
+    .catch(handleError(res));
 };
 
 /**
