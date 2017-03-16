@@ -6,5 +6,8 @@
     "env": {
         "browser": true,
         "commonjs": true
+    },
+    "globals": {
+        "cordova": true
     }
 }

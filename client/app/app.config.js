@@ -5,12 +5,12 @@ export function routeConfig($urlRouterProvider, $locationProvider) {
 
   $urlRouterProvider.otherwise('/');
 
-  $locationProvider.html5Mode(true);
+  // $locationProvider.html5Mode(true);
 
-  // $locationProvider.html5Mode({
-  //   enabled: true,
-  //   requireBase: false
-  // });
+  $locationProvider.html5Mode({
+    enabled: true,
+    requireBase: false
+  });
 }
 
 export function ariaConfig($mdAriaProvider) {
@@ -25,4 +25,18 @@ export function themeConfig($mdThemingProvider) {
   $mdThemingProvider.theme('default')
     .primaryPalette('teal');
   $mdThemingProvider.enableBrowserColor();
+}
+
+export function cordovaConfig($cordovaInAppBrowserProvider) {
+  'ngInject';
+
+  const defaultOptions = {
+    location: 'yes',
+    clearcache: 'no',
+    toolbar: 'yes'
+  };
+
+  document.addEventListener('deviceready', function() {
+    $cordovaInAppBrowserProvider.setDefaultOptions(defaultOptions);
+  }, false);
 }

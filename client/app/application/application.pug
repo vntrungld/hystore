@@ -54,7 +54,7 @@ div(
             a(ui-sref="main({ category: vm.application.category._id })") {{ vm.application.category.name || 'Unknown' }}
 
       md-card-action(ng-if="vm.isLoggedIn()")
-        a.md-button.md-raised.md-primary(ng-href="{{ vm.application.archive }}" style="margin-left: 16px") Install
+        md-button.md-raised.md-primary(ng-click="vm.installApp()" style="margin-left: 16px") Install
 
       md-card-content
         div.carousel-wrapper

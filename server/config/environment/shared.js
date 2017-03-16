@@ -3,5 +3,5 @@
 exports = module.exports = {
   // List of user roles
   userRoles: ['user', 'dev', 'admin'],
-  cordovaApiUrl: ''
+  cordovaApiUrl: 'https://hystore.herokuapp.com'
 };

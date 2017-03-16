@@ -15,24 +15,30 @@ export default class ApplicationComponent {
   starClasses: Array;
 
   /*@ngInject*/
-  constructor($state, ApplicationResource, CategoryResource, Auth, $mdDialog, ReviewResource, Review, $mdToast) {
+  constructor($state, ApplicationResource, CategoryResource, Auth, $mdDialog, ReviewResource, Review, $mdToast, $cordovaFile, $cordovaFileTransfer, $cordovaZip, $window, $cordovaInAppBrowser) {
     this.starClasses = ['one', 'two', 'three', 'four', 'five'];
+    const that = this;
 
     ApplicationResource.get($state.params).$promise.then(app => {
-      this.application = app;
-      this.isLoggedIn = Auth.isLoggedInSync; // eslint-disable-line
-      this.mdDialog = $mdDialog;
-      this.ReviewResource = ReviewResource;
-      this.ReviewService = Review;
-      this.reviews = ReviewResource.query({ application: $state.params.id });
-      this.mdToast = $mdToast;
-      this.review = {
+      that.application = app;
+      that.isLoggedIn = Auth.isLoggedInSync; // eslint-disable-line
+      that.mdDialog = $mdDialog;
+      that.ReviewResource = ReviewResource;
+      that.ReviewService = Review;
+      that.reviews = ReviewResource.query({ application: $state.params.id });
+      that.mdToast = $mdToast;
+      that.cordovaFile = $cordovaFile;
+      that.cordovaFileTransfer = $cordovaFileTransfer;
+      that.cordovaZip = $cordovaZip;
+      that.window = $window;
+      that.cordovaInAppBrowser = $cordovaInAppBrowser;
+      that.review = {
         for: app._id,
         star: 1,
         content: '',
       };
 
-      this.similarApps = ApplicationResource.query({ category: app.category._id });
+      that.similarApps = ApplicationResource.query({ category: app.category._id });
     });
   }
 
@@ -111,5 +117,43 @@ export default class ApplicationComponent {
 
   getRepeatTime(no) {
     return new Array(no);
+  }
+
+  installApp() {
+    const that = this;
+    const appDir = cordova.file.applicationStorageDirectory;
+    const slug = that.application.slug;
+    const ver = `v${that.application.major}.${that.application.minor}.${that.application.maintenance}`;
+    const url = that.application.archive;
+    const path = `${appDir}/apps/${slug}/${ver}`;
+    const trustHost = true;
+    const options = {encodeURI: false};
+
+    this.mdToast.showSimple('Downloading...');
+
+    this.cordovaFileTransfer.download(url, `${path}/archive.zip`, options, trustHost)
+      .then(function(result) {
+        const src = result.fullPath;
+        that.cordovaZip.unzip(src, path)
+          .then(function() {
+            that.mdToast.showSimple('Install complete');
+            that.cordovaInAppBrowser.open(`${path}/index.html`);
+          })
+          .catch(function() {
+            that.mdToast.showSimple('Install fail');
+          });
+      })
+      .catch(function() {
+        that.mdToast.showSimple('Download fail');
+      });
+  }
+
+  openApp() {
+    const appDir = cordova.file.applicationStorageDirectory;
+    const slug = this.application.slug;
+    const ver = `v${this.application.major}.${this.application.minor}.${this.application.maintenance}`;
+    const dest = `${appDir}${slug}/${ver}/index.html`;
+
+    this.cordovaInAppBrowser.open(dest);
   }
 }
