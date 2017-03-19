@@ -33,18 +33,19 @@ export default class ApplicationComponent {
         that.similarApps = ApplicationResource.query({ category: app.category._id });
       });
 
-    ReviewResource.get({ id: 'me', application: appId }).$promise
-      .then(function(rev) {
-        that.review = rev;
-        that.reviewed = true;
-      })
-      .catch(function() {
-        that.review = {
-          for: appId,
-          star: 1,
-          content: ''
-        };
-      });
+    if(this.isLoggedIn()) {
+      ReviewResource.get({ id: 'me', application: appId }).$promise
+        .then(function(rev) {
+          that.review = rev;
+          that.reviewed = true;
+        });
+    } else {
+      that.review = {
+        for: appId,
+        star: 1,
+        content: ''
+      };
+    }
   }
 
   isMobile() {
