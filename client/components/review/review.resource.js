@@ -9,8 +9,11 @@ export function ReviewResource($resource, appConfig) {
     devPatch: {
       method: 'PATCH',
       params: {
-        role: 'dev',
+        role: 'dev'
       }
+    },
+    patch: {
+      method: 'PATCH'
     }
   });
 }
