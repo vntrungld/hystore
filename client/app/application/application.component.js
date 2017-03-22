@@ -53,7 +53,6 @@ export default class ApplicationComponent {
     }
   }
 
-
   showReviewDialog(ev) {
     this.mdDialog.show({
       controller: ApplicationComponent,
@@ -164,6 +163,11 @@ export default class ApplicationComponent {
     const path = `${appDir}/apps/${slug}/${ver}`;
     const trustHost = true;
     const options = {encodeURI: false};
+    const iabOptions = {
+      location: 'yes',
+      clearcache: 'no',
+      toolbar: 'yes'
+    };
 
     this.mdToast.showSimple('Downloading...');
 
@@ -173,7 +177,7 @@ export default class ApplicationComponent {
         that.cordovaZip.unzip(src, path)
           .then(function() {
             that.mdToast.showSimple('Install complete');
-            that.cordovaInAppBrowser.open(`${path}/index.html`);
+            that.cordovaInAppBrowser.open(`${path}/index.html`, '_blank', iabOptions);
           })
           .catch(function() {
             that.mdToast.showSimple('Install fail');
