@@ -38,6 +38,13 @@ export default class ApplicationComponent {
         .then(function(rev) {
           that.review = rev;
           that.reviewed = true;
+        })
+        .catch(function() {
+          that.review = {
+            for: appId,
+            star: 1,
+            content: ''
+          };
         });
     } else {
       that.review = {
@@ -70,7 +77,7 @@ export default class ApplicationComponent {
   createReview() {
     const that = this;
 
-    that.review.save().$promise
+    that.ReviewResource.save({}, that.review).$promise
       .then(() => {
         that.mdToast.showSimple('Review sended!');
         that.cancelReviewDialog();
