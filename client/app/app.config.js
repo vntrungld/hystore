@@ -26,3 +26,7 @@ export function themeConfig($mdThemingProvider) {
     .primaryPalette('teal');
   $mdThemingProvider.enableBrowserColor();
 }
+
+export function loadingBarConfig(cfpLoadingBarProvider) {
+  cfpLoadingBarProvider.includeSpinner = false;
+}
