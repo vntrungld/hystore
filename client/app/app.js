@@ -29,6 +29,7 @@ import Application from '../components/application/application.module';
 import account from './account';
 import admin from './admin';
 import dev from './dev';
+import user from './user';
 import navbar from '../components/navbar/navbar.component';
 import footer from '../components/footer/footer.component';
 import main from './main';
@@ -54,6 +55,7 @@ angular.module('hystoreApp', [
   account,
   admin,
   dev,
+  user,
   navbar,
   footer,
   main,

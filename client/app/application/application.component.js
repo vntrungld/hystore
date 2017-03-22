@@ -56,7 +56,7 @@ export default class ApplicationComponent {
   }
 
   isMobile() {
-    return device.platform !== 'browser';
+    return device.platform !== 'browser' || false;
   }
 
   showReviewDialog(ev) {

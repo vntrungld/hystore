@@ -1,0 +1,27 @@
+md-sidenav.md-sidenav-left(
+  md-component-id="sidenav",
+  md-whiteframe="3",
+  md-is-locked-open="$mdMedia('gt-sm')",
+)
+  md-content
+    md-list.np
+      md-toolbar
+        h1.md-toolbar-tools User site
+      md-list-item(ui-sref="user.account")
+        md-icon perm_identity
+        p Infomation
+
+      md-divider
+
+      md-list-item(ui-sref="user.application")
+        md-icon android
+
+        p My Applications
+
+      md-divider
+
+md-content(
+  flex,
+  layout="column",
+  ui-view=""
+)

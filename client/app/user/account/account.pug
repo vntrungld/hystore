@@ -1,0 +1,16 @@
+div(
+  flex,
+  layout="column",
+  ng-if="vm.user"
+)
+  md-card(flex="none")
+    md-card-header
+      md-card-header-text
+        span.md-title Infomation
+
+    md-card-content
+      p.md-body-1 Email: {{ vm.user.email }}
+      p.md-body-1 Name: {{ vm.user.name }}
+      p.md-body-1 Total Installed Application: {{ vm.user.applications.length }}
+      p.md-body-1 Created At: {{ vm.user.createdAt | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a' }}
+      p.md-body-1 Updated At: {{ vm.user.updatedAt | amDateFormat:'dddd, MMMM Do YYYY, h:mm:ss a' }}

@@ -1,0 +1,39 @@
+div(
+  flex,
+  layout="column"
+)
+  div(
+    layout="row",
+  )
+    h2.md-headline(
+      flex,
+      layout-margin
+    )
+      span(ng-if="vm.applications.length") You have {{ vm.applications.length }} applications
+      span(ng-if="!vm.applications.length") No applications found
+
+  div(
+    layout="row",
+    layout-wrap
+  )
+    md-card(
+      ng-repeat="application in vm.applications",
+      flex="100",
+      flex-gt-xs="45",
+      flex-gt-md="30",
+      layout-padding
+    )
+      md-card-title(layout-padding)
+        md-card-title-media
+          .md-media-md.card-media
+            a.full-cover(
+              ui-sref="application({ id: application._id })",
+              style="background-image: url('{{ application.icon }}')"
+            )
+              img.img-responsive(
+                ng-src="{{ application.icon }}",
+                alt="{{ application.name }}"
+              )
+        md-card-title-text
+          a.md-headline(ui-sref="application({ id: application._id })") {{ application.name }}
+          a.md-subhead(ui-sref="main({ author: application.author._id })") {{ application.author.name }}
