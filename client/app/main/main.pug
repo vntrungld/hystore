@@ -44,10 +44,7 @@ div(
       )
         md-card-content
           .md-media-md.card-media
-            a.full-cover(
-              ui-sref="application({ id: application._id })",
-              style="background-image: url('{{ application.icon }}')"
-            )
+            a.full-cover(ui-sref="application({ id: application._id })")
               img.img-responsive(
                 ng-src="{{ application.icon }}",
                 alt="{{ application.name }}"
