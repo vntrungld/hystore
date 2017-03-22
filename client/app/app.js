@@ -21,7 +21,7 @@ import 'ng-cordova';
 
 // import ngValidationMatch from 'angular-validation-match';
 
-import { routeConfig, ariaConfig, themeConfig, cordovaConfig } from './app.config';
+import { routeConfig, ariaConfig, themeConfig, loadingBarConfig, cordovaConfig } from './app.config';
 
 import _Auth from '../components/auth/auth.module';
 import Category from '../components/category/category.module';
@@ -29,6 +29,7 @@ import Application from '../components/application/application.module';
 import account from './account';
 import admin from './admin';
 import dev from './dev';
+import user from './user';
 import navbar from '../components/navbar/navbar.component';
 import footer from '../components/footer/footer.component';
 import main from './main';
@@ -54,6 +55,7 @@ angular.module('hystoreApp', [
   account,
   admin,
   dev,
+  user,
   navbar,
   footer,
   main,
@@ -74,6 +76,7 @@ angular.module('hystoreApp', [
   .config(routeConfig)
   .config(['$mdAriaProvider', ariaConfig])
   .config(themeConfig)
+  .config(['cfpLoadingBarProvider', loadingBarConfig])
   .config(cordovaConfig)
   .run(($rootScope, $location, Auth) => {
     'ngInject';

@@ -51,9 +51,6 @@ div(
             )
               span Status
 
-            th(md-column)
-              span Action
-
         tbody(md-body)
           tr(
             md-row,
@@ -77,10 +74,6 @@ div(
                   ng-repeat="status in vm.status",
                 )
                   | {{ status.name }}
-
-            td(md-cell)
-              span.md-button.md-icon-button(ng-click="vm.delete(application)")
-                md-icon delete
 
     md-table-pagination(
       md-limit="vm.query.limit",

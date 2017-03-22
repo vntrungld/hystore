@@ -30,7 +30,8 @@ var UserSchema = new Schema({
     default: 'https://s3-ap-southeast-1.amazonaws.com/hystore-dev/default-avatar.jpg'
   },
   applications: [{
-    type: ObjectId
+    type: ObjectId,
+    ref: 'Application'
   }],
   provider: String,
   salt: String,

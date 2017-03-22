@@ -16,31 +16,43 @@ export default class ApplicationComponent {
 
   /*@ngInject*/
   constructor($state, ApplicationResource, CategoryResource, Auth, $mdDialog, ReviewResource, Review, $mdToast, $cordovaFile, $cordovaFileTransfer, $cordovaZip, $window, $cordovaInAppBrowser) {
-    this.starClasses = ['one', 'two', 'three', 'four', 'five'];
+    const appId = $state.params.id;
     const that = this;
 
-    ApplicationResource.get($state.params).$promise.then(app => {
-      that.application = app;
-      that.isLoggedIn = Auth.isLoggedInSync; // eslint-disable-line
-      that.mdDialog = $mdDialog;
-      that.ReviewResource = ReviewResource;
-      that.ReviewService = Review;
-      that.reviews = ReviewResource.query({ application: $state.params.id });
-      that.mdToast = $mdToast;
-      that.cordovaFile = $cordovaFile;
-      that.cordovaFileTransfer = $cordovaFileTransfer;
-      that.cordovaZip = $cordovaZip;
-      that.window = $window;
-      that.cordovaInAppBrowser = $cordovaInAppBrowser;
-      that.review = {
-        for: app._id,
-        star: 1,
-        content: '',
-      };
+    this.starClasses = ['one', 'two', 'three', 'four', 'five'];
+    this.ReviewResource = ReviewResource;
+    this.ReviewService = Review;
+    this.reviewed = false;
+    this.isLoggedIn = Auth.isLoggedInSync; // eslint-disable-line
+    this.mdDialog = $mdDialog;
+    this.reviews = ReviewResource.query({ application: appId });
+    this.mdToast = $mdToast;
+    this.cordovaFile = $cordovaFile;
+    this.cordovaFileTransfer = $cordovaFileTransfer;
+    this.cordovaZip = $cordovaZip;
+    this.window = $window;
+    this.cordovaInAppBrowser = $cordovaInAppBrowser;
+    this.review = {
+      for: appId,
+      star: 1,
+      content: ''
+    };
 
-      that.similarApps = ApplicationResource.query({ category: app.category._id });
-    });
+    ApplicationResource.get({ id: appId }).$promise
+      .then(function(app) {
+        that.application = app;
+        that.similarApps = ApplicationResource.query({ category: app.category._id });
+      });
+
+    if(this.isLoggedIn()) {
+      ReviewResource.get({ id: 'me', application: appId }).$promise
+        .then(function(rev) {
+          that.review = rev;
+          that.reviewed = true;
+        });
+    }
   }
+
 
   showReviewDialog(ev) {
     this.mdDialog.show({
@@ -57,16 +69,40 @@ export default class ApplicationComponent {
     this.mdDialog.cancel();
   }
 
-  submitReview() {
-    this.ReviewService
-      .createReview(this.review)
+  createReview() {
+    const that = this;
+
+    that.ReviewResource.save({}, that.review).$promise
       .then(() => {
-        this.mdToast.showSimple('Review sended!');
-        this.cancelReviewDialog();
+        that.mdToast.showSimple('Review sended!');
+        that.cancelReviewDialog();
       })
       .catch(err => {
-        this.mdToast.showSimple(err.data.message);
+        that.mdToast.showSimple(err.data.message);
       });
+  }
+
+  updateReview() {
+    const that = this;
+    const data = [
+      { op: 'replace', path: '/star', value: that.review.star },
+      { op: 'replace', path: '/content', value: that.review.content }
+    ];
+
+    that.ReviewResource.patch({ id: that.review._id }, data).$promise
+      .then(() => {
+        that.mdToast.showSimple('Review updated!');
+        that.cancelReviewDialog();
+      })
+      .catch(err => {
+        that.mdToast.showSimple(err.data.message);
+      });
+  }
+
+  submitReview() {
+    if(this.reviewed) {
+      return this.updateReview();
+    } return this.createReview();
   }
 
   getTotalStar() {

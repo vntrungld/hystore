@@ -3,6 +3,7 @@
 import User from './user.model';
 import config from '../../config/environment';
 import jwt from 'jsonwebtoken';
+import jsonpatch from 'fast-json-patch';
 
 const validationError = (res, statusCode) => {
   statusCode = statusCode || 422;
@@ -13,6 +14,16 @@ const handleError = (res, statusCode) => {
   statusCode = statusCode || 500;
   return err => res.status(statusCode).send(err);
 };
+
+const patchUpdates = patches =>
+  entity => {
+    try {
+      jsonpatch.apply(entity, patches, /*validate*/ true);
+    } catch(err) {
+      return Promise.reject(err);
+    }
+    return entity.save();
+  };
 
 /**
  * Creates a new user
@@ -99,12 +110,34 @@ export const changeProfile = (req, res) => {
 };
 
 /**
+ * Patch my user
+ */
+export const patch = (req, res) => {
+  if(req.body._id) {
+    delete req.body._id;
+  }
+
+  return User.findById(req.user._id)
+    .exec()
+    .then(patchUpdates(req.body))
+    .catch(handleError(res));
+};
+
+/**
  * Get my info
  */
 export const me = (req, res, next) => {
   var userId = req.user._id;
 
-  return User.findOne({ _id: userId }, '-salt -password').exec()
+  return User.findOne({ _id: userId }, '-salt -password')
+    .populate({
+      path: 'applications',
+      populate: {
+        path: 'author',
+        model: 'User'
+      }
+    })
+    .exec()
     .then(user => { // don't ever give out the password or salt
       if(!user) {
         return res.status(401).end();

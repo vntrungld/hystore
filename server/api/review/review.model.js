@@ -42,6 +42,7 @@ ReviewSchema
   .virtual('public')
   .get(function() {
     return {
+      _id: this._id,
       name: this.from.name,
       email: this.from.email,
       avatar: this.from.avatar,

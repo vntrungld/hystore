@@ -40,3 +40,7 @@ export function cordovaConfig($cordovaInAppBrowserProvider) {
     $cordovaInAppBrowserProvider.setDefaultOptions(defaultOptions);
   }, false);
 }
+
+export function loadingBarConfig(cfpLoadingBarProvider) {
+  cfpLoadingBarProvider.includeSpinner = false;
+}

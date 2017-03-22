@@ -2,7 +2,7 @@ md-toolbar
   .md-toolbar-tools
     md-button.md-icon-button(
       hide-gt-sm,
-      ng-if="$ctrl.isStateAuth('admin') || $ctrl.isStateAuth('dev')",
+      ng-if="$ctrl.isStateAuth('admin') || $ctrl.isStateAuth('dev') || $ctrl.isStateAuth('user')",
       ng-click="$ctrl.mdSidenav('sidenav').toggle()"
     )
       md-icon menu
@@ -53,6 +53,13 @@ md-toolbar
             | Developer
 
         md-menu-divider(ng-if="$ctrl.isDev()")
+
+        md-menu-item
+          md-button(ui-sref="user.account")
+            md-icon account_circle
+            | My Account
+
+        md-menu-divider
 
         md-menu-item
           md-button(ui-sref="profile")

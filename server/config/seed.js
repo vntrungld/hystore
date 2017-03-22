@@ -327,7 +327,20 @@ function seedReview() {
     });
 }
 
-const steps = [seedUser, seedCategory, seedApplication, seedReview];
+function updateUser() {
+  return User.findById(user._id)
+    .then(function(u) {
+      console.log(u);
+      u.applications.push(app[0]._id);
+      console.log(u);
+      return u.save();
+    })
+    .then(function() {
+      console.log('finished update user');
+    });
+}
+
+const steps = [seedUser, seedCategory, seedApplication, seedReview, updateUser];
 
 Promise.each(steps, function(step) {
   return step();
