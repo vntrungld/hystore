@@ -330,9 +330,7 @@ function seedReview() {
 function updateUser() {
   return User.findById(user._id)
     .then(function(u) {
-      console.log(u);
       u.applications.push(app[0]._id);
-      console.log(u);
       return u.save();
     })
     .then(function() {
