@@ -3,6 +3,9 @@
         "../.eslintrc",
         "angular"
     ],
+    globals: [
+      "device": true
+    ],
     "env": {
         "browser": true,
         "commonjs": true
