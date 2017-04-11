@@ -9,7 +9,7 @@ var router = new Router();
 router.get('/me', auth.isAuthenticated(), controller.me);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
 router.put('/:id/profile', auth.isAuthenticated(), controller.changeProfile);
-router.patch('/', auth.isAuthenticated(), controller.patch);
+router.patch('/:id', auth.isAuthenticated(), controller.patch);
 router.get('/:id', auth.isAuthenticated(), controller.show);
 router.post('/', controller.create);
 
