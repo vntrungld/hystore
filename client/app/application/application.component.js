@@ -178,6 +178,7 @@ export default class ApplicationComponent {
 
     this.User.userPatch({ id: this.user._id }, data).$promise
       .then(() => {
+        that.isSaved = true;
         that.mdToast.showSimple('Saved');
         that.cancelReviewDialog();
       })
@@ -192,6 +193,7 @@ export default class ApplicationComponent {
 
     this.User.userPatch({ id: this.user._id }, data).$promise
       .then(() => {
+        that.isSaved = false;
         that.mdToast.showSimple('Unsaved');
         that.cancelReviewDialog();
       })
