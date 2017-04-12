@@ -34,7 +34,7 @@ export default class ApplicationComponent {
     this.window = $window;
     this.cordovaInAppBrowser = $cordovaInAppBrowser;
     this.review = {
-      for: appId,
+      for: this.appId,
       star: 1,
       content: ''
     };
