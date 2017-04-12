@@ -45,7 +45,25 @@ div(
             a(ui-sref="main({ category: vm.application.category._id })") {{ vm.application.category.name || 'Unknown' }}
 
       md-card-action(ng-if="vm.isLoggedIn()")
-        md-button.md-raised.md-primary(ng-click="vm.installApp()" style="margin-left: 16px") Install
+        md-button.md-raised.md-warn(
+          ng-if="vm.isSaved",
+          ng-click="vm.unsaveApp()",
+          style="margin-left: 16px"
+        )
+          | Unsave
+
+        md-button.md-raised.md-primary(
+          ng-if="!vm.isSaved",
+          ng-click="vm.saveApp()",
+          style="margin-left: 16px"
+        )
+          | Save
+
+        md-button.md-raised.md-primary(
+          ng-click="vm.installApp()",
+          style="margin-left: 16px"
+        )
+          | Install
 
       md-card-content
         div.carousel-wrapper

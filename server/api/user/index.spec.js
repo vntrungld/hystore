@@ -5,8 +5,10 @@ var proxyquire = require('proxyquire').noPreserveCache();
 var userCtrlStub = {
   me: 'userCtrl.me',
   changePassword: 'userCtrl.changePassword',
+  changeProfile: 'userCtrl.changeProfile',
   show: 'userCtrl.show',
-  create: 'userCtrl.create'
+  create: 'userCtrl.create',
+  patch: 'userCtrl.patch',
 };
 
 var authServiceStub = {
@@ -22,6 +24,7 @@ var routerStub = {
   get: sinon.spy(),
   put: sinon.spy(),
   post: sinon.spy(),
+  patch: sinon.spy(),
   delete: sinon.spy()
 };
 

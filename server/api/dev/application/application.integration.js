@@ -12,7 +12,7 @@ describe('Application Dev API:', function() {
   var user;
   var category;
   var token;
-  var path = '/home/trungld/Downloads/coc';
+  var path = '/home/trungld/workspace/trungld/hystore/test-data/coc';
 
   before(function(done) {
     return Promise.each([
@@ -100,11 +100,11 @@ describe('Application Dev API:', function() {
         .post('/api/dev/applications')
         .set('authorization', `Bearer ${token}`)
         .field('name', 'New Application')
-        .attach('icon', `${path}/icon.png`)
-        .attach('feature', `${path}/feature.jpg`)
-        .attach('screenshots', `${path}/screenshot-1.jpg`)
-        .attach('screenshots', `${path}/screenshot-2.jpg`)
-        .attach('screenshots', `${path}/screenshot-3.jpg`)
+        .attach('icon', `${path}/icon.webp`)
+        .attach('feature', `${path}/feature.webp`)
+        .attach('screenshots', `${path}/screenshot-1.webp`)
+        .attach('screenshots', `${path}/screenshot-2.webp`)
+        .attach('screenshots', `${path}/screenshot-3.webp`)
         .field('major', 0)
         .field('minor', 0)
         .field('maintenance', 1)

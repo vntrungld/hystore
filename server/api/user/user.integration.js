@@ -3,8 +3,10 @@
 import app from '../..';
 import User from './user.model';
 import request from 'supertest';
+import mongoose from 'mongoose';
 
 describe('User API:', function() {
+  var token;
   var user;
 
   // Clear users before testing
@@ -26,8 +28,6 @@ describe('User API:', function() {
   });
 
   describe('GET /api/users/me', function() {
-    var token;
-
     before(function(done) {
       request(app)
         .post('/auth/local')
@@ -60,6 +60,39 @@ describe('User API:', function() {
         .get('/api/users/me')
         .expect(401)
         .end(done);
+    });
+  });
+
+  describe('PATCH /api/users/:id', function() {
+    var appId = mongoose.Types.ObjectId();
+
+    before(function(done) {
+      request(app)
+        .patch(`/api/users/${user._id}`)
+        .set('authorization', `Bearer ${token}`)
+        .send([{ op: 'add', path: '/applications/-', value: appId }])
+        .expect(204)
+        .end(err => {
+          if(err) {
+            return done(err);
+          }
+          return done();
+        });
+    });
+
+    it('should respond with the patched user', function(done) {
+      request(app)
+        .get('/api/users/me')
+        .set('authorization', `Bearer ${token}`)
+        .expect(200)
+        .expect('Content-Type', /json/)
+        .end((err, res) => {
+          if(err) {
+            return done(err);
+          }
+          res.body.applications.length.should.equal(1);
+          return done();
+        });
     });
   });
 });

@@ -44,6 +44,12 @@ export function UserResource($resource, appConfig) {
       params: {
         role: 'admin'
       }
+    },
+    userPatch: {
+      method: 'PATCH',
+      params: {
+        id: '@id'
+      }
     }
   });
 }

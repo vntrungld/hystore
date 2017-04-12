@@ -19,13 +19,14 @@ import multer from 'multer';
 import { slugify, randomString } from '../../../utilities';
 
 const Promise = require('bluebird');
+const config = require('../../../config/environment');
 
 AWS.config.setPromisesDependency(Promise);
+AWS.config.update(config.aws);
 
 const s3 = new AWS.S3();
 const AdmZip = require('adm-zip');
 const fs = Promise.promisifyAll(require('fs'));
-const config = require('../../../config/environment');
 const path = config.path;
 const s3Params = config.s3;
 const uploadConfig = config.upload;
