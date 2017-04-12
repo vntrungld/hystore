@@ -15,48 +15,60 @@ export default class ApplicationComponent {
   starClasses: Array;
 
   /*@ngInject*/
-  constructor($state, ApplicationResource, CategoryResource, Auth, $mdDialog, ReviewResource, Review, $mdToast) {
-    const appId = $state.params.id;
-    const that = this;
-
+  constructor($state, ApplicationResource, CategoryResource, Auth, $mdDialog, ReviewResource, Review, $mdToast, User) {
+    this.appId = $state.params.id;
     this.starClasses = ['one', 'two', 'three', 'four', 'five'];
     this.ReviewResource = ReviewResource;
     this.ReviewService = Review;
     this.reviewed = false;
     this.isLoggedIn = Auth.isLoggedInSync; // eslint-disable-line
+    this.getCurrentUser = Auth.getCurrentUser;
+    this.User = User;
     this.mdDialog = $mdDialog;
-    this.reviews = ReviewResource.query({ application: appId });
+    this.reviews = ReviewResource.query({ application: this.appId });
     this.mdToast = $mdToast;
-    ApplicationResource.get({ id: appId }).$promise
+    this.isSaved = false;
+
+    const that = this;
+
+    ApplicationResource.get({ id: this.appId }).$promise
       .then(function(app) {
         that.application = app;
         that.similarApps = ApplicationResource.query({ category: app.category._id });
       });
 
     if(this.isLoggedIn()) {
-      ReviewResource.get({ id: 'me', application: appId }).$promise
+      ReviewResource.get({ id: 'me', application: this.appId }).$promise
         .then(function(rev) {
           that.review = rev;
           that.reviewed = true;
         })
         .catch(function() {
           that.review = {
-            for: appId,
+            for: that.appId,
             star: 1,
             content: ''
           };
         });
     } else {
       that.review = {
-        for: appId,
+        for: this.appId,
         star: 1,
         content: ''
       };
     }
-  }
 
-  isMobile() {
-    return device.platform !== 'browser' || false;
+    this.getCurrentUser(function(user) {
+      that.user = user;
+
+      for(let idx in user.applications) {
+        if(user.applications[idx]._id === that.appId) {
+          that.appIdx = idx;
+          that.isSaved = true;
+          break;
+        }
+      }
+    });
   }
 
   showReviewDialog(ev) {
@@ -158,5 +170,33 @@ export default class ApplicationComponent {
 
   getRepeatTime(no) {
     return new Array(no);
+  }
+
+  saveApp() {
+    const data = [{ op: 'add', path: '/applications/-', value: this.appId }];
+    const that = this;
+
+    this.User.userPatch({ id: this.user._id }, data).$promise
+      .then(() => {
+        that.mdToast.showSimple('Saved');
+        that.cancelReviewDialog();
+      })
+      .catch(err => {
+        that.mdToast.showSimple(err.data.message);
+      });
+  }
+
+  unsaveApp() {
+    const data = [{ op: 'remove', path: `/applications/${this.appIdx}` }];
+    const that = this;
+
+    this.User.userPatch({ id: this.user._id }, data).$promise
+      .then(() => {
+        that.mdToast.showSimple('Unsaved');
+        that.cancelReviewDialog();
+      })
+      .catch(err => {
+        that.mdToast.showSimple(err.data.message);
+      });
   }
 }
