@@ -59,7 +59,12 @@ var all = {
   }, {
     name: 'screenshots',
     maxCount: 8
-  }]
+  }],
+  aws: {
+    accessKeyId: 'AKIAIOM2MOAGABWEBB7Q',
+    secretAccessKey: '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',
+    region: 'ap-southeast-1'
+  }
 };
 
 // Export the config object based on the NODE_ENV
