@@ -21,8 +21,8 @@ import { slugify, randomString } from '../../../utilities';
 const Promise = require('bluebird');
 const config = require('../../../config/environment');
 
-AWS.config.setPromisesDependency(Promise);
 AWS.config.update(config.aws);
+AWS.config.setPromisesDependency(Promise);
 
 const s3 = new AWS.S3();
 const AdmZip = require('adm-zip');
