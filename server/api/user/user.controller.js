@@ -117,9 +117,9 @@ export const patch = (req, res) => {
     delete req.body._id;
   }
 
-  return User.findById(req.user._id)
-    .exec()
+  return User.findById(req.user._id).exec()
     .then(patchUpdates(req.body))
+    .then(() => res.status(204).end())
     .catch(handleError(res));
 };
 
