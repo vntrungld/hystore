@@ -14,6 +14,7 @@ export default class DevApplicationEditController {
   /*@ngInject*/
   constructor($state, CategoryResource, Application, ApplicationResource, $mdToast) {
     this.id = $state.params.id;
+    this.state = $state;
     this.categories = CategoryResource.query();
     this.application = {};
     this.applicationService = Application;
