@@ -50,11 +50,14 @@ div(
             th(md-column)
               span Content
 
+            th(md-column)
+              span Updated At
+
             th(
               md-column,
-              md-order-by="when"
+              md-order-by="created_at"
             )
-              span When
+              span Created At
 
             th(
               md-column,
@@ -76,6 +79,8 @@ div(
             td(md-cell) {{ review.star }}
 
             td(md-cell) {{ review.content }}
+
+            td(md-cell, am-time-ago="review.updatedAt")
 
             td(md-cell, am-time-ago="review.createdAt")
 
