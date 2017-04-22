@@ -51,7 +51,7 @@ export default class ApplicationComponent {
           };
         });
     } else {
-      that.review = {
+      this.review = {
         for: this.appId,
         star: 1,
         content: ''
@@ -61,12 +61,10 @@ export default class ApplicationComponent {
     this.getCurrentUser(function(user) {
       that.user = user;
 
-      for(let idx in user.applications) {
-        if(user.applications[idx]._id === that.appId) {
-          that.appIdx = idx;
-          that.isSaved = true;
-          break;
-        }
+      if(that.findApp() !== -1) {
+        that.isSaved = true;
+      } else {
+        that.isSaved = false;
       }
     });
   }
@@ -172,33 +170,51 @@ export default class ApplicationComponent {
     return new Array(no);
   }
 
-  saveApp() {
-    const data = [{ op: 'add', path: '/applications/-', value: this.appId }];
-    const that = this;
+  findApp() {
+    const currentAppId = this.appId;
 
-    this.User.userPatch({ id: this.user._id }, data).$promise
-      .then(() => {
-        that.isSaved = true;
-        that.mdToast.showSimple('Saved');
-        that.cancelReviewDialog();
-      })
-      .catch(err => {
-        that.mdToast.showSimple(err.data.message);
-      });
+    return this.user.applications.findIndex(function(app) {
+      return app._id === currentAppId;
+    });
+  }
+
+  saveApp() {
+    if(this.findApp() === -1) {
+      const that = this;
+      const data = [{ op: 'add', path: '/applications/-', value: this.appId }];
+
+      this.User.userPatch({ id: this.user._id }, data).$promise
+        .then(function() {
+          that.user.applications.push(that.application);
+          that.isSaved = true;
+          that.mdToast.showSimple('Saved!');
+        })
+        .catch(function(err) {
+          that.mdToast.showSimple(`Error: ${err}`);
+        });
+    } else {
+      this.mdToast.showSimple('You are already saved this app');
+    }
   }
 
   unsaveApp() {
-    const data = [{ op: 'remove', path: `/applications/${this.appIdx}` }];
-    const that = this;
+    let appIdx = this.findApp();
 
-    this.User.userPatch({ id: this.user._id }, data).$promise
-      .then(() => {
-        that.isSaved = false;
-        that.mdToast.showSimple('Unsaved');
-        that.cancelReviewDialog();
-      })
-      .catch(err => {
-        that.mdToast.showSimple(err.data.message);
-      });
+    if(appIdx !== -1) {
+      const that = this;
+      const data = [{ op: 'remove', path: `/applications/${appIdx}` }];
+
+      this.User.userPatch({ id: this.user._id }, data).$promise
+        .then(function() {
+          that.user.applications.splice(appIdx, 1);
+          that.isSaved = false;
+          that.mdToast.showSimple('Unsaved!');
+        })
+        .catch(function(err) {
+          that.mdToast.showSimple(`Error: ${err}`);
+        });
+    } else {
+      this.mdToast.showSimple('You are already unsaved this app');
+    }
   }
 }
