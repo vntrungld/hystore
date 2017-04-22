@@ -48,6 +48,18 @@ div(
             )
               span Status
 
+            th(
+              md-column,
+              md-order-by="updated_at"
+            )
+              span Updated At
+
+            th(
+              md-column,
+              md-order-by="created_at"
+            )
+              span Created At
+
             th(md-column)
               span Action
 
@@ -83,6 +95,12 @@ div(
                   ng-repeat="status in vm.status"
                 )
                   | {{ status.name }}
+
+            td(md-cell)
+              span(am-time-ago="category.updatedAt")
+
+            td(md-cell)
+              span(am-time-ago="category.createdAt")
 
             td(md-cell)
               span.md-button.md-icon-button(ui-sref="admin.categoryEdit({ id: category._id })")
