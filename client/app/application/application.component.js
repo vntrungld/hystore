@@ -27,12 +27,15 @@ export default class ApplicationComponent {
     this.mdDialog = $mdDialog;
     this.reviews = ReviewResource.query({ application: this.appId });
     this.mdToast = $mdToast;
-    this.isSaved = false;
+    this.isInstalled = false;
+    this.isUpdated = true;
     this.cordovaFile = $cordovaFile;
     this.cordovaFileTransfer = $cordovaFileTransfer;
     this.cordovaZip = $cordovaZip;
     this.window = $window;
     this.cordovaInAppBrowser = $cordovaInAppBrowser;
+    this.appDir = `${cordova.file.applicationStorageDirectory}/apps`;
+    this.version = '';
     this.review = {
       for: this.appId,
       star: 1,
@@ -45,6 +48,23 @@ export default class ApplicationComponent {
       .then(function(app) {
         that.application = app;
         that.similarApps = ApplicationResource.query({ category: app.category._id });
+        that.version = `v${app.major}.${app.minor}.${app.maintenance}`;
+
+        $cordovaFile.checkDir(`${that.appDir}/${app._id}`, '')
+          .then(function(result) {
+            that.isInstalled = true;
+          })
+          .catch(function(err) {
+            that.isInstalled = false;
+          });
+
+        $cordovaFile.checkDir(`${that.appDir}/${app._id}/${that.version}`, '')
+          .then(function() {
+            that.isUpdated = true;
+          })
+          .catch(function() {
+            that.isUpdated = false;
+          });
       });
 
     if(this.isLoggedIn()) {
@@ -196,14 +216,7 @@ export default class ApplicationComponent {
       this.User.userPatch({ id: this.user._id }, data).$promise
         .then(function() {
           that.user.applications.push(that.application);
-          that.isSaved = true;
-          that.mdToast.showSimple('Saved!');
-        })
-        .catch(function(err) {
-          that.mdToast.showSimple(`Error: ${err}`);
         });
-    } else {
-      this.mdToast.showSimple('You are already saved this app');
     }
   }
 
@@ -217,31 +230,16 @@ export default class ApplicationComponent {
       this.User.userPatch({ id: this.user._id }, data).$promise
         .then(function() {
           that.user.applications.splice(appIdx, 1);
-          that.isSaved = false;
-          that.mdToast.showSimple('Unsaved!');
-        })
-        .catch(function(err) {
-          that.mdToast.showSimple(`Error: ${err}`);
         });
-    } else {
-      this.mdToast.showSimple('You are already unsaved this app');
     }
   }
 
   installApp() {
     const that = this;
-    const appDir = cordova.file.applicationStorageDirectory;
-    const slug = that.application.slug;
-    const ver = `v${that.application.major}.${that.application.minor}.${that.application.maintenance}`;
     const url = that.application.archive;
-    const path = `${appDir}/apps/${slug}/${ver}`;
+    const path = `${this.appDir}/${this.appId}/${this.version}`;
     const trustHost = true;
     const options = {encodeURI: false};
-    const iabOptions = {
-      location: 'yes',
-      clearcache: 'no',
-      toolbar: 'yes'
-    };
 
     this.mdToast.showSimple('Downloading...');
 
@@ -251,7 +249,9 @@ export default class ApplicationComponent {
         that.cordovaZip.unzip(src, path)
           .then(function() {
             that.mdToast.showSimple('Install complete');
-            that.cordovaInAppBrowser.open(`${path}/index.html`, '_blank', iabOptions);
+            that.saveApp();
+            that.isInstalled = true;
+            that.isUpdated = true;
           })
           .catch(function() {
             that.mdToast.showSimple('Install fail');
@@ -262,12 +262,28 @@ export default class ApplicationComponent {
       });
   }
 
-  openApp() {
-    const appDir = cordova.file.applicationStorageDirectory;
-    const slug = this.application.slug;
-    const ver = `v${this.application.major}.${this.application.minor}.${this.application.maintenance}`;
-    const dest = `${appDir}${slug}/${ver}/index.html`;
+  uninstallApp() {
+    const that = this;
 
-    this.cordovaInAppBrowser.open(dest);
+    this.cordovaFile.removeRecursively(this.appDir, this.application._id)
+      .then(function(result) {
+        that.mdToast.showSimple('Uninstall complete');
+        that.isInstalled = false;
+        that.unsaveApp();
+      })
+      .catch(function(err) {
+        that.mdToast.showSimple(`Uninstall fail: ${err}`);
+      });
+  }
+
+  openApp() {
+    const dest = `${this.appDir}/${this.application._id}/${this.version}/index.html`;
+    const iabOptions = {
+      location: 'yes',
+      clearcache: 'no',
+      toolbar: 'no'
+    };
+
+    this.cordovaInAppBrowser.open(dest, iabOptions);
   }
 }
