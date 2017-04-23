@@ -7,6 +7,7 @@ const ObjectId = mongoose.Schema.Types.ObjectId;
 var CategorySchema = new mongoose.Schema({
   name: {
     type: String,
+    unique: true,
     required: true
   },
   parent: {
