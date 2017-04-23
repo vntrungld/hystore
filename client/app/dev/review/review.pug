@@ -50,7 +50,10 @@ div(
             th(md-column)
               span Content
 
-            th(md-column)
+            th(
+              md-column,
+              md-order-by="updated_at"
+            )
               span Updated At
 
             th(
