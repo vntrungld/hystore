@@ -66,7 +66,7 @@ div(
           | Update
 
         md-button.md-raised.md-primary(
-          ng-if="vm.isInstalled",
+          ng-if="vm.isInstalled && vm.isUpdated",
           ng-click="vm.openApp()",
         )
           | Open
