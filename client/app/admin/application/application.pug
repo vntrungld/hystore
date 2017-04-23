@@ -51,6 +51,18 @@ div(
             )
               span Status
 
+            th(
+              md-column,
+              md-order-by="updated_at"
+            )
+              span Updated At
+
+            th(
+              md-column,
+              md-order-by="created_at"
+            )
+              span Created At
+
         tbody(md-body)
           tr(
             md-row,
@@ -74,6 +86,12 @@ div(
                   ng-repeat="status in vm.status",
                 )
                   | {{ status.name }}
+
+            td(md-cell)
+              span(am-time-ago="application.updatedAt")
+
+            td(md-cell)
+              span(am-time-ago="application.createdAt")
 
     md-table-pagination(
       md-limit="vm.query.limit",

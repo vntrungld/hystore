@@ -86,4 +86,21 @@ export default class DevApplicationController {
         mdToast.showSimple(`Error: ${err.data.message}`);
       });
   }
+
+  changeCategory(application) {
+    const mdToast = this.mdToast;
+    const data = [{
+      op: 'replace',
+      path: '/category',
+      value: application.category._id
+    }];
+
+    this.ApplicationResource.devPatch({ id: application._id }, data).$promise
+      .then(function() {
+        mdToast.showSimple('Application category changed');
+      })
+      .catch(function(err) {
+        mdToast.showSimple(`Error: ${err.data.message}`);
+      });
+  }
 }

@@ -36,8 +36,11 @@ div(
 
             th(
               md-column,
-              md-order-by="version"
+              md-order-by="category"
             )
+              span Category
+
+            th(md-column)
               span Version
 
             th(
@@ -45,6 +48,18 @@ div(
               md-order-by="status"
             )
               span Status
+
+            th(
+              md-column,
+              md-order-by="updated_at"
+            )
+              span Updated At
+
+            th(
+              md-column,
+              md-order-by="created_at"
+            )
+              span Created At
 
             th(md-column)
               span Action
@@ -58,6 +73,17 @@ div(
             ng-if="vm.applications"
           )
             td(md-cell) {{ application.name }}
+
+            td(md-cell)
+              md-select(
+                ng-model="application.category._id",
+                ng-change="vm.changeCategory(application)"
+              )
+                md-option(
+                  ng-repeat="category in vm.categories"
+                  ng-value="category._id",
+                )
+                  | {{ category.name }}
 
             td(md-cell)
               md-select(
@@ -80,6 +106,12 @@ div(
                   ng-repeat="status in vm.status"
                 )
                   | {{ status.name }}
+
+            td(md-cell)
+              span(am-time-ago="application.updatedAt")
+
+            td(md-cell)
+              span(am-time-ago="application.createdAt")
 
             td(md-cell)
               md-button.md-icon-button(ui-sref="dev.applicationEdit({ id: application._id })")

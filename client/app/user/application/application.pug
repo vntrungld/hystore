@@ -33,6 +33,6 @@ div(
                 ng-src="{{ application.icon }}",
                 alt="{{ application.name }}"
               )
-        md-card-title-text
+        md-card-title-text(style="margin-left: 16px;")
           a.md-headline(ui-sref="application({ id: application._id })") {{ application.name }}
           a.md-subhead(ui-sref="main({ author: application.author._id })") {{ application.author.name }}

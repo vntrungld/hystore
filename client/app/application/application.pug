@@ -83,18 +83,21 @@ div(
             li(ng-repeat="screenshot in vm.application.screenshots")
               img.img-fluid(ng-src="{{screenshot}}")
 
+        h2.md-title Description
+
         div(ng-bind-html="vm.application.description")
 
-        md-divider
+        md-divider(style="margin-top: 20px;")
 
         div(ng-if="vm.application.whatsnew")
-          md-card-title
-            md-card-title-text
-              h2.md-title What's New
+          h2.md-title What's New
 
           div(ng-bind-html="vm.application.whatsnew")
 
-        md-divider(ng-if="vm.application.whatsnew")
+        md-divider(
+          style="margin-top: 20px;",
+          ng-if="vm.application.whatsnew"
+        )
 
         div
           md-card-title
@@ -178,7 +181,6 @@ div(
           flex-xs="45",
           flex-gt-xs="20",
           flex-gt-sm="15",
-          flex="10",
           layout-gt-sm="column",
           layout-padding
         )
