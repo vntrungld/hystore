@@ -46,10 +46,16 @@ div(
             )
               span Status
 
-            th(md-column)
+            th(
+              md-column,
+              md-order-by="updated_at"
+            )
               span Updated At
 
-            th(md-column)
+            th(
+              md-column,
+              md-order-by="created_at"
+            )
               span Created At
 
             th(md-column)
