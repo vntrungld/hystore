@@ -21,6 +21,9 @@ div(
         novalidate="",
       )
         md-card-content(layout="column")
+          div(ng-messages="vm.errors")
+            p(ng-message="login") {{ vm.errors.login }}
+
           md-input-container
             label Email
 
@@ -49,9 +52,6 @@ div(
             div(ng-messages="form.password.$error")
               p(ng-message="required") Please enter your password.
               p(ng-message="minlength") Password must be at least 3 characters.
-
-          div(ng-messages="vm.errors")
-            p(ng-message="login") {{ vm.errors.login }}
 
         md-card-actions
           button.md-button.md-primary(type="submit") Login

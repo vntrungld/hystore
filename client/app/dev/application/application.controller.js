@@ -24,9 +24,6 @@ export default class DevApplicationController {
       }, {
         name: 'Depublish',
         value: 'depublish'
-      }, {
-        name: 'Block',
-        value: 'block'
       }
     ];
     this.query = {

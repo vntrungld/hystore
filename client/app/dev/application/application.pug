@@ -80,8 +80,8 @@ div(
                 ng-change="vm.changeCategory(application)"
               )
                 md-option(
-                  ng-repeat="category in vm.categories"
-                  ng-value="category._id",
+                  ng-repeat="category in vm.categories",
+                  ng-value="category._id"
                 )
                   | {{ category.name }}
 
@@ -97,13 +97,17 @@ div(
                   | {{ version.major }}.{{ version.minor }}.{{ version.maintenance }}
 
             td(md-cell)
+              span(ng-if="application.status === 'block'") Block
+
               md-select(
                 ng-model="application.status",
-                ng-change="vm.changeStatus(application)"
+                ng-change="vm.changeStatus(application)",
+                ng-if="application.status !== 'block'"
               )
                 md-option(
                   ng-value="status.value",
-                  ng-repeat="status in vm.status"
+                  ng-repeat="status in vm.status",
+                  ng-if="(application.status === 'unpublish' && status.value !== 'depublish') || (application.status !== 'unpublish' && status.value !== 'unpublish')"
                 )
                   | {{ status.name }}
 
