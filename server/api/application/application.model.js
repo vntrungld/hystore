@@ -148,6 +148,34 @@ ApplicationSchema.virtual('dev')
  * Validations
  */
 
+// Validate empty application name
+ApplicationSchema
+  .path('name')
+  .validate(function(name) {
+    return name.length;
+  }, 'Name cannot be blank');
+
+// Validate application icon
+ApplicationSchema
+  .path('icon')
+  .validate(function(url) {
+    return url.length;
+  }, 'Icon is required');
+
+// Validate application feature
+ApplicationSchema
+  .path('feature')
+  .validate(function(url) {
+    return url.length;
+  }, 'Feature is required');
+
+// Validate empty application description
+ApplicationSchema
+  .path('description')
+  .validate(function(desc) {
+    return desc.length;
+  }, 'Description cannot be blank');
+
 // Validate star limit of 5
 ApplicationSchema
   .path('stars')
@@ -158,23 +186,31 @@ ApplicationSchema
 // Validate screenshot limit of 3 to 8
 ApplicationSchema
   .path('screenshots')
-  .validate(function(val) {
-    return val.length >= 3 && val.length <= 8;
+  .validate(function(urls) {
+    return urls.length >= 3 && urls.length <= 8;
   }, '{PATH} limit 3 to 8');
+
+// Validate application category
+ApplicationSchema
+  .path('category')
+  .validate(function(id) {
+    return id.length;
+  }, 'Category is required');
 
 ApplicationSchema
   .path('versions')
   .validate(function(val) {
     const totalVersion = this.versions.length;
+    const currentVersion = val[totalVersion - 1];
+    const currentMajor = currentVersion.major;
+    const currentMinor = currentVersion.minor;
+    const currentMaintenance = currentVersion.maintenance;
+
     if(totalVersion >= 2) {
       const highestVersion = val[totalVersion - 2];
-      const currentVersion = val[totalVersion - 1];
       const minMajor = highestVersion.major;
       const minMinor = highestVersion.minor;
       const minMaintenance = highestVersion.maintenance;
-      const currentMajor = currentVersion.major;
-      const currentMinor = currentVersion.minor;
-      const currentMaintenance = currentVersion.maintenance;
 
       if(currentMajor > minMajor) {
         return true;
@@ -184,14 +220,12 @@ ApplicationSchema
         } else if(currentMinor === minMinor) {
           if(currentMaintenance > minMaintenance) {
             return true;
-          } else {
-            return false;
           }
         }
       }
       return false;
     } else {
-      return true;
+      return currentMajor >= 0 && currentMinor >= 0 && currentMaintenance > 0;
     }
   }, 'Your version must higher the highest version');
 

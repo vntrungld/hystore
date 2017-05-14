@@ -28,4 +28,15 @@ var CategorySchema = new mongoose.Schema({
   }
 }, { timestamps: true });
 
+/**
+ * Validations
+ */
+
+// Validate empty category name
+CategorySchema
+  .path('name')
+  .validate(function(name) {
+    return name.length;
+  }, 'Name cannot be blank');
+
 export default mongoose.model('Category', CategorySchema);

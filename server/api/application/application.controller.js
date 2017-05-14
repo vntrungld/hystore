@@ -7,6 +7,7 @@
 'use strict';
 
 import Application from './application.model';
+import Category from '../category/category.model';
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -42,7 +43,26 @@ export function index(req, res) {
 
   if(query.search) {
     query.name = new RegExp(`^.*${query.search}.*$`, 'i');
-    delete query.search;
+    delete query.search; // eslint-disable-line
+  }
+
+  if(query.category) {
+    return Category.findById(query.category)
+      .exec()
+      .then(function(category) {
+        let categoryIds = category.children;
+        categoryIds.push(category._id);
+
+        query.category = { $in: categoryIds } ;
+      })
+      .then(function() {
+        console.log(query);
+        return Application.find(query)
+          .populate('category author')
+          .exec()
+          .then(respondWithResult(res))
+          .catch(handleError(res));
+      });
   }
 
   return Application.find(query)

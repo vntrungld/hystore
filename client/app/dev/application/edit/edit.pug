@@ -151,19 +151,16 @@ div(
 
             p(ng-if="!vm.application.screenshots") No file chosen
 
-          md-grid-list.input-preview(
-            flex="none",
-            ng-if="vm.application.screenshots"
-            md-cols='1',
-            md-cols-sm='2',
-            md-cols-md='3',
-            md-cols-gt-md='6',
-            md-row-height-gt-md='1:1',
-            md-row-height='4:3',
-            md-gutter='8px',
-            md-gutter-gt-sm='4px'
+          div(
+            layout-xs="column",
+            layout-gt-xs="row"
           )
-            md-grid-tile(ng-repeat="screenshot in vm.application.screenshots")
+            div(
+              flex,
+              flex-sm="50",
+              flex-md="25",
+              ng-repeat="screenshot in vm.application.screenshots"
+            )
               img.img-fill(
                 ngf-src="screenshot",
                 ngf-background="screenshot",

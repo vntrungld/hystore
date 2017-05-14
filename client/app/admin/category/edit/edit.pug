@@ -49,7 +49,8 @@ div(
           )
             md-option(
               ng-repeat="option in vm.options.status",
-              value="{{ option }}"
+              value="{{ option }}",
+              ng-selected="$first"
             ) {{ option }}
 
         md-input-container

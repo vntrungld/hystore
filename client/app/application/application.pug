@@ -123,7 +123,7 @@ div(
               .rating-bar-container(
                 layout="row",
                 ng-repeat="star in vm.application.stars",
-                ng-class="vm.starClasses[$index]"
+                class="vm.starClasses[$index]"
               )
                 .bar-label(flex-nogrow)
                   md-icon star
