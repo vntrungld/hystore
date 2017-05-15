@@ -20,20 +20,25 @@ export default class SettingsController {
   Auth;
 
   /*@ngInject*/
-  constructor(Auth) {
+  constructor(Auth, $mdToast, $state) {
     this.Auth = Auth;
+    this.mdToast = $mdToast;
+    this.state = $state;
   }
 
   changePassword(form) {
+    form.password.$setValidity('mongoose', true);
     if(form.$valid) {
+      const that = this;
       this.Auth.changePassword(this.user.oldPassword, this.user.newPassword)
         .then(() => {
-          this.message = 'Password successfully changed.';
+          that.mdToast.showSimple('Password successfully changed.');
+          that.state.go('main');
         })
         .catch(() => {
           form.password.$setValidity('mongoose', false);
           this.errors.other = 'Incorrect password';
-          this.message = '';
+          that.mdToast.showSimple('Fail to change password');
         });
     }
   }
