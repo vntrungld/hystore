@@ -18,21 +18,25 @@ export default class ProfileController {
   Auth;
 
   /*@ngInject*/
-  constructor(Auth) {
+  constructor(Auth, $mdToast, $state) {
     this.Auth = Auth;
     this.user = Auth.getCurrentUserSync();
+    this.mdToast = $mdToast;
+    this.state = $state;
   }
 
   changeProfile(form) {
     if(form.$valid) {
+      const that = this;
       this.Auth.changeProfile(this.user)
         .then(() => {
-          this.message = 'Profile successfully changed.';
+          that.mdToast.showSimple('Profile successfully changed.');
+          that.state.go('main');
         })
         .catch(() => {
           form.name.$setValidity('mongoose', false);
           this.errors.other = 'Incorrect profile';
-          this.message = '';
+          that.mdToast.showSimple('Fail to change profile');
         });
     }
   }
