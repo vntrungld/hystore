@@ -26,11 +26,23 @@ const respondWithResult = (res, statusCode) => {
 const patchUpdates = patches =>
   entity => {
     try {
-      jsonpatch.apply(entity, patches, /*validate*/ true); // eslint-disable-line
+      return Application.findById(entity.for)
+        .then(function(app) {
+          let stars = app.stars;
+          const oldStarIdx = entity.star - 1;
+          const newStarIdx = patches[0].value - 1;
+          stars[oldStarIdx] -= 1;
+          stars[newStarIdx] += 1;
+
+          return app.update({ $set: { stars } }).exec()
+            .then(function() {
+              jsonpatch.apply(entity, patches, /*validate*/ true); // eslint-disable-line
+              return entity.save();
+            });
+        });
     } catch(err) {
       return Promise.reject(err);
     }
-    return entity.save();
   };
 
 const handleEntityNotFound = res =>

@@ -191,7 +191,7 @@ export function fileValidate(req, res, next) {
 
     removeTemp(req.files);
 
-    return res.status(400).end();
+    return res.status(400).send({ message: 'Incorrect file structure' });
   }
 
   return next();
