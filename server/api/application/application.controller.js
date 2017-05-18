@@ -47,16 +47,20 @@ export function index(req, res) {
   }
 
   if(query.category) {
+    if(query.ne) {
+      query._id = { $ne: query.ne };
+      delete query.ne; //eslint-disable-line
+    }
+
     return Category.findById(query.category)
       .exec()
       .then(function(category) {
         let categoryIds = category.children;
         categoryIds.push(category._id);
 
-        query.category = { $in: categoryIds } ;
+        query.category = { $in: categoryIds };
       })
       .then(function() {
-        console.log(query);
         return Application.find(query)
           .populate('category author')
           .exec()

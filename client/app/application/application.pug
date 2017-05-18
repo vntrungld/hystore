@@ -122,8 +122,8 @@ div(
             )
               .rating-bar-container(
                 layout="row",
-                ng-repeat="star in vm.application.stars",
-                class="vm.starClasses[$index]"
+                ng-repeat="star in vm.application.stars track by $index",
+                ng-class="vm.starClasses[$index]"
               )
                 .bar-label(flex-nogrow)
                   md-icon star

@@ -28,13 +28,14 @@ export default class ApplicationComponent {
     this.reviews = ReviewResource.query({ application: this.appId });
     this.mdToast = $mdToast;
     this.isSaved = false;
+    this.state = $state;
 
     const that = this;
 
     ApplicationResource.get({ id: this.appId }).$promise
       .then(function(app) {
         that.application = app;
-        that.similarApps = ApplicationResource.query({ category: app.category._id });
+        that.similarApps = ApplicationResource.query({ category: app.category._id, ne: app._id });
       });
 
     if(this.isLoggedIn()) {
@@ -91,6 +92,7 @@ export default class ApplicationComponent {
       .then(() => {
         that.mdToast.showSimple('Review sended!');
         that.cancelReviewDialog();
+        that.state.reload();
       })
       .catch(err => {
         that.mdToast.showSimple(err.data.message);
@@ -108,6 +110,7 @@ export default class ApplicationComponent {
       .then(() => {
         that.mdToast.showSimple('Review updated!');
         that.cancelReviewDialog();
+        that.state.reload();
       })
       .catch(err => {
         that.mdToast.showSimple(err.data.message);
